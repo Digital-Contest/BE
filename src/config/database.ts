@@ -12,7 +12,7 @@ import url from 'url';
 import { envs } from './environment.js';
 import {Container} from 'typedi';
 import { User } from '../entity/User.js';
-import { FirebaseToken } from '../entity/FirebaseToken.js';
+
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 /**
  * Before insert/update validation data
@@ -41,7 +41,7 @@ export async function initializeDatabase() {
             database: envs.db.database,
             logging: envs.isProd === false,
             synchronize: true,
-            entities: [User,FirebaseToken],
+            entities: [User],
             namingStrategy: new SnakeNamingStrategy(),
         });
         return connection;

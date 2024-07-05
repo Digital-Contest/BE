@@ -1,6 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
+import path from 'path';
 import { User } from '../entity/User.js';
-
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 /**
@@ -10,22 +13,20 @@ import { User } from '../entity/User.js';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
-    public async selectUserById(userId: number) {
-        return await this.findOne({
-            where: {
-                id: userId
-            }
-        })
-    }
+
     // 카카오Id로 사용자 찾기
-    public async findByKakaoId(kakaoId: string): Promise<User | undefined> {
-        return this.findOne({ where: {numbers:kakaoId} });
+    public async findByKakaoId(kakaoId: string): Promise<User> {
+        return this.createQueryBuilder()
+            .select('u')
+            .from(User, 'u')
+            .where('u.numbers = :kakaoId',{kakaoId})
+            .getOne()
     }
 
     // 사용자 정보 생성 및 업데이트
-    public async createUser(userData: {numbers: string, email: string}): Promise<User> {
-        const user = this.create(userData);
-        return this.save(user);
+    public async insertUser(numbers: string, email: string): Promise<User> {
+        const newUser = User.createUser(numbers, email, "USER")
+        return this.save(newUser);
     }
 
     // id(번호)로 사용자 찾기

@@ -2,7 +2,7 @@ name: CO-Walk CI/CD - Nodejs CI with NPM and CD with Docker & AWS EC2
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -28,13 +28,6 @@ jobs:
         touch .env
         echo "${{ secrets.ENV }}" >> .env
       shell: bash
-    # FIREBASE SDK 세팅
-    - name: create-json
-      id: create-json
-      uses: jsdaniell/create-json@1.1.2
-      with:
-        name: "firebase-admin.json"
-        json: ${{ secrets.FIREBASE }}
     # Node.js 어플리케이션 Docker Image 빌드
     - name: Build Docker Image For Node.js
       run: |
@@ -51,8 +44,8 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
         
-          docker stop goodmorning
-          docker rm goodmorning
+          docker stop eco-marketer
+          docker rm eco-marketer
           docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
-          docker run -d -p 3000:3000 --name goodmorning ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
+          docker run -d -p 3000:3000 --name eco-marketer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
