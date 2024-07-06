@@ -5,9 +5,6 @@ import { IsNotEmpty } from "class-validator";
 export class IntroduceText{
 
     @IsNotEmpty()
-    private images:File[];
-
-    @IsNotEmpty()
     private category:string;
 
     @IsNotEmpty()
@@ -15,11 +12,6 @@ export class IntroduceText{
     
     @IsNotEmpty()
     private product: string;
-
-
-    public getImages(){
-        return this.images;
-    }
 
     public getCategory(){
         return this.category;

@@ -15,9 +15,10 @@ export class IntroduceService{
     ) {}
 
 
-    public async makeIntroduceText(image:File[], category:string, price:number, product:string): Promise<string> {
+    public async makeIntroduceText(images:File[], category:string, price:number, product:string): Promise<string> {
         const categoryData = await this.categoryRepository.findCategoryByName(category);
         this.verifyCategory(categoryData);
+        console.log(images)
 
         return ;
    
