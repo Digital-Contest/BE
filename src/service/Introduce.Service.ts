@@ -1,10 +1,10 @@
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
-import { CategoryRepository } from "../repository/Category.Repository";
-import { Category } from "../entity/Category";
-import { checkData } from "../util/checker";
-import { ErrorResponseDto } from "../response/ErrorResponseDto";
-import { ErrorCode } from "../exception/ErrorCode";
+import { CategoryRepository } from "../repository/Category.Repository.js";
+import { Category } from "../entity/Category.js";
+import { checkData } from "../util/checker.js";
+import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
+import { ErrorCode } from "../exception/ErrorCode.js";
 import { uploadImage } from "../util/s3Upload.js";
 
 @Service()
