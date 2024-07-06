@@ -1,14 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { BaseEntity } from "./BaseEntity.js";
 
 
 
 @Entity("Category")
+@Unique(['name'])
 export class Category extends BaseEntity{
 
     
     @PrimaryGeneratedColumn()
     id: number
+
 
     @Column()
     name:string;

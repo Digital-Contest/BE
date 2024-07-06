@@ -70,7 +70,7 @@ export class AuthService {
     }
 
     private signVerifyRefreshToken(status: boolean){
-        if(!status)
+        if(status)
             throw  ErrorResponseDto.of(ErrorCode.LOGIN_AGAIN);        
     }
 
