@@ -1,5 +1,6 @@
 
 import {Request} from "express";
+import * as multer from 'multer-s3';
 
 interface decodedToken {
     id: number;
@@ -12,8 +13,13 @@ declare global{
       decoded :decodedToken;
       user: decodedToken;
     }
+    export interface MulterS3File extends multer.File {
+      location: string;
+    }
   }
 }
+
+
 
 
 // import { Request, Response } from 'express';

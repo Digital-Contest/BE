@@ -5,6 +5,7 @@ import { Category } from "../entity/Category";
 import { checkData } from "../util/checker";
 import { ErrorResponseDto } from "../response/ErrorResponseDto";
 import { ErrorCode } from "../exception/ErrorCode";
+import { uploadImage } from "../util/s3Upload.js";
 
 @Service()
 export class IntroduceService{
@@ -15,12 +16,12 @@ export class IntroduceService{
     ) {}
 
 
-    public async makeIntroduceText(images:File[], category:string, price:number, product:string): Promise<string> {
+    public async makeIntroduceText(images: string[], category:string, price:number, product:string): Promise<string> {
         const categoryData = await this.categoryRepository.findCategoryByName(category);
         this.verifyCategory(categoryData);
         console.log(images)
-
-        return ;
+        console.log(category)
+        return;
    
     }
 
