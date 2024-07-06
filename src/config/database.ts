@@ -12,6 +12,7 @@ import url from 'url';
 import { envs } from './environment.js';
 import {Container} from 'typedi';
 import { User } from '../entity/User.js';
+import { Category } from '../entity/Category.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 /**
@@ -41,7 +42,7 @@ export async function initializeDatabase() {
             database: envs.db.database,
             logging: envs.isProd === false,
             synchronize: true,
-            entities: [User],
+            entities: [User, Category],
             namingStrategy: new SnakeNamingStrategy(),
         });
         return connection;
