@@ -21,8 +21,8 @@ export class Product extends BaseEntity{
     @Column({ type: 'varchar', name: 'name', nullable: false })
     name:string;
 
-    @Column({ type: 'boolean', name: 'status', nullable: false })
-    status:string;
+    @Column({ type: 'boolean', name: 'status', nullable: true })
+    status:boolean;
 
     @Column({ type: 'varchar', name: 'introduce_text', nullable: false })
     introduceText:string;
