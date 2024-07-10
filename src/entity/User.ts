@@ -30,6 +30,9 @@ export class User extends BaseEntity{
 
     @Column({ type: 'varchar', name: 'role', nullable: false })
     role: string;
+
+    @Column({ type: 'int', name: 'score', nullable: false })
+    score: number;
    
     public static createUser(numbers:string, email:string, role:string){
         return new User(numbers, email, role)
