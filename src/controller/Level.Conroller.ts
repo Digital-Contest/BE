@@ -8,6 +8,7 @@ import { compareAuthToken } from "../middleware/jwtMiddleware.js";
 import { LevelService } from "../service/Level.Service.js";
 import { SecondhandTradeCount } from "../dto/response/SecondhandTradeCount.js";
 import { LevelInformation } from "../dto/response/LevelInformation.js";
+import { LevelColor } from "../dto/response/LevelColor.js";
 
 
 
@@ -50,6 +51,23 @@ async bringLevelInformation(
 ): Promise<SuccessResponseDto<LevelInformation>>{
     const result = await this.levelService.bringLevelInformation(req.decoded.user_id);
     console.log("레벨 정보 조회 완료"); 
+    return SuccessResponseDto.of(result);
+}
+
+
+/**
+ * 내 레벨 컬러 조회 함수
+ * @param req 
+ * @returns 레벨 컬러
+ */
+@HttpCode(200)
+@UseBefore(compareAuthToken)
+@Get('/color')
+async bringLevelColor(
+    @Req() req: Request
+): Promise<SuccessResponseDto<LevelColor>>{
+    const result = await this.levelService.bringLevelColor(req.decoded.user_id);
+    console.log("레벨 컬러 조회 완료"); 
     return SuccessResponseDto.of(result);
 }
 
