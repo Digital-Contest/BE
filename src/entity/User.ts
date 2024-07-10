@@ -75,6 +75,10 @@ export class User extends BaseEntity{
         return this.role;
     }
 
+    public getScore(){
+        return this.score;
+    }
+
     
 
 }
