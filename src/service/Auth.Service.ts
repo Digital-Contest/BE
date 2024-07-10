@@ -30,9 +30,9 @@ export class AuthService {
     public async kakaoLogin(kakaoToken: string): Promise<LoginResponse> {
 
         const kakaoData = await this.socialLogin.getKakaoData(kakaoToken);
-        const userData: User = await this.userRepository.findByKakaoId(kakaoData.data.id);
+        const userData: User = await this.userRepository.findUserByKakaoId(kakaoData.data.id);
         await this.signInDependingOnRegistrationStatus(userData, kakaoData);
-        const checkedUserData: User = await this.userRepository.findByKakaoId(kakaoData.data.id);
+        const checkedUserData: User = await this.userRepository.findUserByKakaoId(kakaoData.data.id);
         const accessToken = this.jwtManager.makeAccessToken(checkedUserData.getId(), checkedUserData.getRole()); 
         const refreshToken = this.jwtManager.makeRefreshToken();
         await this.tokenManager.setToken(String(checkedUserData.getId()+"eco"), refreshToken);
