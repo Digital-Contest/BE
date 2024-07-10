@@ -10,6 +10,7 @@ import  compression from 'compression';
 import { AuthController } from './controller/Auth.Controller.js';
 import { createRequire } from 'module'
 import { IntroduceController } from './controller/Introduce.Controller.js';
+import { LevelController } from './controller/Level.Conroller.js';
 
 
 
@@ -18,7 +19,7 @@ const require = createRequire(import.meta.url)
 require('dotenv').config();
 
 export const app: express.Application = createExpressServer({
-    controllers: [ AuthController, IntroduceController],
+    controllers: [ AuthController, IntroduceController, LevelController],
     middlewares: [ErrorHandler],
 
     routePrefix: envs.prefix,
