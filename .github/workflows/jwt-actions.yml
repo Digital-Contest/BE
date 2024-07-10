@@ -11,41 +11,52 @@ jobs:
   CI-CD:
     runs-on: ubuntu-latest
     steps:
-    # 소스코드 다운로드
-    - name: Checkout code
-      uses: actions/checkout@v3
-    # Nodejs 세팅
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.6.0'
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    # ENV SDK 세팅
-    - name: Setting env file
-      run: |
-        touch .env
-        echo "${{ secrets.ENV }}" >> .env
-      shell: bash
-    # Node.js 어플리케이션 Docker Image 빌드
-    - name: Build Docker Image For Node.js
-      run: |
-
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0 .
-        docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
-    # 서버에서 Docker 이미지 실행
-    - name: EC2 Docker Run
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-        
-          docker stop eco-marketer
-          docker rm eco-marketer
-          docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
-          docker run -d -p 3000:3000 --name eco-marketer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
+      # 소스코드 다운로드
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Nodejs 세팅
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.6.0'
+          cache: 'npm'
+      
+      # Clean npm cache
+      - name: Clean npm cache
+        run: npm cache clean --force
+      
+      # Install dependencies using npm ci
+      - name: Install dependencies
+        run: npm ci
+      
+      # Build if present
+      - run: npm run build --if-present
+      
+      # Setting env file
+      - name: Setting env file
+        run: |
+          touch .env
+          echo "${{ secrets.ENV }}" >> .env
+        shell: bash
+      
+      # Build Docker Image For Node.js
+      - name: Build Docker Image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0 .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
+      
+      # EC2 Docker Run
+      - name: EC2 Docker Run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker stop eco-marketer
+            docker rm eco-marketer
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
+            docker run -d -p 3000:3000 --name eco-marketer ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
