@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGenerat
 import { BaseEntity } from "./base/BaseEntity.js";
 import { User } from "./User.js";
 import { ProductCategory } from "./ProductCategory.js";
+import { IntroduceTextCategory } from "./IntroduceTextCategory.js";
 
 
 @Entity("product")
@@ -33,6 +34,9 @@ export class Product extends BaseEntity{
 
     @OneToMany(() => ProductCategory, productCategorys => productCategorys.product)
     productCategorys: Relation<ProductCategory>[];
+
+    @OneToMany(() => IntroduceTextCategory,  introduceTextCategorys =>  introduceTextCategorys.product)
+    introduceTextCategorys: Relation<IntroduceTextCategory>[];
 
 
 
