@@ -40,16 +40,14 @@ export class AuthService {
     }
 
     public async logout(userId: string): Promise<void> {
-        await this.tokenManager.deleteToken(userId)
+        await this.tokenManager.deleteToken(userId+"eco")
     }
 
 
     public async reissueToken(accessToken: string, refreshToken: string): Promise<Token>{
         const accessTokenVerifyResult = this.jwtManager.verify(accessToken.split('Bearer ')[1]);
         const accessTokenDecodedData = this.jwtManager.decode(accessToken.split('Bearer ')[1]);
-        const refreshTokenVerifyesult = await this.jwtManager.refreshVerify(refreshToken.split('Bearer ')[1], accessTokenDecodedData.userId);
-        console.log(accessTokenVerifyResult.state)
-        console.log(refreshTokenVerifyesult.state)
+        const refreshTokenVerifyesult = await this.jwtManager.refreshVerify(refreshToken, accessTokenDecodedData.userId);
         this.signVerifyToken(accessTokenVerifyResult.state, refreshTokenVerifyesult.state);
         const newAccessToken = this.jwtManager.makeAccessToken(accessTokenDecodedData.userId, accessTokenDecodedData.role);
         return Token.of(newAccessToken, refreshTokenVerifyesult.token);
@@ -67,7 +65,7 @@ export class AuthService {
     }
 
     private signVerifyAccessToken(status: boolean){
-        if(!status)
+        if(status)
             throw ErrorResponseDto.of(ErrorCode.NOT_EXPIRED);
     }
 

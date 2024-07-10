@@ -3,7 +3,7 @@ import {Request} from "express";
 import * as multer from 'multer-s3';
 
 interface decodedToken {
-    id: number;
+    user_id: number;
   }
 
 declare global{
@@ -21,8 +21,3 @@ declare global{
 
 
 
-
-// import { Request, Response } from 'express';
-// export interface IUserAddedRequest extends Request {
-//     decoded: number; 
-//   }

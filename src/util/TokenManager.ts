@@ -5,15 +5,15 @@ import { redisClient } from "../config/redis.js";
 export class TokenManager{
 
     public async setToken(key:string, value:string) {
-        await redisClient.set(key, value)
+        await redisClient.v4.set(key, value);
     }
 
     public async deleteToken(key:string){
-        await redisClient.del(key);
+        await redisClient.v4.del(String(key));
     }
 
-    public async getToken(key:string): Promise<string>{   
-        return redisClient.get(key);
+    public async getToken(key:string){   
+        return await redisClient.v4.get(key);
     }
 
 }

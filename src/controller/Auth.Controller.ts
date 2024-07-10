@@ -27,7 +27,7 @@ async kakaoLogin(@Req() req: Request) {
 @UseBefore(compareAuthToken)
 @Delete('/logout')
 async logout(@Req() req: Request) {
-        await this.authService.logout(String(req.decoded.id));   
+        await this.authService.logout(String(req.decoded.user_id));   
         console.log("로그아웃 완료"); 
         return SuccessResponseDto.of(); 
 }

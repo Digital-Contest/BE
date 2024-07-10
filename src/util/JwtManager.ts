@@ -60,12 +60,9 @@ export class JwtManager {
 
      public async refreshVerify (requestToken: string, userId: number){
         try {  
-            console.log(String(userId)+"eco")
-            const responseToken = await this.tokenManager.getToken(String(userId)+"eco");
-            console.log(requestToken)
-            console.log(responseToken)
-            if (this.verifyToken(requestToken, responseToken.split('Bearer ')[1])) {
-                jwt.verify(requestToken, process.env.SECRET) as JwtPayload
+            const responseToken = await this.tokenManager.getToken(userId+"eco");
+            if (this.verifyToken(requestToken, responseToken)) {
+                jwt.verify(requestToken.split('Bearer ')[1], process.env.JWT_SECRET) as JwtPayload
                 return { state: true, token: responseToken };
             }
             return { state: false };

@@ -12,7 +12,7 @@ export class ErrorHandler implements ExpressErrorMiddlewareInterface {
 
     error(error: any, req: Request, res: Response, next: NextFunction): void {
         console.error(
-            `Middleware Handler - ${req.method} ${req.url}\n${error}\n${JSON.stringify(req.body)}`,
+            `Middleware Handler - ${req.method} ${req.url}`,
         );
         
         this.divideError(error);

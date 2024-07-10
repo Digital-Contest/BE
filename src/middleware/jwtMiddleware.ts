@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { HttpError } from 'routing-controllers';
 
 export interface ITokenBody {
-  id: number;
+  user_id: number;
   role: string;
 }
 
