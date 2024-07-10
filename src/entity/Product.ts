@@ -1,8 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { BaseEntity } from "./base/BaseEntity.js";
+import { User } from "./User.js";
 
 
 @Entity("product")
+@Index("idx_product_user", ["user"])
 export class Product extends BaseEntity{
 
     
@@ -20,5 +22,14 @@ export class Product extends BaseEntity{
 
     @Column({ type: 'varchar', name: 'introduce_text', nullable: false })
     introduceText:string;
+
+    @ManyToOne(() => User, user => user.products, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn({ name: "user_id", referencedColumnName: "id" })
+    user: Relation<User>;
+
+
 
 }

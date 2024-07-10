@@ -3,9 +3,11 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
+    OneToMany,
 } from "typeorm"
 import { InternalServerError } from "routing-controllers";
 import { Relation } from "typeorm";
+import { Product } from "./Product.js";
 
 
 
@@ -33,6 +35,9 @@ export class User extends BaseEntity{
 
     @Column({ type: 'int', name: 'score', nullable: false })
     score: number;
+
+    @OneToMany(() => Product , products => products.user)
+    products: Relation<Product>[];
    
     public static createUser(numbers:string, email:string, role:string){
         return new User(numbers, email, role)
