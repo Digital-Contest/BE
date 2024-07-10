@@ -1,25 +1,23 @@
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
-//import { CategoryRepository } from "../repository/Category.Repository.js";
 import { checkData } from "../util/checker.js";
 import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
 import { ErrorCode } from "../exception/ErrorCode.js";
-import { uploadImage } from "../util/s3Upload.js";
-import { ProductCategoryRepository } from "../repository/ProductCategory.Repository.js";
-import { ProductCategory } from "../entity/ProductCategory.js";
+import { IntroduceTextCategory } from "../entity/IntroduceTextCategory.js";
+import { IntroduceTextCategoryRepository } from "../repository/IntroduceTextCategoryData.Repository.js";
 
 @Service()
 export class IntroduceService{
 
 
     constructor(
-        @InjectRepository(ProductCategoryRepository) private readonly productCategoryRepository: ProductCategoryRepository,
+        @InjectRepository(IntroduceTextCategory) private readonly introduceTextCategory: IntroduceTextCategoryRepository,
     ) {}
 
 
     public async makeIntroduceText(images: string[], category:string, price:number, product:string): Promise<string> {
-        const productCategoryData = await this.productCategoryRepository.findCategoryByName(category);
-        this.verifyCategory(productCategoryData);
+        const introduceTextCategoryData = await this.introduceTextCategory.findIntroduceTextCategoryByName(category);
+        this. verifyIntroduceTextCategory(introduceTextCategoryData);
         console.log(images)
         console.log(category)
         return;
@@ -29,8 +27,8 @@ export class IntroduceService{
 
 
 
-    private verifyCategory(productCategoryData: ProductCategory){
-        if(!checkData(productCategoryData)){
+    private verifyIntroduceTextCategory(introduceTextCategoryData: IntroduceTextCategory){
+        if(!checkData(introduceTextCategoryData)){
             throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_CATEGORY);
         }
     }

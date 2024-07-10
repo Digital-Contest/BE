@@ -5,6 +5,9 @@ import { Product } from "./Product.js";
 
 @Entity("introduce_text_category")
 export class IntroduceTextCategory extends BaseEntity{
+    findIntroduceTextCategoryByName(category: string) {
+        throw new Error("Method not implemented.");
+    }
 
     
     @PrimaryGeneratedColumn()
