@@ -33,7 +33,7 @@ export class User extends BaseEntity{
     @Column({ type: 'varchar', name: 'role', nullable: false })
     role: string;
 
-    @Column({ type: 'int', name: 'score', nullable: false })
+    @Column({ type: 'int', name: 'score', nullable: false, default : 0})
     score: number;
 
     @OneToMany(() => Product , products => products.user)
