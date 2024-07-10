@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { BaseEntity } from "./base/BaseEntity.js";
 import { Product } from "./Product.js";
 
@@ -19,12 +19,10 @@ export class IntroduceTextCategory extends BaseEntity{
     @Column({ type: 'varchar', name: 'prompt_text', nullable: false })
     promptText:string;
 
-    @ManyToOne(() => Product, product => product.introduceTextCategorys, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-    })
-    @JoinColumn({ name: "product_id", referencedColumnName: "id" })
-    product: Relation<Product>;
+
+    @OneToMany(() => Product,  products =>  products.introduceTextCategory)
+    products: Relation< Product>[];
+
 
 
 }

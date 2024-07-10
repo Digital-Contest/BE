@@ -34,18 +34,30 @@ export class Product extends BaseEntity{
     @JoinColumn({ name: "user_id", referencedColumnName: "id" })
     user: Relation<User>;
 
-    @OneToMany(() => ProductCategory, productCategorys => productCategorys.product)
-    productCategorys: Relation<ProductCategory>[];
 
-    @OneToMany(() => IntroduceTextCategory,  introduceTextCategorys =>  introduceTextCategorys.product)
-    introduceTextCategorys: Relation<IntroduceTextCategory>[];
+    @ManyToOne(() => IntroduceTextCategory, introduceTextCategory => introduceTextCategory.products, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn({ name: "introduce_text_category_id", referencedColumnName: "id" })
+    introduceTextCategory: Relation<IntroduceTextCategory>;
+
+
+    @ManyToOne(() => ProductCategory, productCategory => productCategory.products, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn({ name: "product_category_id", referencedColumnName: "id" })
+    productCategory: Relation<ProductCategory>;
+
+    
 
     @OneToMany(() => ProductImage,  productImages =>  productImages.product)
     productImages: Relation<ProductImage>[];
 
-
     @OneToMany(() => ProductCompany,  productCompanys =>  productCompanys.product)
     productCompanys: Relation<ProductCompany>[];
+
 
 
 }
