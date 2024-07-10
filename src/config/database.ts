@@ -7,14 +7,13 @@ import {
     BeforeUpdate,
 } from 'typeorm';
 import {  validateOrReject } from 'class-validator';
-import { join } from 'path';
-import url from 'url';
 import { envs } from './environment.js';
 import {Container} from 'typedi';
-import { User } from '../entity/User.js';
-import { Category } from '../entity/Category.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 /**
  * Before insert/update validation data
  */
@@ -42,7 +41,7 @@ export async function initializeDatabase() {
             database: envs.db.database,
             logging: envs.isProd === false,
             synchronize: true,
-            entities: [User, Category],
+            entities: [path.join(__dirname, '../entity/*.{js,ts}')],
             namingStrategy: new SnakeNamingStrategy(),
         });
         return connection;
