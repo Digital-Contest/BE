@@ -5,33 +5,35 @@ import { checkData } from "../util/checker.js";
 import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
 import { ErrorCode } from "../exception/ErrorCode.js";
 import { uploadImage } from "../util/s3Upload.js";
+import { ProductCategoryRepository } from "../repository/ProductCategory.Repository.js";
+import { ProductCategory } from "../entity/ProductCategory.js";
 
 @Service()
 export class IntroduceService{
 
 
     constructor(
-     //   @InjectRepository(CategoryRepository) private readonly categoryRepository: CategoryRepository,
+        @InjectRepository(ProductCategoryRepository) private readonly productCategoryRepository: ProductCategoryRepository,
     ) {}
 
 
-    // public async makeIntroduceText(images: string[], category:string, price:number, product:string): Promise<string> {
-    //     const categoryData = await this.categoryRepository.findCategoryByName(category);
-    // //    this.verifyCategory(categoryData);
-    //     console.log(images)
-    //     console.log(category)
-    //     return;
+    public async makeIntroduceText(images: string[], category:string, price:number, product:string): Promise<string> {
+        const productCategoryData = await this.productCategoryRepository.findCategoryByName(category);
+        this.verifyCategory(productCategoryData);
+        console.log(images)
+        console.log(category)
+        return;
    
-    // }
+    }
 
 
 
 
-    // private verifyCategory(categoryData: Category){
-    //     if(!checkData(categoryData)){
-    //         throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_CATEGORY);
-    //     }
-    // }
+    private verifyCategory(productCategoryData: ProductCategory){
+        if(!checkData(productCategoryData)){
+            throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_CATEGORY);
+        }
+    }
 
 
 }
