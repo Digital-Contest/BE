@@ -8,16 +8,6 @@ export interface ITokenBody {
 }
 
 
-export const generateAuthToken = (userId: number, userRole: string) => {
-    const payload : ITokenBody= {
-      id: userId,
-      role: userRole,
-    };
-    return 'Bearer ' +jwt.sign(payload, "secret", {
-      algorithm: 'HS256',
-      expiresIn: '30d',
-    });
-  }
 
 
 const extractAuthToken = (req: Request) => {

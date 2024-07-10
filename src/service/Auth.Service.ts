@@ -48,6 +48,8 @@ export class AuthService {
         const accessTokenVerifyResult = this.jwtManager.verify(accessToken.split('Bearer ')[1]);
         const accessTokenDecodedData = this.jwtManager.decode(accessToken.split('Bearer ')[1]);
         const refreshTokenVerifyesult = await this.jwtManager.refreshVerify(refreshToken.split('Bearer ')[1], accessTokenDecodedData.userId);
+        console.log(accessTokenVerifyResult.state)
+        console.log(refreshTokenVerifyesult.state)
         this.signVerifyToken(accessTokenVerifyResult.state, refreshTokenVerifyesult.state);
         const newAccessToken = this.jwtManager.makeAccessToken(accessTokenDecodedData.userId, accessTokenDecodedData.role);
         return Token.of(newAccessToken, refreshTokenVerifyesult.token);
@@ -60,17 +62,17 @@ export class AuthService {
     }
     
     private signVerifyToken(accessTokenVerifyResult: boolean, refreshTokenVerifyesult: boolean){
-        this.signVerifyAccessToken(accessTokenVerifyResult);
         this.signVerifyRefreshToken(refreshTokenVerifyesult);
+        this.signVerifyAccessToken(accessTokenVerifyResult);
     }
 
     private signVerifyAccessToken(status: boolean){
-        if(status)
+        if(!status)
             throw ErrorResponseDto.of(ErrorCode.NOT_EXPIRED);
     }
 
     private signVerifyRefreshToken(status: boolean){
-        if(status)
+        if(!status)
             throw  ErrorResponseDto.of(ErrorCode.LOGIN_AGAIN);        
     }
 
