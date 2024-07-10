@@ -9,7 +9,7 @@ import { Relation } from "typeorm";
 
 
 
-@Entity("User")
+@Entity("user")
 export class User extends BaseEntity{
   
     constructor(numbers:string, email:string, role:string){
@@ -22,13 +22,13 @@ export class User extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({ type: 'varchar', name: 'numbers', nullable: false })
     numbers:string;
 
-    @Column()
+    @Column({ type: 'varchar', name: 'email', nullable: false })
     email: string;
 
-    @Column()
+    @Column({ type: 'varchar', name: 'role', nullable: false })
     role: string;
    
     public static createUser(numbers:string, email:string, role:string){
