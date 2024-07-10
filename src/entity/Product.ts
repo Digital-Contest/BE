@@ -1,6 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { BaseEntity } from "./base/BaseEntity.js";
 import { User } from "./User.js";
+import { ProductCategory } from "./ProductCategory.js";
 
 
 @Entity("product")
@@ -29,6 +30,9 @@ export class Product extends BaseEntity{
     })
     @JoinColumn({ name: "user_id", referencedColumnName: "id" })
     user: Relation<User>;
+
+    @OneToMany(() => ProductCategory, productCategorys => productCategorys.product)
+    productCategorys: Relation<ProductCategory>[];
 
 
 
