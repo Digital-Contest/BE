@@ -42,13 +42,13 @@ export class User extends BaseEntity{
         if(numbers === null) throw new InternalServerError(`${__dirname} : nickname 값이 존재하지 않습니다.`);
         this.numbers=numbers
     }
-    // 유효성 검증
+
 
     private setEmail(email:string): void{
         if(email=== null) throw new InternalServerError(`${__dirname} : email 값이 존재하지 않습니다.`);
         this.email=email
     }
-        // 유효성 검증
+   
     private setRole(role:string): void{
         if(role=== null) throw new InternalServerError(`${__dirname} :role 값이 존재하지 않습니다.`);
         this.role=role
