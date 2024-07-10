@@ -4,6 +4,7 @@ import { User } from "./User.js";
 import { ProductCategory } from "./ProductCategory.js";
 import { IntroduceTextCategory } from "./IntroduceTextCategory.js";
 import { ProductImage } from "./ProductImage.js";
+import { ProductCompany } from "./ProductCompany.js";
 
 
 @Entity("product")
@@ -42,6 +43,9 @@ export class Product extends BaseEntity{
     @OneToMany(() => ProductImage,  productImages =>  productImages.product)
     productImages: Relation<ProductImage>[];
 
+
+    @OneToMany(() => ProductCompany,  productCompanys =>  productCompanys.product)
+    productCompanys: Relation<ProductCompany>[];
 
 
 }
