@@ -1,4 +1,5 @@
 export enum LevelExperience {
+    LEVEL_0 = 0,
     LEVEL_1 = 30,
     LEVEL_2 = 100,
     LEVEL_3 = 300,
@@ -18,6 +19,14 @@ const LevelColor: { [key: string]: string } = {
 
 export function getLevelColor(level: LevelExperience): string {
     return LevelColor[level] || "알 수 없는 오류가 발생하였습니다.";
+}
+
+export const getLevelExperience = (level:number) => {
+    return LevelExperience[`LEVEL_${level}` as keyof typeof LevelExperience] - LevelExperience[`LEVEL_${level-1}` as keyof typeof LevelExperience];
+}
+
+export const getMyLevelExperience = (level:number, score:number) => {
+    return score - LevelExperience[`LEVEL_${level-1}` as keyof typeof LevelExperience];
 }
 
 
