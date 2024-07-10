@@ -7,7 +7,8 @@ import { SecondhandTradeCount } from '../dto/response/SecondhandTradeCount.js';
 import { LevelInformation } from '../dto/response/LevelInformation.js';
 import { User } from '../entity/User.js';
 import { UserRepository } from '../repository/User.Repository.js';
-import { getLevelByScore, getLevelExperience, getMyLevelExperience } from '../util/level.js';
+import { getLevelByScore, getLevelColor, getLevelExperience, getMyLevelExperience, LevelExperience } from '../util/level.js';
+import { LevelColor } from '../dto/response/LevelColor.js';
 
 
 
@@ -38,11 +39,19 @@ export class LevelService {
      */
     async bringLevelInformation(userId:number):Promise<LevelInformation> {
         const userData = await this.userRepository.findUserById(userId);
-        console.log(userData)
         const myLevel = getLevelByScore(userData.getScore());
-        const levelExperience = getLevelExperience(myLevel)
-        const myLevelExperience = getMyLevelExperience(myLevel, userData.getScore());
-        return LevelInformation.of(levelExperience, myLevelExperience, myLevel);
+        return LevelInformation.of(getLevelExperience(myLevel), getMyLevelExperience(myLevel, userData.getScore()), myLevel);
+    }
+
+    /**
+     * 레벨별 색상 조회 함수
+     * @param userId 유저 id
+     * @returns 레벨의 색상 
+     */
+    async bringLevelColor(userId:number):Promise<LevelColor> {
+        const userData = await this.userRepository.findUserById(userId);
+        const myLevel = getLevelByScore(userData.getScore());
+        return LevelColor.of(getLevelColor(LevelExperience[`LEVEL_${myLevel}` as keyof typeof LevelExperience]));
     }
 
 
