@@ -1,9 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { BaseEntity } from "./base/BaseEntity.js";
 import { Product } from "./Product.js";
 
 
 @Entity("product_image")
+@Index("idx_product_image_product", ["product"])
 export class ProductImage extends BaseEntity{
 
     
