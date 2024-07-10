@@ -14,8 +14,12 @@ const __dirname = path.dirname(__filename);
 export class UserRepository extends Repository<User> {
 
 
-    // 카카오Id로 사용자 찾기
-    public async findByKakaoId(kakaoId: string): Promise<User> {
+   /**
+    * 카카오 번호로 유저 엔티티 조회 함수
+    * @param kakaoId 카카오 번호 -> numbers
+    * @returns 유저 엔티티
+    */
+    public async findUserByKakaoId(kakaoId: string): Promise<User> {
         return this.createQueryBuilder()
             .select('u')
             .from(User, 'u')
@@ -23,13 +27,23 @@ export class UserRepository extends Repository<User> {
             .getOne()
     }
 
-    // 사용자 정보 생성 및 업데이트
+    /**
+     * 카카오 유저 생성 함수
+     * @param numbers 카카오 번호
+     * @param email 카카오 지정 이메일
+     * @returns 생성 유저 엔티티
+     */
     public async insertUser(numbers: string, email: string): Promise<User> {
         const newUser = User.createUser(numbers, email, "USER")
         return this.save(newUser);
     }
 
-    // id(번호)로 사용자 찾기
+
+    /**
+     * 유저 id에 따른 유저 엔티티 조회 함수
+     * @param id 유저 id
+     * @returns 해당 유저 엔티티 
+     */
     public async findUserById(id: number): Promise<User | undefined> {
         return await this.findOne({ where: {id} })
     }
