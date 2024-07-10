@@ -43,7 +43,7 @@ export const  getLevelByScore = (score: number): number => {
         case (score >= 600 && score <= 999):
             return 5;
         default:
-            return -1; 
+            return 5; 
     }
 }
 
