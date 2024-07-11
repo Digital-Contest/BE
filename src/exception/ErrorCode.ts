@@ -6,7 +6,8 @@ export enum ErrorCode  {
     NO_VALUE=502,
     LOGIN_AGAIN=403,
     NOT_EXPIRED=404,
-    NOT_FOUND_CATEGORY=405
+    NOT_FOUND_CATEGORY=405,
+    NOT_FOUND_PRODUCT=406
     
 }
 
@@ -16,7 +17,8 @@ const ErrorMessages: { [key: number]: string } = {
     502: "해당 값이 존재하지 않습니다.",
     403: "재로그인 하세요",
     404: "토큰이 만료되지 않았습니다.",
-    405: "카테고리 데이터가 존재하지 않습니다."
+    405: "카테고리 데이터가 존재하지 않습니다.",
+    406: "해당 물품 데이터가 존재하지 않습니다."
 
 };
 
