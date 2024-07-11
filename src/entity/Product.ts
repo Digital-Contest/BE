@@ -66,5 +66,22 @@ export class Product extends BaseEntity{
     productCompanys: Relation<ProductCompany>[];
 
 
+    public getId(){
+        return this.id
+    }
+
+    public getPrice(){
+        return this.price;
+    }
+
+    public getUser(){
+        return this.user;
+    }
+
+    public getProductCategory(){
+        return this.productCategory;
+    }
+
+
 
 }
