@@ -27,6 +27,13 @@ export class Product extends BaseEntity{
     @Column({ type: 'varchar', name: 'introduce_text', nullable: false })
     introduceText:string;
 
+    @Column({ type: 'varchar', name: 'product_category', nullable: false })
+    productCategory:string;
+
+    @Column({ type: 'varchar', name: 'introduce_text_category', nullable: false })
+    introduceTextCategory:string;
+
+
     @ManyToOne(() => User, user => user.products, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
