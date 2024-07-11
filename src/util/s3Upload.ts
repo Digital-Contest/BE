@@ -1,10 +1,8 @@
-
-
-
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 import { createRequire } from 'module'
+import { envs } from '../config/environment';
 const require = createRequire(import.meta.url)
 require('dotenv').config();
 
@@ -14,8 +12,8 @@ export const uploadImage = multer({
   storage: multerS3({
     s3: new S3Client({
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY as string,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+        accessKeyId: envs.s3.accessKey as string,
+        secretAccessKey: envs.s3.secretKey as string,
       },
       region: 'ap-northeast-2',
     }),

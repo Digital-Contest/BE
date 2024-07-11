@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 
+
 dotenv.config();
 
 export const envs = {
@@ -16,6 +17,18 @@ export const envs = {
   redis:{
     host:process.env.AWS_REDIS_ENDPOINT as string,
     port:process.env.AWS_REDIS_PORT as string
+  },
+  openAI:{
+    key:process.env.OPENAI_API_KEY
+  },
+  jwt:{
+    secret:process.env.JWT_SECRET,
+    accessTime:process.env.JWT_ACCESSTOKEN,
+    refreshTime:process.env.JWT_REFRESHTOKEN
+  },
+  s3:{
+    accessKey:process.env.AWS_ACCESS_KEY,
+    secretKey:process.env.AWS_SECRET_ACCESS_KEY
   },
   prefix: process.env.PREFIX || '',
 };

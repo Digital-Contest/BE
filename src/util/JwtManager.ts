@@ -2,7 +2,7 @@ import { Service } from "typedi";
 import jwt from 'jsonwebtoken';
 import type { JwtPayload } from "jsonwebtoken"
 import { TokenManager } from "./TokenManager.js";
-
+import { envs } from "../config/environment.js";
 
 @Service()
 export class JwtManager {
@@ -18,14 +18,14 @@ export class JwtManager {
         };
         return 'Bearer ' + jwt.sign(payload, process.env.JWT_SECRET, {
             algorithm: 'HS256',
-            expiresIn: '30d',
+            expiresIn: envs.jwt.accessTime,
         });
     }
 
     public makeRefreshToken(){
         return 'Bearer ' + jwt.sign({}, process.env.JWT_SECRET, {
             algorithm: 'HS256',
-            expiresIn: '60d',
+            expiresIn: envs.jwt.refreshTime,
         });
     }
 
