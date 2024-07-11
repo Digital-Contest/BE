@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { envs } from "../config/environment";
+import { envs } from "../config/environment.js";
 
 
 const openai = new OpenAI({
