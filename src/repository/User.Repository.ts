@@ -48,4 +48,19 @@ export class UserRepository extends Repository<User> {
         return await this.findOne({ where: {id} })
     }
 
+    /**
+     * 유저에 따라 유저 점수를 업데이트 해주는 함수
+     * @param userId 유저 id
+     * @param score 추가할 점수
+     * @returns ..
+     */
+    public async updateUserScore(userId:number, addScore:number){
+        return this.createQueryBuilder()
+            .update(User)
+            .set({ score: () => `score + :addScore` })
+            .where('id = :userId',{userId})
+            .setParameters({ addScore })
+            .execute();
+    }
+
  }
