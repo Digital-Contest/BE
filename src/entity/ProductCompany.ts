@@ -24,6 +24,11 @@ export class ProductCompany extends BaseEntity{
     product: Relation<Product>;
 
 
+    public getCompany(){
+        return this.company;
+    }
+
+
     // @ManyToOne(() => Company, company => company.productCompanys, {
     //     onDelete: "CASCADE",
     //     onUpdate: "CASCADE",

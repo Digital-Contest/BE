@@ -68,6 +68,24 @@ export class Product extends BaseEntity{
         return this.productCategory;
     }
 
+    public getProduct(){
+        return this.name;
+    }
+
+    public getCreatedAt(){
+        return this.createdAt;
+    }
+
+    public getImageUrl(){
+        return this.imageUrl;
+    }
+
+    public getProductCompanys(){
+        return this.productCompanys;
+    }
+
+
+
 
 
 }
