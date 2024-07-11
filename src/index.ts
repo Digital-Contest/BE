@@ -11,6 +11,7 @@ import { AuthController } from './controller/Auth.Controller.js';
 import { createRequire } from 'module'
 import { IntroduceController } from './controller/Introduce.Controller.js';
 import { LevelController } from './controller/Level.Conroller.js';
+import { ProductController } from './controller/Product.Controller.js';
 
 
 
@@ -19,7 +20,7 @@ const require = createRequire(import.meta.url)
 require('dotenv').config();
 
 export const app: express.Application = createExpressServer({
-    controllers: [ AuthController, IntroduceController, LevelController],
+    controllers: [ AuthController, IntroduceController, LevelController, ProductController],
     middlewares: [ErrorHandler],
 
     routePrefix: envs.prefix,
