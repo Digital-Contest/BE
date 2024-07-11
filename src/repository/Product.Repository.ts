@@ -55,6 +55,23 @@ export class ProductRepository extends Repository<Product> {
     }
 
 
+    /**
+     * 상태에 Product, ProductCompany 조회 함수 
+     * @param userId 유저 id
+     * @param status 물품 상태
+     * @returns Product, ProductCompany 엔티티s
+     */
+    public async findProductAndProductCompanyByUserIdAndStatus(userId:number, status:boolean | null){
+        return this.createQueryBuilder('p')
+            .innerJoinAndSelect('p.productCompanys', 'pc')
+            .where('p.user_id = :userId',{userId})
+            .andWhere('p.status = :status',{status})
+            .orWhere('p.status is :status',{status})
+            .orderBy('p.created_at', 'DESC')
+            .getMany();
+    }
+
+
 
 
   
