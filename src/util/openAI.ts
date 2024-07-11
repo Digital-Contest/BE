@@ -6,8 +6,7 @@ const openai = new OpenAI({
   apiKey: envs.openAI.key,
 });
 
-export const openAI = async (imageUrls:string, text:string) => {
-
+export const openAI = async (imageUrl:string, text:string) => {
   const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -15,14 +14,11 @@ export const openAI = async (imageUrls:string, text:string) => {
           role: "user",
           content: [
             { type: "text", text: text },
-            {type: "image_url", image_url: {url: imageUrls[0]}},
-          ],
-
-          
+            {type: "image_url", image_url: {url: imageUrl}},
+          ], 
         },
       ],
     });
-    console.log(response.choices[0].message.content);
     return response.choices[0].message.content
 }
 
