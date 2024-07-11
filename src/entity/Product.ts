@@ -1,8 +1,8 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { BaseEntity } from "./base/BaseEntity.js";
 import { User } from "./User.js";
-import { ProductCategory } from "./ProductCategory.js";
-import { IntroduceTextCategory } from "./IntroduceTextCategory.js";
+// import { ProductCategory } from "./ProductCategory.js";
+// import { IntroduceTextCategory } from "./IntroduceTextCategory.js";
 import { ProductImage } from "./ProductImage.js";
 import { ProductCompany } from "./ProductCompany.js";
 
@@ -35,20 +35,20 @@ export class Product extends BaseEntity{
     user: Relation<User>;
 
 
-    @ManyToOne(() => IntroduceTextCategory, introduceTextCategory => introduceTextCategory.products, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-    })
-    @JoinColumn({ name: "introduce_text_category_id", referencedColumnName: "id" })
-    introduceTextCategory: Relation<IntroduceTextCategory>;
+    // @ManyToOne(() => IntroduceTextCategory, introduceTextCategory => introduceTextCategory.products, {
+    //     onDelete: "CASCADE",
+    //     onUpdate: "CASCADE",
+    // })
+    // @JoinColumn({ name: "introduce_text_category_id", referencedColumnName: "id" })
+    // introduceTextCategory: Relation<IntroduceTextCategory>;
 
 
-    @ManyToOne(() => ProductCategory, productCategory => productCategory.products, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-    })
-    @JoinColumn({ name: "product_category_id", referencedColumnName: "id" })
-    productCategory: Relation<ProductCategory>;
+    // @ManyToOne(() => ProductCategory, productCategory => productCategory.products, {
+    //     onDelete: "CASCADE",
+    //     onUpdate: "CASCADE",
+    // })
+    // @JoinColumn({ name: "product_category_id", referencedColumnName: "id" })
+    // productCategory: Relation<ProductCategory>;
 
     
 

@@ -7,7 +7,7 @@ import { SecondhandTradeCount } from '../dto/response/SecondhandTradeCount.js';
 import { LevelInformation } from '../dto/response/LevelInformation.js';
 import { User } from '../entity/User.js';
 import { UserRepository } from '../repository/User.Repository.js';
-import { getLevelByScore, getLevelColor, getLevelExperience, getMyLevelExperience, LevelExperience } from '../util/level.js';
+import { getLevelByScore, getLevelColor, getLevelExperience, getMyLevelExperience, LevelExperience } from '../util/Level.js';
 import { LevelColor } from '../dto/response/LevelColor.js';
 
 
