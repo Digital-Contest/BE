@@ -3,16 +3,14 @@ import { InjectRepository } from "typeorm-typedi-extensions";
 import { checkData } from "../util/checker.js";
 import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
 import { ErrorCode } from "../exception/ErrorCode.js";
-//import { IntroduceTextCategory } from "../entity/IntroduceTextCategory.js";
-//import { IntroduceTextCategoryRepository } from "../repository/IntroduceTextCategoryData.Repository.js";
-import { getAllIntroduceTextCategory, getIntroduceTextCategoryByCondition } from "../util/enum/IntroduceTextCategory.js";
+import { getIntroduceTextCategoryByCondition } from "../util/enum/IntroduceTextCategory.js";
 
 @Service()
 export class IntroduceService{
 
 
     constructor(
-     //   @InjectRepository(IntroduceTextCategory) private readonly introduceTextCategory: IntroduceTextCategoryRepository,
+
     ) {}
 
 
