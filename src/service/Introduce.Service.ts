@@ -4,7 +4,7 @@ import { checkData } from "../util/checker.js";
 import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
 import { ErrorCode } from "../exception/ErrorCode.js";
 //import { IntroduceTextCategory } from "../entity/IntroduceTextCategory.js";
-import { IntroduceTextCategoryRepository } from "../repository/IntroduceTextCategoryData.Repository.js";
+//import { IntroduceTextCategoryRepository } from "../repository/IntroduceTextCategoryData.Repository.js";
 import { getAllIntroduceTextCategory, getIntroduceTextCategoryByCondition } from "../util/enum/IntroduceTextCategory.js";
 
 @Service()
