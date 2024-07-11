@@ -1,7 +1,7 @@
 
 
 
-export enum ProductCompany{
+export enum ProductCategory{
     "기타중고"=1,
     "도서"=3,
     "식물"=5,
@@ -20,11 +20,11 @@ export enum ProductCompany{
 }
 
 
-export const getAllProductCompany = () => {
-    return Object.keys(ProductCompany);
+export const getAllProductCategory = () => {
+    return Object.keys(ProductCategory);
 }
 
 
-export const getProductCompanyByCondition = (key: string): number => {
-    return ProductCompany[key as keyof typeof ProductCompany];
+export const getProductCategoryByCondition = (key: string): number => {
+    return ProductCategory[key as keyof typeof ProductCategory];
 }
