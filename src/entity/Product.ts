@@ -3,7 +3,7 @@ import { BaseEntity } from "./base/BaseEntity.js";
 import { User } from "./User.js";
 // import { ProductCategory } from "./ProductCategory.js";
 // import { IntroduceTextCategory } from "./IntroduceTextCategory.js";
-import { ProductImage } from "./ProductImage.js";
+//import { ProductImage } from "./ProductImage.js";
 import { ProductCompany } from "./ProductCompany.js";
 
 
@@ -34,6 +34,10 @@ export class Product extends BaseEntity{
     introduceTextCategory:string;
 
 
+    @Column({ type: 'varchar', name: 'image_url', nullable: false })
+    imageUrl:string;
+
+
     @ManyToOne(() => User, user => user.products, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
@@ -41,26 +45,8 @@ export class Product extends BaseEntity{
     @JoinColumn({ name: "user_id", referencedColumnName: "id" })
     user: Relation<User>;
 
-
-    // @ManyToOne(() => IntroduceTextCategory, introduceTextCategory => introduceTextCategory.products, {
-    //     onDelete: "CASCADE",
-    //     onUpdate: "CASCADE",
-    // })
-    // @JoinColumn({ name: "introduce_text_category_id", referencedColumnName: "id" })
-    // introduceTextCategory: Relation<IntroduceTextCategory>;
-
-
-    // @ManyToOne(() => ProductCategory, productCategory => productCategory.products, {
-    //     onDelete: "CASCADE",
-    //     onUpdate: "CASCADE",
-    // })
-    // @JoinColumn({ name: "product_category_id", referencedColumnName: "id" })
-    // productCategory: Relation<ProductCategory>;
-
-    
-
-    @OneToMany(() => ProductImage,  productImages =>  productImages.product)
-    productImages: Relation<ProductImage>[];
+    // @OneToMany(() => ProductImage,  productImages =>  productImages.product)
+    // productImages: Relation<ProductImage>[];
 
     @OneToMany(() => ProductCompany,  productCompanys =>  productCompanys.product)
     productCompanys: Relation<ProductCompany>[];
