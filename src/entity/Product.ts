@@ -1,22 +1,43 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 import { BaseEntity } from "./base/BaseEntity.js";
 import { User } from "./User.js";
-// import { ProductCategory } from "./ProductCategory.js";
-// import { IntroduceTextCategory } from "./IntroduceTextCategory.js";
-//import { ProductImage } from "./ProductImage.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { ProductCompany } from "./ProductCompany.js";
+import { ProductCreate } from "../dto/request/ProductCreat.js";
 
 
 @Entity("product")
 @Index("idx_product_user", ["user"])
 export class Product extends BaseEntity{
 
+    constructor(
+        userId:number, imageUrl:string, introduceCategory:string, price:number, productCategory:string,
+        product:string, introduceText:string){
+        super()
+        this.setUserId(userId),
+        this.setImageUrl(imageUrl);
+        this.setIntroduceCategory(introduceCategory);
+        this.setPrice(price);
+        this.setProductCategory(productCategory);
+        this.setProduct(product);
+        this.setIntroduceText(introduceText);
+    }
+
+    public static createProduct(
+        userId:number, imageUrl:string, introduceCategory:string, price:number, productCategory:string,
+        product:string, introduceText:string){
+        return new Product(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText)
+    }
+
     
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'int', name: 'price', nullable: false })
-    price:string;
+    price:number;
 
     @Column({ type: 'varchar', name: 'name', nullable: false })
     name:string;
@@ -32,6 +53,9 @@ export class Product extends BaseEntity{
 
     @Column({ type: 'varchar', name: 'introduce_text_category', nullable: false })
     introduceTextCategory:string;
+
+    @Column({ type: 'int', name: 'user_id', nullable: false })
+    userId:number;
 
 
     @Column({ type: 'varchar', name: 'image_url', nullable: false })
@@ -84,8 +108,48 @@ export class Product extends BaseEntity{
         return this.productCompanys;
     }
 
+   private setIntroduceCategory(introduceCategory: string) {
+        if (introduceCategory === null) 
+            throw new Error(`${__dirname} : introduceCategory 값이 존재하지 않습니다.`);
+        this.introduceTextCategory = introduceCategory;
+    }
+
+    private setPrice(price: number) {
+        if (price === null) 
+            throw new Error(`${__dirname} : price 값이 존재하지 않습니다.`);
+        this.price=price
+    }
+
+    private setProductCategory(productCategory: string) {
+        if (productCategory === null) 
+            throw new Error(`${__dirname} : productCategory 값이 존재하지 않습니다.`);
+        this.productCategory = productCategory;
+    }
+
+    private setProduct(product: string) {
+        if (product === null) 
+            throw new Error(`${__dirname} : product 값이 존재하지 않습니다.`);
+        this.name=product
+    }
+
+    private setIntroduceText(introduceText: string) {
+        if (introduceText === null) 
+            throw new Error(`${__dirname} : introduceText 값이 존재하지 않습니다.`);
+        this.introduceText = introduceText;
+    }
+
+    private setImageUrl(imageUrl: string) {
+        if (imageUrl === null) 
+            throw new Error(`${__dirname} : imageUrl 값이 존재하지 않습니다.`);
+        this.imageUrl = imageUrl;
+    }
 
 
+    private setUserId(userId:number) {
+        if (userId === null) 
+            throw new Error(`${__dirname} : userId 값이 존재하지 않습니다.`);
+        this.userId=userId;
+    }
 
 
 }
