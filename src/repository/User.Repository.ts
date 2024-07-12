@@ -33,8 +33,8 @@ export class UserRepository extends Repository<User> {
      * @param email 카카오 지정 이메일
      * @returns 생성 유저 엔티티
      */
-    public async insertUser(numbers: string, email: string): Promise<User> {
-        const newUser = User.createUser(numbers, email, "USER")
+    public async insertUser(numbers: string, email: string, nickname:string): Promise<User> {
+        const newUser = User.createUser(numbers, email, "USER", nickname)
         return this.save(newUser);
     }
 

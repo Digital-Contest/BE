@@ -55,7 +55,7 @@ export class AuthService {
 
     private async signInDependingOnRegistrationStatus(userData: User, kakaoData: AxiosResponse<any>) {
         if (!checkData(userData)) {
-            await this.userRepository.insertUser(kakaoData.data.id, kakaoData.data.kakao_account.email);
+            await this.userRepository.insertUser(kakaoData.data.id, kakaoData.data.kakao_account.email, kakaoData.data.properties.nickname);
         }
     }
     
