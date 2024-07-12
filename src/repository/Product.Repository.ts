@@ -2,6 +2,8 @@ import { EntityRepository, Repository } from 'typeorm';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Product } from '../entity/Product.js';
+import { ProductCreate } from '../dto/request/ProductCreat.js';
+import { User } from '../entity/User.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -69,6 +71,19 @@ export class ProductRepository extends Repository<Product> {
             .orWhere('p.status is :status',{status})
             .orderBy('p.created_at', 'DESC')
             .getMany();
+    }
+
+
+    public async insertProduct(
+     //   user:User, 
+     userId:number,
+      imageUrl:string, introduceCategory:string, price:number, productCategory:string,
+     product:string, introduceText:string):Promise<Product>{
+        const newProduct = Product.createProduct(
+           userId, 
+           imageUrl, introduceCategory, price, productCategory, product, introduceText );
+       return this.save(newProduct);
+
     }
 
 
