@@ -14,6 +14,9 @@ import { UserRepository } from '../repository/User.Repository.js';
 import { ProductCompanyRepository } from '../repository/ProductCompany.Repository.js';
 import { Transactional } from '../util/decorator/transaction.js';
 import { Connection } from 'typeorm';
+import { verifyIntroduceTextCategory, verifyProductCategory } from '../util/verify.js';
+import { getIntroduceTextCategoryByCondition } from '../util/enum/IntroduceTextCategory.js';
+import { getProductCategoryByCondition } from '../util/enum/ProductCategory.js';
 
 
 
@@ -63,6 +66,8 @@ export class ProductService {
     @Transactional()
     async pentrateProduct(userId:number, imageUrl:string, introduceCategory:string, price:number, productCategory:string,
         product:string, introduceText:string, companys:string[]){
+        verifyIntroduceTextCategory(getIntroduceTextCategoryByCondition(introduceCategory));
+        verifyProductCategory(getProductCategoryByCondition(productCategory));
         const productData = await this.productRepository.insertProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText);
         await this.pentrateProductCompany(companys, productData.getId());
     }
