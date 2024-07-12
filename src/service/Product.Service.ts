@@ -9,6 +9,11 @@ import { ErrorCode } from '../exception/ErrorCode.js';
 import { ProductList } from '../dto/response/ProductList.js';
 import { parseRoutes } from 'routing-controllers-openapi';
 import { formatDate } from '../util/date.js';
+import { ProductCreate } from '../dto/request/ProductCreat.js';
+import { UserRepository } from '../repository/User.Repository.js';
+import { ProductCompanyRepository } from '../repository/ProductCompany.Repository.js';
+import { Transactional } from '../util/decorator/transaction.js';
+import { Connection } from 'typeorm';
 
 
 
@@ -19,7 +24,10 @@ export class ProductService {
 
     constructor(
         @InjectRepository(ProductRepository) private readonly productRepository: ProductRepository,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
+        @InjectRepository(ProductCompanyRepository) private readonly productCompanyRepository: ProductCompanyRepository,
+        private readonly connection: Connection,
     ) {}
 
     /**
@@ -44,6 +52,28 @@ export class ProductService {
     async bringMyProduct(userId:number, status:string):Promise<ProductList[]>{
         const productDatas = await this.productRepository.findProductAndProductCompanyByUserIdAndStatus(userId, this.changeType(status));
         return this.mappingMyProductData(productDatas);
+    }
+
+    /**
+     * Product 생성
+     * @param userId 유저 id
+     * @param imageUrl 상품 이미지
+     * @param productCreate 상품 정보
+     */
+    @Transactional()
+    async pentrateProduct(userId:number, imageUrl:string, introduceCategory:string, price:number, productCategory:string,
+        product:string, introduceText:string, companys:string[]){
+        const productData = await this.productRepository.insertProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText);
+        await this.pentrateProductCompany(companys, productData.getId());
+    }
+
+    /**
+     * 물품 등록 회사를 삽입하는 함수
+     * @param company 등록할 회사들
+     * @param productId 물품 id
+     */
+    async pentrateProductCompany(company:string[], productId:number){
+        await this.productCompanyRepository.insertProductCompanys(company, productId);
     }
 
     /**
