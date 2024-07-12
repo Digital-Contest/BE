@@ -7,6 +7,6 @@
  */
 export const formatDate = (date:Date) =>{
     const settingDate = new Date(date);
-    const formattedDate = `${settingDate.getFullYear()}-${ settingDate.getMonth() + 1}/${settingDate.getDate()}`;
+    const formattedDate = `${settingDate.getFullYear()}년${ settingDate.getMonth() + 1}월${settingDate.getDate()}일`;
     return formattedDate;
 }
