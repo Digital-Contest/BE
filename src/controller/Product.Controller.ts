@@ -1,7 +1,7 @@
 
 
 
-import { JsonController,  Body, HttpCode, Req, UseBefore, Get, Patch, Param, QueryParam } from "routing-controllers";
+import { JsonController,  Body, HttpCode, Req, UseBefore, Get, Patch, Param, QueryParam, Post } from "routing-controllers";
 import { Request } from "express";
 import { Service } from "typedi";
 import { SuccessResponseDto } from "../response/SuccessResponseDto.js";
@@ -9,7 +9,8 @@ import { compareAuthToken } from "../middleware/jwtMiddleware.js";
 import { ProductStatus } from "../dto/request/ProductStatus.js";
 import { ProductService } from "../service/Product.Service.js";
 import { ProductList } from "../dto/response/ProductList.js";
-import { Query } from "typeorm/driver/Query.js";
+import { ProductCreate } from "../dto/request/ProductCreat.js";
+import { uploadImage } from "../util/s3Upload.js";
 
 
 
@@ -53,6 +54,21 @@ export class ProductController {
         const result = await this.productService.bringMyProduct(req.decoded.user_id, status);
         console.log("물품 조회 완료"); 
         return SuccessResponseDto.of(result);
+    }
+
+
+    @HttpCode(200)
+    @UseBefore(compareAuthToken, uploadImage.array('files'))
+    @Post()
+    async pentrateProduct(
+        @Req() req: any,
+        @Body() productCreate: ProductCreate
+    ): Promise<SuccessResponseDto<void>>{
+        const imageUrls = req.files.map((image) => {return image.location});
+        await this.productService.pentrateProduct(req.decoded.user_id, imageUrls, productCreate.getIntroduceCategory(), productCreate.getPrice(),
+        productCreate.getProductCategory(), productCreate.getProduct(), productCreate.getIntroduceText(), productCreate.getCompanys());
+        console.log("물품 등록 완료"); 
+        return SuccessResponseDto.of();
     }
 
 
