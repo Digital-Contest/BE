@@ -4,6 +4,7 @@ import { InjectRepository } from "typeorm-typedi-extensions";
 import { UserRepository } from "../repository/User.Repository.js";
 import { getProductCategoryByCondition } from "../util/enum/ProductCategory.js";
 import { Product } from "../entity/Product.js";
+import { UserNickname } from "../dto/response/UserNickname.js";
 
 
 
@@ -13,8 +14,15 @@ export class UserService{
         @InjectRepository(UserRepository) private userRepository: UserRepository,
     ) { }
 
-
-
+    /**
+     * 유저 닉네임 조회 함수
+     * @param userId 유저 id
+     * @returns 
+     */
+    async bringNickname(userId:number) {
+        const userData = await this.userRepository.findUserById(userId);
+        return UserNickname.of(userData.getNickname());
+    }
 
 
 
