@@ -1,18 +1,17 @@
-
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import {  createConnection, useContainer} from 'typeorm';
-import {
-    BaseEntity,
-    BeforeInsert,
-    BeforeUpdate,
-} from 'typeorm';
-import {  validateOrReject } from 'class-validator';
+import { createConnection, useContainer, Connection } from 'typeorm';
+import { BaseEntity, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { validateOrReject } from 'class-validator';
 import { envs } from './environment.js';
-import {Container} from 'typedi';
+import { Container } from 'typedi';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Register TypeORM Connection in typedi container
+useContainer(Container);
 
 /**
  * Before insert/update validation data
@@ -25,12 +24,8 @@ export abstract class ValidationEntity extends BaseEntity {
     }
 }
 
-
-
 export async function initializeDatabase() {
     try {
-        useContainer(Container);
-    
         const connection = await createConnection({
             name: 'default',
             type: 'mysql',
@@ -44,9 +39,13 @@ export async function initializeDatabase() {
             entities: [path.join(__dirname, '../entity/*.{js,ts}')],
             namingStrategy: new SnakeNamingStrategy(),
         });
+
+        // Register TypeORM Connection in typedi container
+        Container.set(Connection, connection);
+
         return connection;
     } catch (err) {
-        console.error("데이터베이스 초기화 중 오류 발생", err);
+        console.error("Error occurred during database initialization", err);
         throw err;
     }
 }
