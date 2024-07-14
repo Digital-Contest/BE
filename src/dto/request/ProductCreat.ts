@@ -1,4 +1,5 @@
-import { IsNotEmpty } from "class-validator";
+import { IsEmpty, IsNotEmpty, IsOptional } from "class-validator";
+
 
 
 export class ProductCreate{
@@ -6,8 +7,8 @@ export class ProductCreate{
     @IsNotEmpty()
     private introduceCategory:string;
 
-    @IsNotEmpty()
-    private price:number;
+    @IsOptional()
+    private price:number | null;
     
     @IsNotEmpty()
     private productCategory: string;
