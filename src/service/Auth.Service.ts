@@ -33,6 +33,7 @@ export class AuthService {
         const userData: User = await this.userRepository.findUserByKakaoId(kakaoData.data.id);
         await this.signInDependingOnRegistrationStatus(userData, kakaoData);
         const checkedUserData: User = await this.userRepository.findUserByKakaoId(kakaoData.data.id);
+        console.log(checkedUserData.getId())
         const accessToken = this.jwtManager.makeAccessToken(checkedUserData.getId(), checkedUserData.getRole()); 
         const refreshToken = this.jwtManager.makeRefreshToken();
         await this.tokenManager.setToken(String(checkedUserData.getId()+"eco"), refreshToken);

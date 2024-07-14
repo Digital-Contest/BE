@@ -51,6 +51,7 @@ export class ProductController {
         @Req() req: Request,
         @QueryParam('status') status: string
     ): Promise<SuccessResponseDto<ProductList[]>>{
+        console.log(req.decoded.user_id)
         const result = await this.productService.bringMyProduct(req.decoded.user_id, status);
         console.log("물품 조회 완료"); 
         return SuccessResponseDto.of(result);
