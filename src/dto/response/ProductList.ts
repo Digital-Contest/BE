@@ -12,14 +12,16 @@ export class ProductList {
     private imageUrl: string;
     private createdAt: string;
     private company: string[];
+    private price:number;
 
-    constructor(productId: number, product: string, productCategory: string, imageUrl: string, createdAt: string, company: string[]) {
+    constructor(productId: number, product: string, productCategory: string, imageUrl: string, createdAt: string, company: string[], price:number) {
         this.setProductId(productId);
         this.setProduct(product);
         this.setProductCategory(productCategory);
         this.setImageUrl(imageUrl);
         this.setCreatedAt(createdAt);
         this.setCompany(company);
+        this.setPrice(price);
     }
 
     private setProductId(productId: number) {
@@ -52,13 +54,16 @@ export class ProductList {
         this.company = company;
     }
 
-    // public static of(productId: number, product: string, productCategory: string, imageUrl: string, createdAt: string, company: string[]) {
-    //     return new ProductList(productId, product, productCategory, imageUrl, createdAt, company);
-    // }
+    private setPrice(price:number){
+        if(price === null)throw new Error (`${__dirname} : company 값이 존재하지 않습니다.`);
+        this.price=price;
+    }
+
+
 
     public static of(productList:ProductList[]) {
         return productList.map((data)=>{
-            return new ProductList(data.productId, data.product, data.productCategory, data.imageUrl, data.createdAt, data.company);
+            return new ProductList(data.productId, data.product, data.productCategory, data.imageUrl, data.createdAt, data.company, data.price);
         })
       
     }

@@ -95,7 +95,7 @@ export class ProductService {
         return products.map((data)=> {
             return new ProductList(data.getId(), data.getProduct(), data.getProductCategory(), 
             data.getImageUrl(), formatDate(data.getCreatedAt()), 
-            data.getProductCompanys().map((data)=> data.getCompany()))
+            data.getProductCompanys().map((data)=> data.getCompany()), data.getPrice());
         })
     }
 
