@@ -7,7 +7,6 @@ export class IntroduceTextRequest{
     @IsNotEmpty()
     private introduceCategory:string;
 
-    @IsNotEmpty()
     private price:number;
     
     @IsNotEmpty()

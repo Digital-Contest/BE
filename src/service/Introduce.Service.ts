@@ -4,6 +4,7 @@ import { openAI } from "../util/openAI.js";
 import { getProductCategoryByCondition } from "../util/enum/ProductCategory.js";
 import {  IntroduceTextResponse } from "../dto/response/IntroduceTextResponse.js";
 import { verifyIntroduceTextCategory, verifyProductCategory } from "../util/verify.js";
+import { checkData } from "../util/checker.js";
 
 @Service()
 export class IntroduceService{
@@ -25,12 +26,18 @@ export class IntroduceService{
     public async makeIntroduceText(images: string[], introduceCategory:string, price:number, productCategory:string, product:string): Promise<IntroduceTextResponse> {
         verifyIntroduceTextCategory(getIntroduceTextCategoryByCondition(introduceCategory));
         verifyProductCategory(getProductCategoryByCondition(productCategory));
-        const introduceText = await openAI(images[0], price +product +getIntroduceTextCategoryByCondition(introduceCategory))
-        return IntroduceTextResponse.of(introduceText);
+        const introduceText = await openAI(images[0], this.checkPrice(price) +product +getIntroduceTextCategoryByCondition(introduceCategory))
+        return IntroduceTextResponse.of(introduceText, this.checkPrice(price));
     }
 
 
-
+    public checkPrice(price:number){
+        let result = price;
+        if(!checkData(price)){
+            result = 50000
+        }
+        return result;
+    }
 
 
 
