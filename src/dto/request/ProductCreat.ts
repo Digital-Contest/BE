@@ -7,7 +7,7 @@ export class ProductCreate{
     @IsNotEmpty()
     private introduceCategory:string;
 
-    @IsOptional()
+    @IsNotEmpty()
     private price:number | null;
     
     @IsNotEmpty()

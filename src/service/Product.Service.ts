@@ -71,7 +71,7 @@ export class ProductService {
         product:string, introduceText:string, companys:string[]){
         verifyIntroduceTextCategory(getIntroduceTextCategoryByCondition(introduceCategory));
         verifyProductCategory(getProductCategoryByCondition(productCategory));
-        const productData = await this.productRepository.insertProduct(userId, imageUrl, introduceCategory, this.checkPrice(price), productCategory, product, introduceText);
+        const productData = await this.productRepository.insertProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText);
         await this.pentrateProductCompany(companys, productData.getId());
     }
 
@@ -92,14 +92,6 @@ export class ProductService {
         if (!checkData(productData)) {
            throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT);
         }
-    }
-
-    public checkPrice(price:number){
-        let result = price;
-        if(!checkData(price)){
-            result = 50000
-        }
-        return result;
     }
 
     private mappingMyProductData(products: Product[]){
