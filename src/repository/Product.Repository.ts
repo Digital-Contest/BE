@@ -20,13 +20,13 @@ export class ProductRepository extends Repository<Product> {
      * @param userId 유저 id
      * @returns 
      */
-    public async findSecondhandTradeCount(userId:number):Promise<number>{
+    public async findSecondhandTradeCount(userId:number){
         return this.createQueryBuilder()
-            .select()
+            .select('p')
             .from(Product, 'p')
-            .where('p.id = :userId',{userId})
-            .andWhere('p.status = 1')
-            .getCount();
+            .where('p.user_id = :userId',{userId})
+            .andWhere('p.status = true')
+            .getMany();
     }
 
     /**

@@ -29,7 +29,7 @@ export class LevelService {
      */
     async bringSecondhandTradeCount(userId:number):Promise<SecondhandTradeCount> {
         const secondhandTradeCount = await this.productRepository.findSecondhandTradeCount(userId);
-        return SecondhandTradeCount.of(secondhandTradeCount)
+        return SecondhandTradeCount.of(secondhandTradeCount.length)
     }
 
     /**
