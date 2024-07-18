@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { redisClient } from "../config/redis.js";
+import { redisClient } from "../config/redis";
 
 @Service()
 export class TokenManager{

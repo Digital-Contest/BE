@@ -1,18 +1,17 @@
 import { Service } from 'typedi';
 import { InjectRepository } from 'typeorm-typedi-extensions';
-import { UserRepository } from '../repository/User.Repository.js';
-import { createRequire } from 'module'
-import { JwtManager } from '../util/JwtManager.js';
-import { TokenManager } from '../util/TokenManager.js';
-import { LoginResponse } from '../dto/response/loginResponse.js';
-import { SocialLogin } from '../util/SocialLogin.js';
-import { Token } from '../dto/response/Token.js';
-import { User } from '../entity/User.js';
-import { ErrorResponseDto } from '../response/ErrorResponseDto.js';
-import { ErrorCode } from '../exception/ErrorCode.js';
+import { UserRepository } from '../repository/User.Repository';
+import { JwtManager } from '../util/JwtManager';
+import { TokenManager } from '../util/TokenManager';
+import { LoginResponse } from '../dto/response/loginResponse';
+import { SocialLogin } from '../util/SocialLogin';
+import { Token } from '../dto/response/Token';
+import { User } from '../entity/User';
+import { ErrorResponseDto } from '../response/ErrorResponseDto';
+import { ErrorCode } from '../exception/ErrorCode';
 import { AxiosResponse } from 'axios';
-import { checkData } from '../util/checker.js';
-const require = createRequire(import.meta.url)
+import { checkData } from '../util/checker';
+
 require('dotenv').config();
 
 

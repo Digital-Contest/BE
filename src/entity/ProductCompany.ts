@@ -1,10 +1,10 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
-import { BaseEntity } from "./base/BaseEntity.js";
-import { Product } from "./Product.js";
+import { BaseEntity } from "./base/BaseEntity";
+import { Product } from "./Product";
 import path from 'path';
 import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 
 @Entity("product_company")

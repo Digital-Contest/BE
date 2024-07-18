@@ -1,11 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { Product } from '../entity/Product.js';
-import { ProductCreate } from '../dto/request/ProductCreat.js';
-import { User } from '../entity/User.js';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { Product } from '../entity/Product';
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 
 /**

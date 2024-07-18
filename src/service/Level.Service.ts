@@ -1,14 +1,13 @@
 import { Service } from 'typedi';;
-import { createRequire } from 'module'
-import { Product } from '../entity/Product.js';
+import { Product } from '../entity/Product';
 import { InjectRepository } from 'typeorm-typedi-extensions';
-import { ProductRepository } from '../repository/Product.Repository.js';
-import { SecondhandTradeCount } from '../dto/response/SecondhandTradeCount.js';
-import { LevelInformation } from '../dto/response/LevelInformation.js';
-import { User } from '../entity/User.js';
-import { UserRepository } from '../repository/User.Repository.js';
-import { getLevelByScore, getLevelColor, getLevelExperience, getMyLevelExperience, LevelExperience } from '../util/enum/Level.js';
-import { LevelColor } from '../dto/response/LevelColor.js';
+import { ProductRepository } from '../repository/Product.Repository';
+import { SecondhandTradeCount } from '../dto/response/SecondhandTradeCount';
+import { LevelInformation } from '../dto/response/LevelInformation';
+import { User } from '../entity/User';
+import { UserRepository } from '../repository/User.Repository';
+import { getLevelByScore, getLevelColor, getLevelExperience, getMyLevelExperience, LevelExperience } from '../util/enum/Level';
+import { LevelColor } from '../dto/response/LevelColor';
 
 
 

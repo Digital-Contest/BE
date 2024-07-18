@@ -1,12 +1,14 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
-import { BaseEntity } from "./base/BaseEntity.js";
-import { User } from "./User.js";
+import { BaseEntity } from "./base/BaseEntity";
+import { User } from "./User";
 import path from 'path';
 import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-import { ProductCompany } from "./ProductCompany.js";
-import { ProductCreate } from "../dto/request/ProductCreat.js";
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+import { ProductCompany } from "./ProductCompany";
+import { ProductCreate } from "../dto/request/ProductCreat";
 
 
 @Entity("product")

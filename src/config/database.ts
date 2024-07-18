@@ -2,13 +2,14 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { createConnection, useContainer, Connection } from 'typeorm';
 import { BaseEntity, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { validateOrReject } from 'class-validator';
-import { envs } from './environment.js';
+import { envs } from './environment';
 import { Container } from 'typedi';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const __filename = __filename || path.basename(__filename);
+// const __dirname = __dirname || path.dirname(__filename);
 
 // Register TypeORM Connection in typedi container
 useContainer(Container);

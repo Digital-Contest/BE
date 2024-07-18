@@ -1,8 +1,8 @@
 import { Service } from "typedi";
 import jwt from 'jsonwebtoken';
 import type { JwtPayload } from "jsonwebtoken"
-import { TokenManager } from "./TokenManager.js";
-import { envs } from "../config/environment.js";
+import { TokenManager } from "./TokenManager";
+import { envs } from "../config/environment";
 
 @Service()
 export class JwtManager {

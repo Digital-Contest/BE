@@ -1,14 +1,12 @@
 import { JsonController, Post, Body, Res, HttpCode, Req, Delete, UseBefore, Get } from "routing-controllers";
 import { Request, Response, response } from "express";
 import { Service } from "typedi";
-import { AuthService } from "../service/Auth.Service.js";
-import { SuccessResponseDto } from "../response/SuccessResponseDto.js";
-import { LoginResponse } from "../dto/response/loginResponse.js";
-import { compareAuthToken } from "../middleware/jwtMiddleware.js";
-import { LevelService } from "../service/Level.Service.js";
-import { SecondhandTradeCount } from "../dto/response/SecondhandTradeCount.js";
-import { LevelInformation } from "../dto/response/LevelInformation.js";
-import { LevelColor } from "../dto/response/LevelColor.js";
+import { SuccessResponseDto } from "../response/SuccessResponseDto";
+import { compareAuthToken } from "../middleware/jwtMiddleware";
+import { LevelService } from "../service/Level.Service";
+import { SecondhandTradeCount } from "../dto/response/SecondhandTradeCount";
+import { LevelInformation } from "../dto/response/LevelInformation";
+import { LevelColor } from "../dto/response/LevelColor";
 
 
 

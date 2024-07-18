@@ -1,4 +1,4 @@
-import { BaseEntity } from "./base/BaseEntity.js"
+import { BaseEntity } from "./base/BaseEntity"
 import {
     Entity,
     PrimaryGeneratedColumn,
@@ -7,7 +7,7 @@ import {
 } from "typeorm"
 import { InternalServerError } from "routing-controllers";
 import { Relation } from "typeorm";
-import { Product } from "./Product.js";
+import { Product } from "./Product";
 
 
 

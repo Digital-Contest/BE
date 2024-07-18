@@ -1,22 +1,20 @@
 import { Service } from 'typedi';
 import { InjectRepository } from 'typeorm-typedi-extensions';
-import { ProductRepository } from '../repository/Product.Repository.js';
-import { UserService } from './User.Service.js';
-import { Product } from '../entity/Product.js';
-import { checkData } from '../util/checker.js';
-import { ErrorResponseDto } from '../response/ErrorResponseDto.js';
-import { ErrorCode } from '../exception/ErrorCode.js';
-import { ProductList } from '../dto/response/ProductList.js';
-import { parseRoutes } from 'routing-controllers-openapi';
-import { formatDate } from '../util/date.js';
-import { ProductCreate } from '../dto/request/ProductCreat.js';
-import { UserRepository } from '../repository/User.Repository.js';
-import { ProductCompanyRepository } from '../repository/ProductCompany.Repository.js';
-import { Transactional } from '../util/decorator/transaction.js';
+import { ProductRepository } from '../repository/Product.Repository';
+import { UserService } from './User.Service';
+import { Product } from '../entity/Product';
+import { checkData } from '../util/checker';
+import { ErrorResponseDto } from '../response/ErrorResponseDto';
+import { ErrorCode } from '../exception/ErrorCode';
+import { ProductList } from '../dto/response/ProductList';
+import { formatDate } from '../util/date';
+import { UserRepository } from '../repository/User.Repository';
+import { ProductCompanyRepository } from '../repository/ProductCompany.Repository';
+import { Transactional } from '../util/decorator/transaction';
 import { Connection } from 'typeorm';
-import { verifyIntroduceTextCategory, verifyProductCategory } from '../util/verify.js';
-import { getIntroduceTextCategoryByCondition } from '../util/enum/IntroduceTextCategory.js';
-import { getProductCategoryByCondition } from '../util/enum/ProductCategory.js';
+import { verifyIntroduceTextCategory, verifyProductCategory } from '../util/verify';
+import { getIntroduceTextCategoryByCondition } from '../util/enum/IntroduceTextCategory';
+import { getProductCategoryByCondition } from '../util/enum/ProductCategory';
 
 
 

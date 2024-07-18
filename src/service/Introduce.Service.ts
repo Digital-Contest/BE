@@ -1,10 +1,10 @@
 import { Service } from "typedi";
-import { getIntroduceTextCategoryByCondition } from "../util/enum/IntroduceTextCategory.js";
-import { openAI } from "../util/openAI.js";
-import { getProductCategoryByCondition } from "../util/enum/ProductCategory.js";
-import {  IntroduceTextResponse } from "../dto/response/IntroduceTextResponse.js";
-import { verifyIntroduceTextCategory, verifyProductCategory } from "../util/verify.js";
-import { checkData } from "../util/checker.js";
+import { getIntroduceTextCategoryByCondition } from "../util/enum/IntroduceTextCategory";
+import { openAI } from "../util/openAI";
+import { getProductCategoryByCondition } from "../util/enum/ProductCategory";
+import {  IntroduceTextResponse } from "../dto/response/IntroduceTextResponse";
+import { verifyIntroduceTextCategory, verifyProductCategory } from "../util/verify";
+import { checkData } from "../util/checker";
 
 @Service()
 export class IntroduceService{

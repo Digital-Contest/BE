@@ -3,22 +3,22 @@ import express from 'express';
 import {Container} from 'typedi';
 import { createServer, Server } from 'http';
 import { useContainer, createExpressServer } from 'routing-controllers';
-import { initializeDatabase } from './config/database.js';
-import { envs } from './config/environment.js';
-import {ErrorHandler} from './exception/ErrorHandler.js'
+import { initializeDatabase } from './config/database';
+import { envs } from './config/environment';
+import {ErrorHandler} from './exception/ErrorHandler'
 import  compression from 'compression';
-import { AuthController } from './controller/Auth.Controller.js';
+import { AuthController } from './controller/Auth.Controller';
 import { createRequire } from 'module'
-import { IntroduceController } from './controller/Introduce.Controller.js';
-import { LevelController } from './controller/Level.Conroller.js';
-import { ProductController } from './controller/Product.Controller.js';
-import { UserController } from './controller/User.Controller.js';
+import { IntroduceController } from './controller/Introduce.Controller';
+import { LevelController } from './controller/Level.Conroller';
+import { ProductController } from './controller/Product.Controller';
+import { UserController } from './controller/User.Controller';
 
 
 
 
-const require = createRequire(import.meta.url)
-require('dotenv').config();
+// const require = createRequire(import.meta.url)
+// require('dotenv').config();
 
 export const app: express.Application = createExpressServer({
     controllers: [ AuthController, IntroduceController, LevelController, ProductController, UserController],

@@ -1,10 +1,10 @@
 
 import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
-import { UserRepository } from "../repository/User.Repository.js";
-import { getProductCategoryByCondition } from "../util/enum/ProductCategory.js";
-import { Product } from "../entity/Product.js";
-import { UserNickname } from "../dto/response/UserNickname.js";
+import { UserRepository } from "../repository/User.Repository";
+import { getProductCategoryByCondition } from "../util/enum/ProductCategory";
+import { Product } from "../entity/Product";
+import { UserNickname } from "../dto/response/UserNickname";
 
 
 

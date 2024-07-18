@@ -1,9 +1,9 @@
 
-import { JwtManager } from "../util/JwtManager.js";
-import { ErrorCode } from "../exception/ErrorCode.js";
-import { Token } from "../dto/response/Token.js";
+import { JwtManager } from "../util/JwtManager";
+import { ErrorCode } from "../exception/ErrorCode";
+import { Token } from "../dto/response/Token";
 import { Service } from "typedi";
-import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
+import { ErrorResponseDto } from "../response/ErrorResponseDto";
 
 
 

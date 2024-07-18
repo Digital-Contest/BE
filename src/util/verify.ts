@@ -1,6 +1,6 @@
-import { ErrorCode } from "../exception/ErrorCode.js";
-import { ErrorResponseDto } from "../response/ErrorResponseDto.js";
-import { checkData } from "./checker.js";
+import { ErrorCode } from "../exception/ErrorCode";
+import { ErrorResponseDto } from "../response/ErrorResponseDto";
+import { checkData } from "./checker";
 
 export const verifyIntroduceTextCategory = (introduceTextCategoryData: string) =>{
     if(!checkData(introduceTextCategoryData)){

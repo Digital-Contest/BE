@@ -1,10 +1,10 @@
 import { JsonController, Post, Body, Res, HttpCode, Req, Delete, UseBefore } from "routing-controllers";
 import { Request, Response, response } from "express";
 import { Service } from "typedi";
-import { AuthService } from "../service/Auth.Service.js";
-import { SuccessResponseDto } from "../response/SuccessResponseDto.js";
-import { LoginResponse } from "../dto/response/loginResponse.js";
-import { compareAuthToken } from "../middleware/jwtMiddleware.js";
+import { AuthService } from "../service/Auth.Service";
+import { SuccessResponseDto } from "../response/SuccessResponseDto";
+import { LoginResponse } from "../dto/response/loginResponse";
+import { compareAuthToken } from "../middleware/jwtMiddleware";
 
 
 

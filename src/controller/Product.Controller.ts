@@ -4,13 +4,13 @@
 import { JsonController,  Body, HttpCode, Req, UseBefore, Get, Patch, Param, QueryParam, Post } from "routing-controllers";
 import { Request } from "express";
 import { Service } from "typedi";
-import { SuccessResponseDto } from "../response/SuccessResponseDto.js";
-import { compareAuthToken } from "../middleware/jwtMiddleware.js";
-import { ProductStatus } from "../dto/request/ProductStatus.js";
-import { ProductService } from "../service/Product.Service.js";
-import { ProductList } from "../dto/response/ProductList.js";
-import { ProductCreate } from "../dto/request/ProductCreat.js";
-import { uploadImage } from "../util/s3Upload.js";
+import { SuccessResponseDto } from "../response/SuccessResponseDto";
+import { compareAuthToken } from "../middleware/jwtMiddleware";
+import { ProductStatus } from "../dto/request/ProductStatus";
+import { ProductService } from "../service/Product.Service";
+import { ProductList } from "../dto/response/ProductList";
+import { ProductCreate } from "../dto/request/ProductCreat";
+import { uploadImage } from "../util/s3Upload";
 
 
 

@@ -1,11 +1,11 @@
 import { Body, HttpCode, JsonController, Post, Req, UseBefore } from "routing-controllers";
 import { Service } from "typedi";
-import {  IntroduceTextRequest } from "../dto/request/IntruduceTextRequest.js";
-import { IntroduceService } from "../service/Introduce.Service.js";
-import { SuccessResponseDto } from "../response/SuccessResponseDto.js";
-import { compareAuthToken } from "../middleware/jwtMiddleware.js";
-import { uploadImage } from "../util/s3Upload.js";
-import { IntroduceTextResponse } from "../dto/response/IntroduceTextResponse.js";
+import {  IntroduceTextRequest } from "../dto/request/IntruduceTextRequest";
+import { IntroduceService } from "../service/Introduce.Service";
+import { SuccessResponseDto } from "../response/SuccessResponseDto";
+import { compareAuthToken } from "../middleware/jwtMiddleware";
+import { uploadImage } from "../util/s3Upload";
+import { IntroduceTextResponse } from "../dto/response/IntroduceTextResponse";
 
 
 
