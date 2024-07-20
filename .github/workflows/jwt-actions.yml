@@ -42,6 +42,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0 .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:1.0
       
+      
       # EC2에서 Docker 실행
       - name: EC2 Docker 실행
         uses: appleboy/ssh-action@master
