@@ -8,20 +8,16 @@ import { envs } from './config/environment';
 import {ErrorHandler} from './exception/ErrorHandler'
 import  compression from 'compression';
 import { AuthController } from './controller/Auth.Controller';
-import { createRequire } from 'module'
 import { IntroduceController } from './controller/Introduce.Controller';
 import { LevelController } from './controller/Level.Conroller';
 import { ProductController } from './controller/Product.Controller';
 import { UserController } from './controller/User.Controller';
+import { SatisfactionController } from './controller/Satisfaction.Controller';
 
 
-
-
-// const require = createRequire(import.meta.url)
-// require('dotenv').config();
 
 export const app: express.Application = createExpressServer({
-    controllers: [ AuthController, IntroduceController, LevelController, ProductController, UserController],
+    controllers: [ AuthController, IntroduceController, LevelController, ProductController, UserController, SatisfactionController],
     middlewares: [ErrorHandler],
 
     routePrefix: envs.prefix,
