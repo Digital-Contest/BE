@@ -2,6 +2,8 @@ import { EntityRepository, Repository } from 'typeorm';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Product } from '../entity/Product';
+import { ProductCompany } from '../entity/ProductCompany';
+import { CompanySatisfaction } from '../dto/response/CompanySatisfaction';
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
@@ -70,11 +72,18 @@ export class ProductRepository extends Repository<Product> {
             .getMany();
     }
 
-
-    public async insertProduct(
-     //   user:User, 
-     userId:number,
-      imageUrl:string, introduceCategory:string, price:number, productCategory:string,
+    /**
+     * 물품 등록 함수
+     * @param userId 유저 id
+     * @param imageUrl 상품 이미지
+     * @param introduceCategory 소개 카테고리
+     * @param price 물품 가격
+     * @param productCategory 물품 카테고리 
+     * @param product 물품명
+     * @param introduceText 소개글
+     * @returns 
+     */
+    public async insertProduct(userId:number, imageUrl:string, introduceCategory:string, price:number, productCategory:string,
      product:string, introduceText:string):Promise<Product>{
         const newProduct = Product.createProduct(
            userId, 
@@ -83,6 +92,48 @@ export class ProductRepository extends Repository<Product> {
 
     }
 
+
+    /**
+     * 플랫폼별 선호 말투 조회 함수
+     * @returns 
+     */
+    public async findWholeProductSatisfaction(): Promise<CompanySatisfaction[]> {
+        const productSatisfaction = await this.createQueryBuilder('p')
+            .select([
+                'pc.company AS company',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ])
+            .innerJoin(ProductCompany, 'pc', 'pc.product_id = p.id')
+            .where('p.status = true')
+            .groupBy('pc.company, p.introduceTextCategory')
+            .orderBy('introduceTextCategoryCount', 'DESC')
+            .getRawMany();
+        return productSatisfaction.map((data)=> CompanySatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
+    }
+
+
+
+    /**
+     * 내 판매 완료 상품의 플랫폼별 선호 말투 조회 함수
+     * @param userId 유저 id
+     * @returns 
+     */
+    public async findMineProductSatisfaction(userId:number): Promise<CompanySatisfaction[]> {
+        const productSatisfaction = await this.createQueryBuilder('p')
+            .select([
+                'pc.company AS company',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ])
+            .innerJoin(ProductCompany, 'pc', 'pc.product_id = p.id')
+            .where('p.status = true')
+            .andWhere('p.user_id = :userId',{userId})
+            .groupBy('pc.company, p.introduceTextCategory')
+            .orderBy('introduceTextCategoryCount', 'DESC')
+            .getRawMany();
+        return productSatisfaction.map((data)=> CompanySatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
+    }
 
 
 
