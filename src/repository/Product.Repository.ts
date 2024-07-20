@@ -3,7 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { Product } from '../entity/Product';
 import { ProductCompany } from '../entity/ProductCompany';
-import { CompanySatisfaction } from '../dto/response/CompanySatisfaction';
+import { PlatformSatisfaction } from '../dto/response/PlatformSatisfaction';
+import { CategorySatisfaction } from '../dto/response/CategorySatisfaction';
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
@@ -97,8 +98,8 @@ export class ProductRepository extends Repository<Product> {
      * 플랫폼별 선호 말투 조회 함수
      * @returns 
      */
-    public async findWholeProductSatisfaction(): Promise<CompanySatisfaction[]> {
-        const productSatisfaction = await this.createQueryBuilder('p')
+    public async findWholePlatformSatisfaction(): Promise<PlatformSatisfaction[]> {
+        const result = await this.createQueryBuilder('p')
             .select([
                 'pc.company AS company',
                 'p.introduceTextCategory AS introduceTextCategory',
@@ -109,7 +110,7 @@ export class ProductRepository extends Repository<Product> {
             .groupBy('pc.company, p.introduceTextCategory')
             .orderBy('introduceTextCategoryCount', 'DESC')
             .getRawMany();
-        return productSatisfaction.map((data)=> CompanySatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
+        return result.map((data)=> PlatformSatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
     }
 
 
@@ -119,8 +120,8 @@ export class ProductRepository extends Repository<Product> {
      * @param userId 유저 id
      * @returns 
      */
-    public async findMineProductSatisfaction(userId:number): Promise<CompanySatisfaction[]> {
-        const productSatisfaction = await this.createQueryBuilder('p')
+    public async findMinePlatformSatisfaction(userId:number): Promise<PlatformSatisfaction[]> {
+        const result = await this.createQueryBuilder('p')
             .select([
                 'pc.company AS company',
                 'p.introduceTextCategory AS introduceTextCategory',
@@ -132,11 +133,52 @@ export class ProductRepository extends Repository<Product> {
             .groupBy('pc.company, p.introduceTextCategory')
             .orderBy('introduceTextCategoryCount', 'DESC')
             .getRawMany();
-        return productSatisfaction.map((data)=> CompanySatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
+        return result.map((data)=> PlatformSatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
     }
 
 
 
+
+   
+    /**
+     * 카테고리별 선호 말투 조회 함수
+     * @returns 
+     */
+    public async findWholeCategorySatisfaction(): Promise<CategorySatisfaction[]> {
+        const result = await this.createQueryBuilder('p')
+            .select([
+                'p.product_category AS category',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ])
+            .where('p.status = true')
+            .groupBy('p.product_category, p.introduceTextCategory')
+            .orderBy('introduceTextCategoryCount', 'DESC')
+            .getRawMany();
+        return result.map((data)=> CategorySatisfaction.of(data.category, data.introduceTextCategory, data.introduceTextCategoryCount))    
+    }
+
+
+
+    /**
+     * 카테고리별 선호 말투 조회 함수
+     * @param userId 유저 id
+     * @returns 
+     */
+    public async findMineCategorySatisfaction(userId:number): Promise<CategorySatisfaction[]> {
+        const result = await this.createQueryBuilder('p')
+            .select([
+                'p.product_category AS category',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ])
+            .where('p.status = true')
+            .andWhere('p.user_id = :userId',{userId})
+            .groupBy('p.product_category, p.introduceTextCategory')
+            .orderBy('introduceTextCategoryCount', 'DESC')
+            .getRawMany();
+        return result.map((data)=> CategorySatisfaction.of(data.category, data.introduceTextCategory, data.introduceTextCategoryCount))    
+    }
   
 
  }
