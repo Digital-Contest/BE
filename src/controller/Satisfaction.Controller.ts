@@ -52,5 +52,26 @@ export class SatisfactionController {
     }
 
 
+    @HttpCode(200)
+    @UseBefore(compareAuthToken)
+    @Get('/platform/detail/:kind')
+    async bringPlatfromDetailSatisfation(@Req() req: Request, @Param('kind') kind:string){
+        const result = await this.satisfactionService.bringPlatfromDetailSatisfation(req.decoded.user_id, kind);
+        console.log("플랫폼별 회사통계 조회 완료");
+        return SuccessResponseDto.of(result);
+    }
+
+
+
+    @HttpCode(200)
+    @UseBefore(compareAuthToken)
+    @Get('/category/detail:kind')
+    async bringCategoryDetailSatisfation(@Req() req: Request, @Param('kind') kind:string): Promise<SuccessResponseDto<CategorySatisfaction[]>> {
+        const result = await this.satisfactionService.bringCategorySatisfation(req.decoded.user_id, kind);
+        console.log("카테고리별 회사통계 조회 완료");
+        return SuccessResponseDto.of(result);
+    }
+
+
 
 }

@@ -21,7 +21,7 @@ export enum ProductCategory{
 
 
 export const getAllProductCategory = () => {
-    return Object.keys(ProductCategory);
+    return Object.keys(ProductCategory).filter(key => isNaN(Number(key)));
 }
 
 

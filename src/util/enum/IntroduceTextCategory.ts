@@ -10,7 +10,7 @@ export enum IntroduceTextCategory{
 
 
 export const getAllIntroduceTextCategory = () => {
-    return Object.keys(IntroduceTextCategory);
+    return Object.keys(IntroduceTextCategory).filter(key => isNaN(Number(key)));
 }
 
 
