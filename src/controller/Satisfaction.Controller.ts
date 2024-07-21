@@ -4,10 +4,8 @@ import { Request } from "express";
 import { Service } from "typedi";
 import { SuccessResponseDto } from "../response/SuccessResponseDto";
 import { compareAuthToken } from "../middleware/jwtMiddleware";
-import { UserNickname } from "../dto/response/UserNickname";
 import { SatisfactionService } from "../service/Satisfaction.Service";
 import { Satisfaction } from "../dto/response/Satisfaction";
-import { CategorySatisfaction } from "../dto/response/CategorySatisfaction";
 import { SatisfactionDetail } from "dto/response/SatisfactionDetail";
 
 

@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url';
 import { Product } from '../entity/Product';
 import { ProductCompany } from '../entity/ProductCompany';
 import {  Satisfaction } from '../dto/response/Satisfaction';
-import { CategorySatisfaction } from '../dto/response/CategorySatisfaction';
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
