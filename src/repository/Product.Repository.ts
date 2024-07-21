@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { Product } from '../entity/Product';
 import { ProductCompany } from '../entity/ProductCompany';
-import { PlatformSatisfaction } from '../dto/response/PlatformSatisfaction';
+import {  Satisfaction } from '../dto/response/Satisfaction';
 import { CategorySatisfaction } from '../dto/response/CategorySatisfaction';
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -98,10 +98,10 @@ export class ProductRepository extends Repository<Product> {
      * 플랫폼별 선호 말투 조회 함수
      * @returns 
      */
-    public async findWholePlatformSatisfaction(): Promise<PlatformSatisfaction[]> {
+    public async findWholePlatformSatisfaction(): Promise<Satisfaction[]> {
         const result = await this.createQueryBuilder('p')
             .select([
-                'pc.company AS company',
+                'pc.company AS target',
                 'p.introduceTextCategory AS introduceTextCategory',
                 'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
             ])
@@ -110,7 +110,7 @@ export class ProductRepository extends Repository<Product> {
             .groupBy('pc.company, p.introduceTextCategory')
             .orderBy('introduceTextCategoryCount', 'DESC')
             .getRawMany();
-        return result.map((data)=> PlatformSatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
+        return result.map((data)=> Satisfaction.of(data.target, data.introduceTextCategory, data.introduceTextCategoryCount))    
     }
 
 
@@ -120,10 +120,10 @@ export class ProductRepository extends Repository<Product> {
      * @param userId 유저 id
      * @returns 
      */
-    public async findMinePlatformSatisfaction(userId:number): Promise<PlatformSatisfaction[]> {
+    public async findMinePlatformSatisfaction(userId:number): Promise<Satisfaction[]> {
         const result = await this.createQueryBuilder('p')
             .select([
-                'pc.company AS company',
+                'pc.company AS target',
                 'p.introduceTextCategory AS introduceTextCategory',
                 'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
             ])
@@ -133,7 +133,7 @@ export class ProductRepository extends Repository<Product> {
             .groupBy('pc.company, p.introduceTextCategory')
             .orderBy('introduceTextCategoryCount', 'DESC')
             .getRawMany();
-        return result.map((data)=> PlatformSatisfaction.of(data.company, data.introduceTextCategory, data.introduceTextCategoryCount))    
+        return result.map((data)=> Satisfaction.of(data.target, data.introduceTextCategory, data.introduceTextCategoryCount))    
     }
 
 
@@ -144,10 +144,10 @@ export class ProductRepository extends Repository<Product> {
      * 카테고리별 선호 말투 조회 함수
      * @returns 
      */
-    public async findWholeCategorySatisfaction(): Promise<CategorySatisfaction[]> {
+    public async findWholeCategorySatisfaction(): Promise<Satisfaction[]> {
         const result = await this.createQueryBuilder('p')
             .select([
-                'p.product_category AS category',
+                'p.product_category AS target',
                 'p.introduceTextCategory AS introduceTextCategory',
                 'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
             ])
@@ -155,7 +155,7 @@ export class ProductRepository extends Repository<Product> {
             .groupBy('p.product_category, p.introduceTextCategory')
             .orderBy('introduceTextCategoryCount', 'DESC')
             .getRawMany();
-        return result.map((data)=> CategorySatisfaction.of(data.category, data.introduceTextCategory, data.introduceTextCategoryCount))    
+        return result.map((data)=> Satisfaction.of(data.target, data.introduceTextCategory, data.introduceTextCategoryCount))    
     }
 
 
@@ -165,10 +165,10 @@ export class ProductRepository extends Repository<Product> {
      * @param userId 유저 id
      * @returns 
      */
-    public async findMineCategorySatisfaction(userId:number): Promise<CategorySatisfaction[]> {
+    public async findMineCategorySatisfaction(userId:number): Promise<Satisfaction[]> {
         const result = await this.createQueryBuilder('p')
             .select([
-                'p.product_category AS category',
+                'p.product_category AS target',
                 'p.introduceTextCategory AS introduceTextCategory',
                 'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
             ])
@@ -177,7 +177,7 @@ export class ProductRepository extends Repository<Product> {
             .groupBy('p.product_category, p.introduceTextCategory')
             .orderBy('introduceTextCategoryCount', 'DESC')
             .getRawMany();
-        return result.map((data)=> CategorySatisfaction.of(data.category, data.introduceTextCategory, data.introduceTextCategoryCount))    
+        return result.map((data)=> Satisfaction.of(data.target, data.introduceTextCategory, data.introduceTextCategoryCount))    
     }
   
 

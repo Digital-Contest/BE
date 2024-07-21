@@ -1,34 +1,33 @@
+export class CategoryDetail{
 
 
-export class PlatformDetail{
-
-    private company:string;
-    private data:PlatformDetailData[];
+    private category:string;
+    private data:CategoryDetailData[];
 
 
-    constructor(company:string, data:PlatformDetailData[]){
-        this.setCompany(company);
+    constructor(category:string, data:CategoryDetailData[]){
+        this.setCategory(category);
         this.setData(data)
     }
 
 
-    public static of(company:string, data:PlatformDetailData[]){
-        return new PlatformDetail(company, data);
+    public static of(category:string, data:CategoryDetailData[]){
+        return new CategoryDetail(category, data);
     }
 
 
-    private setCompany(company:string){
-        this.company=company;
+    private setCategory(category:string){
+        this.category=category;
     }
 
-    private setData(data:PlatformDetailData[]){
+    private setData(data:CategoryDetailData[]){
         this.data=data;
     }
 }
 
 
 
-export class PlatformDetailData{
+export class CategoryDetailData{
  
     private introduceTextCategory:string;
     private introduceTextCategoryCount:number;
@@ -39,7 +38,7 @@ export class PlatformDetailData{
     }
 
     public static of(introduceTextCategory:string, introduceTextCategoryCount:number){
-        return new PlatformDetailData(introduceTextCategory, introduceTextCategoryCount);
+        return new CategoryDetailData(introduceTextCategory, introduceTextCategoryCount);
     }
 
  

@@ -1,25 +1,25 @@
 
 
-export class PlatformSatisfaction{
-    private company:string;
+export class Satisfaction{
+    private target:string;
     private introduceTextCategory:string;
     private introduceTextCategoryCount:number;
 
 
-    public static of(company:string, introduceTextCategory:string, introduceTextCategoryCount:number){
-        return new PlatformSatisfaction(company, introduceTextCategory, introduceTextCategoryCount);
+    public static of( target:string, introduceTextCategory:string, introduceTextCategoryCount:number){
+        return new Satisfaction( target, introduceTextCategory, introduceTextCategoryCount);
     }
 
 
-    constructor(company:string, introduceTextCategory:string, introduceTextCategoryCount:number){
-        this.setCompany(company);
+    constructor(target:string, introduceTextCategory:string, introduceTextCategoryCount:number){
+        this.setTarget(target);
         this.setIntroduceTextCategory(introduceTextCategory);
         this.setIntroduceTextCategoryCount(introduceTextCategoryCount);
     }
 
 
-    private setCompany(company:string){
-        this.company=company;
+    private setTarget(target:string){
+        this.target= target;
     }
 
 
@@ -32,8 +32,8 @@ export class PlatformSatisfaction{
         this.introduceTextCategoryCount=introduceTextCategoryCount;
     }
 
-    public getCompany(){
-        return this.company;
+    public getTarget(){
+        return this.target;
     } 
 
     public getIntroduceTextCategory(){

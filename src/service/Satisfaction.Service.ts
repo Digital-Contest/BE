@@ -3,12 +3,12 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 import { ErrorResponseDto } from '../response/ErrorResponseDto';
 import { ErrorCode } from '../exception/ErrorCode';
 import { ProductRepository } from '../repository/Product.Repository';
-import { PlatformSatisfaction } from '../dto/response/PlatformSatisfaction';
-import { CategorySatisfaction } from '../dto/response/CategorySatisfaction';
-import { PlatformDetail, PlatformDetailData } from '../dto/response/PlatformDetail';
+import {  Satisfaction } from '../dto/response/Satisfaction';
 import { getAllCompany } from '../util/enum/Company';
 import { getAllIntroduceTextCategory } from '../util/enum/IntroduceTextCategory';
-import { GroupedData } from '../interface/GroupedData';
+import { GroupedData } from '../interface/GroupData';
+import { SatisfactionDetail, SatisfactionDetailData } from '../dto/response/SatisfactionDetail';
+import { getAllProductCategory } from '../util/enum/ProductCategory';
 
 
 
@@ -27,7 +27,7 @@ export class SatisfactionService {
      * @returns 
      */
     async bringPlatfromSatisfation(userId:number, kind:string) {
-        const platformSatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind) as PlatformSatisfaction[];
+        const platformSatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind);
         return this.extractMostPlatform(platformSatisfaction);
     }
 
@@ -39,7 +39,7 @@ export class SatisfactionService {
      * @returns 
      */
     async bringCategorySatisfation(userId:number, kind:string) {
-         const categorySatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind) as CategorySatisfaction[];
+         const categorySatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind);
          return this.extractMostCategory(categorySatisfaction);
     }
 
@@ -51,22 +51,35 @@ export class SatisfactionService {
      * @returns 
      */
     async bringPlatfromDetailSatisfation(userId:number, kind:string) {
-        const platformSatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind) as PlatformSatisfaction[];
-        return this.mappingPlatformDetailData(platformSatisfaction);
+        const platformSatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind);
+        return this.mappingSatisfactionData(platformSatisfaction, getAllCompany());
     }
 
 
     /**
-     * 플랫폼 상세 데이터 매핑 함수
-     * @param platformSatisfaction 플랫폼 데이터
-     * @returns 
+     * 전체 or 나의 카테고리별 선호 말투 디테일 조회 함수
+     * @param userId 유저 id
+     * @param kind 종류 category-whole -> 전체,  category-mine -> 나의 
      */
-    public mappingPlatformDetailData(platformSatisfaction:PlatformSatisfaction[]){
+    async bringCategoryDetailSatisfation(userId:number, kind:string) {
+        const categorySatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind);
+        return this.mappingSatisfactionData(categorySatisfaction,  getAllProductCategory());
+    }
+
+
+
+    /**
+     * 통계 데이터 매핑 함수
+     * @param satisfaction 통계 데이터
+     * @param criteria 기준 타켓
+     * @returns 매핑된 데이터
+     */
+    public mappingSatisfactionData(satisfaction:Satisfaction[], criteria:string[]){
         const result: GroupedData = {};
-        const groupedData = this.groupByCompany(platformSatisfaction, result);
-        const checkedGroupedData = this.checkExistence(getAllCompany(), getAllIntroduceTextCategory(), groupedData);
+        const groupedData = this.groupByTarget(satisfaction, result);
+        const checkedGroupedData = this.checkExistence(criteria, getAllIntroduceTextCategory(), groupedData);
         return Object.values(checkedGroupedData).map(companyData =>
-            PlatformDetail.of(companyData.company, companyData.data)
+            SatisfactionDetail.of(companyData.target, companyData.data)
         );
     }
 
@@ -78,45 +91,43 @@ export class SatisfactionService {
      * @param groupedData 등록된 데이터
      * @returns 
      */
-    public checkExistence(allCompanies:string[], allCategories:string[], groupedData:GroupedData){
-        allCompanies.forEach(company => {
-            if (!groupedData[company]) {
-                groupedData[company] = {
-                    company: company,
+    public checkExistence(targets:string[], allCategories:string[], groupedData:GroupedData){
+        targets.forEach(target => {
+            if (!groupedData[target]) {
+                groupedData[target] = {
+                    target: target,
                     data: []};}
-            const existingCategories = groupedData[company].data.map(d => d.getIntroduceTextCategory());
+            const existingCategories = groupedData[target].data.map(d => d.getIntroduceTextCategory());
             allCategories.forEach(category => {
                 if (!existingCategories.includes(category)) {
-                    groupedData[company].data.push(
-                        PlatformDetailData.of(category, 0));}
+                    groupedData[target].data.push(
+                        SatisfactionDetailData.of(category, 0));}
             });
         });
         return groupedData;
     }
 
 
+
     /**
-     * 회사 기준 데이터 그룹화 함수
-     * @param platformSatisfaction 플랫폼 데이터
-     * @param groupedData 등록 데이터
-     * @returns 
+     * 타켓을 기준으로 그룹화 진행
+     * @param satisfaction 통계 데이터
+     * @param groupedData 그룹 데이터 형식
+     * @returns 그룹화된 데이터
      */
-    public groupByCompany(platformSatisfaction:PlatformSatisfaction[],groupedData:GroupedData){
-        platformSatisfaction.forEach(data => {
-            const company = data.getCompany();
-            if (!groupedData[company]) {
-                groupedData[company] = {
-                    company: company,
+    public groupByTarget(satisfaction:Satisfaction[],groupedData:GroupedData){
+        satisfaction.forEach(data => {
+            const target = data.getTarget();
+            if (!groupedData[target]) {
+                groupedData[target] = {
+                    target: target,
                     data: []
                 };}
-            groupedData[company].data.push(
-                PlatformDetailData.of(data.getIntroduceTextCategory(), data.getIntroduceTextCategoryCount()));
+            groupedData[target].data.push(
+                SatisfactionDetailData.of(data.getIntroduceTextCategory(), data.getIntroduceTextCategoryCount()));
         });
         return groupedData;
     }
-
-
-
 
 
     /**
@@ -124,11 +135,11 @@ export class SatisfactionService {
      * @param platformSatisfaction 플랫폼별 선호 말투 중 가장 인기 있는 말투를 선별하는 함수
      * @returns 
      */
-    public extractMostPlatform(platformSatisfaction:PlatformSatisfaction[]){ 
+    public extractMostPlatform(platformSatisfaction:Satisfaction[]){ 
         const result = platformSatisfaction.reduce((acc, current) => {
-            const existing = acc.find(item => item.getCompany() === current.getCompany());
+            const existing = acc.find(item => item.getTarget() === current.getTarget());
             if (!existing || existing.introduceTextCategoryCount < current.getIntroduceTextCategoryCount()) {
-                acc = acc.filter(item => item.getCompany() !== current.getCompany());
+                acc = acc.filter(item => item.getTarget() !== current.getTarget());
                 acc.push(current);
             }
             return acc;
@@ -142,11 +153,11 @@ export class SatisfactionService {
      * @param categorySatisfaction 카테고리별 선호 말투 중 가장 인기 있는 말투를 선별하는 함수
      * @returns 
      */
-    public extractMostCategory(categorySatisfaction:CategorySatisfaction[]){ 
+    public extractMostCategory(categorySatisfaction:Satisfaction[]){ 
         const result = categorySatisfaction.reduce((acc, current) => {
-            const existing = acc.find(item => item.getCategory() === current.getCategory());
+            const existing = acc.find(item => item.getTarget() === current.getTarget());
             if (!existing || existing.introduceTextCategoryCount < current.getIntroduceTextCategoryCount()) {
-                acc = acc.filter(item => item.getCategory() !== current.getCategory());
+                acc = acc.filter(item => item.getTarget() !== current.getTarget());
                 acc.push(current);
             }
             return acc;
