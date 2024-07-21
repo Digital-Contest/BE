@@ -33,7 +33,7 @@ export class SatisfactionService {
 
 
     /**
-     * 전체 or 나의 카체고리별 선호 말투 조회 함수
+     * 전체 or 나의 카테고리별 선호 말투 조회 함수
      * @param userId 유저 id
      * @param kind 종류 category-whole -> 전체,  category-mine -> 나의
      * @returns 
@@ -44,87 +44,76 @@ export class SatisfactionService {
     }
 
 
+    /**
+     * 전체 or 나의 플랫폼별 선호 말투 디테일 조회 함수
+     * @param userId 유저id
+     * @param kind 종류 platform-whole -> 전체, platform-mine -> 나의
+     * @returns 
+     */
     async bringPlatfromDetailSatisfation(userId:number, kind:string) {
         const platformSatisfaction = await this.bringSatisfactionAccordingToKind(userId, kind) as PlatformSatisfaction[];
         return this.mappingPlatformDetailData(platformSatisfaction);
     }
 
 
-
-    public groupByCompany(platformSatisfaction:PlatformSatisfaction[],groupedData:GroupedData ){
-        platformSatisfaction.forEach(data => {
-            const company = data.getCompany();
-            if (!groupedData[company]) {
-                groupedData[company] = {
-                    company: company,
-                    data: []
-                };
-            }
-            groupedData[company].data.push(
-                PlatformDetailData.of(data.getIntroduceTextCategory(), data.getIntroduceTextCategoryCount())
-            );
-        });
-
-        return groupedData;
-    }
-
+    /**
+     * 플랫폼 상세 데이터 매핑 함수
+     * @param platformSatisfaction 플랫폼 데이터
+     * @returns 
+     */
     public mappingPlatformDetailData(platformSatisfaction:PlatformSatisfaction[]){
-        // const groupedData: { [key: string]: { company: string; data: PlatformDetailData[] } } = {};
-        // platformSatisfaction.forEach(data => {
-        //     if (!groupedData[data.getCompany()]) {
-        //         groupedData[data.getCompany()] = {
-        //             company: data.getCompany(),
-        //             data: []
-        //         };}
-        //     groupedData[data.getCompany()].data.push(
-        //         PlatformDetailData.of(data.getIntroduceTextCategory(), data.getIntroduceTextCategoryCount()));
-        // });
-        // return Object.values(groupedData).map(companyData => 
-        //     PlatformDetail.of(companyData.company, companyData.data)
-        // );
         const result: GroupedData = {};
         const groupedData = this.groupByCompany(platformSatisfaction, result);
-        const checkedGroupedData = this.checkCompanyExistence(getAllCompany(), getAllIntroduceTextCategory(), groupedData);
+        const checkedGroupedData = this.checkExistence(getAllCompany(), getAllIntroduceTextCategory(), groupedData);
         return Object.values(checkedGroupedData).map(companyData =>
             PlatformDetail.of(companyData.company, companyData.data)
         );
     }
 
 
-    public checkCompanyExistence(allCompanies:string[], allCategories:string[], groupedData:GroupedData){
+    /**
+     * 존재 여부 체킹 후 데이터 처리 함수
+     * @param allCompanies 회사
+     * @param allCategories 제품 카테고리
+     * @param groupedData 등록된 데이터
+     * @returns 
+     */
+    public checkExistence(allCompanies:string[], allCategories:string[], groupedData:GroupedData){
         allCompanies.forEach(company => {
             if (!groupedData[company]) {
                 groupedData[company] = {
                     company: company,
-                    data: []
-                };
-            }
-            // Ensure all categories are included with count 0 if not present
+                    data: []};}
             const existingCategories = groupedData[company].data.map(d => d.getIntroduceTextCategory());
             allCategories.forEach(category => {
                 if (!existingCategories.includes(category)) {
                     groupedData[company].data.push(
-                        PlatformDetailData.of(category, 0)
-                    );
-                }
+                        PlatformDetailData.of(category, 0));}
             });
         });
-
         return groupedData;
     }
 
-    // public checkCategoryExistence(allCategories:string[], groupedData:GroupedData){
-    //     const existingCategories = groupedData[company].data.map(d => d.getIntroduceTextCategory());
-    //     allCategories.forEach(category => {
-    //         if (!existingCategories.includes(category)) {
-    //             groupedData[company].data.push(
-    //                 PlatformDetailData.of(category, 0)
-    //             );
-    //         }
-    //     });
-    // }
 
-
+    /**
+     * 회사 기준 데이터 그룹화 함수
+     * @param platformSatisfaction 플랫폼 데이터
+     * @param groupedData 등록 데이터
+     * @returns 
+     */
+    public groupByCompany(platformSatisfaction:PlatformSatisfaction[],groupedData:GroupedData){
+        platformSatisfaction.forEach(data => {
+            const company = data.getCompany();
+            if (!groupedData[company]) {
+                groupedData[company] = {
+                    company: company,
+                    data: []
+                };}
+            groupedData[company].data.push(
+                PlatformDetailData.of(data.getIntroduceTextCategory(), data.getIntroduceTextCategoryCount()));
+        });
+        return groupedData;
+    }
 
 
 
