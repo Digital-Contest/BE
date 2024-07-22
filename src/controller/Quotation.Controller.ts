@@ -19,6 +19,7 @@ export class QuotationController {
     async bringPlatformQuotation(
         @QueryParam('item') item:string
     ) {
+        console.log("start")
         await this.quotationService.bringPlatformQuotation(3, item)
         console.log("플랫폼별 시세 조회 완료");
         return SuccessResponseDto.of();
