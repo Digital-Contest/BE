@@ -20,7 +20,7 @@ export class QuotationService {
 
     public async carrotMarketCrawler(count: number, searchWord: string) {
         try {
-            console.log(1)
+            console.log(0)
             const browser = await puppeteer.launch({
                 headless: true,
                 args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -28,7 +28,7 @@ export class QuotationService {
             console.log(1)
             const page = await browser.newPage();
             console.log(2)
-            await page.goto(`https://www.daangn.com/search/${searchWord}/`);
+            await page.goto(`https://www.daangn.com/search/${searchWord}/`,{  timeout: 0 });
             console.log(3)
             const crawlingResult = await page.evaluate((count) => {
                 const result = [];
