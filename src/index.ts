@@ -13,11 +13,12 @@ import { LevelController } from './controller/Level.Conroller';
 import { ProductController } from './controller/Product.Controller';
 import { UserController } from './controller/User.Controller';
 import { SatisfactionController } from './controller/Satisfaction.Controller';
+import { QuotationController } from './controller/Quotation.Controller';
 
 
 
 export const app: express.Application = createExpressServer({
-    controllers: [ AuthController, IntroduceController, LevelController, ProductController, UserController, SatisfactionController],
+    controllers: [ AuthController, IntroduceController, LevelController, ProductController, UserController, SatisfactionController, QuotationController],
     middlewares: [ErrorHandler],
 
     routePrefix: envs.prefix,
