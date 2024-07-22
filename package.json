@@ -1,72 +1,146 @@
 {
 
   "name": "typeorm",
+
   "version": "1.0.0",
+
   "description": "study",
+
   "main": "index.js",
+
   "scripts": {
+
     "dev": "nodemon",
+
     "start": "tsc && pm2-runtime start ecosystem.config.cjs",
+
     "test": "jest"
+
   },
+
   "author": "lee",
+
   "license": "MIT",
+
   "devDependencies": {
+
     "@types/chai": "^4.3.16",
+
     "@types/chai-as-promised": "^7.1.8",
+
     "@types/compression": "^1.7.5",
+
     "@types/cors": "^2.8.17",
+
     "@types/express": "^4.17.21",
+
     "@types/jest": "^29.5.12",
+
     "@types/jsonwebtoken": "^9.0.6",
+
     "@types/mocha": "^10.0.7",
+
     "@types/node": "^20.12.2",
+
     "@types/nodemon": "^1.19.6",
+
     "@types/redis": "^4.0.11",
+
     "@types/sinon": "^17.0.3",
+
     "@types/sinon-chai": "^3.2.12",
+
     "@types/supertest": "^6.0.2",
+
     "chai": "^4.4.1",
+
     "chai-as-promised": "^8.0.0",
+
     "express": "^4.19.2",
+
     "jest": "^29.7.0",
+
     "mocha": "^10.6.0",
+
     "sinon": "^18.0.0",
+
     "sinon-chai": "^3.7.0",
+
     "supertest": "^7.0.0",
+
     "ts-jest": "^29.2.2",
+
     "ts-mocha": "^10.0.0",
+
     "ts-node": "^10.9.2",
+
     "typeorm-model-generator": "^0.4.6",
+
     "typescript": "^5.4.3"
+
   },
+
   "dependencies": {
+
     "@aws-sdk/client-s3": "^3.609.0",
+
+    "axios": "^1.7.2",
+
     "class-transformer": "^0.3.1",
+
     "class-validator": "^0.12.2",
+
     "compression": "^1.7.4",
+
     "cors": "^2.8.5",
+
     "dotenv": "^16.4.5",
+
     "express": "^4.18.2",
+
     "express-rate-limit": "^6.7.0",
+
     "firebase-admin": "^12.1.1",
+
     "helmet": "^7.1.0",
+
     "jsonwebtoken": "^9.0.2",
+
     "multer": "^1.4.5-lts.1",
+
     "multer-s3": "^3.0.1",
+
     "mysql": "^2.18.1",
+
     "nodemon": "^3.1.0",
+
     "openai": "^4.52.3",
+
     "pm2": "^5.3.1",
+
+    "puppeteer": "^22.13.1",
+
     "redis": "^4.6.10",
+
     "routing-controllers": "^0.9.0",
+
     "routing-controllers-openapi": "^3.0.0",
+
     "tsconfig-paths": "^4.2.0",
+
     "typedi": "^0.10.0",
+
     "typeorm": "^0.2.45",
+
     "typeorm-naming-strategies": "^4.1.0",
+
     "typeorm-typedi-extensions": "^0.4.1",
+
     "winston": "^3.13.0",
+
     "winston-daily-rotate-file": "^5.0.0"
+
   }
+
 }
+
