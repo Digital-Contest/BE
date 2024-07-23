@@ -66,7 +66,7 @@ export class Crawler{
             //     headless: true,
             //     args: ['--no-sandbox', '--disable-setuid-sandbox']});
             // const page = await browser.newPage();
-            await page.goto(`https://m.bunjang.co.kr/search/products?q=${searchWord}`);
+            await page.goto(`https://m.bunjang.co.kr/search/products?q=${searchWord}`,{  timeout: 0 });
             const searchResult = await page.evaluate((count) => {
                 const result = [];
                 for (let i = 1; i <= count + 1; i++) {
@@ -96,7 +96,7 @@ export class Crawler{
             //     headless: true,
             //     args: ['--no-sandbox', '--disable-setuid-sandbox']});
             // const page = await browser.newPage();
-            await page.goto(`https://web.joongna.com/search/${searchWord}`);
+            await page.goto(`https://web.joongna.com/search/${searchWord}`,{  timeout: 0 });
             const searchResult = await page.evaluate((count) => {
                 const result = [];
                 for (let i = 1; i <= count; i++) {
