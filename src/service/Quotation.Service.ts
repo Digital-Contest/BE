@@ -9,13 +9,9 @@ export class QuotationService {
 
 
     public async bringPlatformQuotation(count:number, search:string){
-        const [carrotCrawlingResult, sunderCrawlingResult, usedCrawlingResult] = await Promise.all([
-            this.crawler.carrotMarketCrawler(count, search),
-            this.crawler.sunderMarket(count, search),
-            this.crawler.usedCountry(count, search)
-        ]);
-        const combinedResults = carrotCrawlingResult.concat(sunderCrawlingResult, usedCrawlingResult);
-        return combinedResults;
+        const crawlerResult = await this.crawler.bringCompanyProductPrice(count, search)
+     //   const combinedResults = carrotCrawlingResult.concat(sunderCrawlingResult, usedCrawlingResult);
+        return crawlerResult;
     }
 
    

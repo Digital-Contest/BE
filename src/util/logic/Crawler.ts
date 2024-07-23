@@ -1,22 +1,41 @@
-import  puppeteer  from 'puppeteer'
+import  puppeteer, { Page }  from 'puppeteer'
 import { Service } from 'typedi';
 
 @Service()
 export class Crawler{
 
-    
-    public async carrotMarketCrawler(count: number, searchWord: string) {
+    public async bringCompanyProductPrice(count: number, searchWord: string){
+        console.log(0)
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        console.log(1)
+        const page = await browser.newPage();
+        console.log(2)
+        const carrotCrawlingResult = await this.carrotMarketCrawler(page, count, searchWord);
+        const sunderCrawlingResult = await this.sunderMarket(page, count, searchWord);
+        const usedCrawlingResult = await this.usedCountry(page, count, searchWord);
+        console.log(3)
+        await page.close();
+        await browser.close();
+
+        return carrotCrawlingResult.concat(sunderCrawlingResult, usedCrawlingResult);
+    }
+
+
+    public async carrotMarketCrawler(page:Page, count:number, searchWord:string) {
         try {
-            console.log(0)
-            const browser = await puppeteer.launch({
-                headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
-            });
-            console.log(1)
-            const page = await browser.newPage();
-            console.log(2)
+            // console.log(0)
+            // const browser = await puppeteer.launch({
+            //     headless: true,
+            //     args: ['--no-sandbox', '--disable-setuid-sandbox']
+            // });
+            // console.log(1)
+            // const page = await browser.newPage();
+            // console.log(2)
             await page.goto(`https://www.daangn.com/search/${searchWord}/`,{  timeout: 0 });
-            console.log(3)
+           // console.log(3)
             const crawlingResult = await page.evaluate((count) => {
                 const result = [];
                 for (let i = 3; i <= count + 3; i++) {
@@ -32,9 +51,9 @@ export class Crawler{
                 }
                 return result;
             }, count);
-            console.log(4)
-            await page.close();
-            await browser.close();
+        //    console.log(4)
+            // await page.close();
+            // await browser.close();
             return crawlingResult;
         } catch (error) {
             console.error('Error launching browser:', error);
@@ -42,12 +61,12 @@ export class Crawler{
         }    
     }
 
-    public async sunderMarket(count:number, searchWord:string){
+    public async sunderMarket(page:Page, count:number, searchWord:string){
         try {
-            const browser = await puppeteer.launch({    
-                headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox']});
-            const page = await browser.newPage();
+            // const browser = await puppeteer.launch({    
+            //     headless: true,
+            //     args: ['--no-sandbox', '--disable-setuid-sandbox']});
+            // const page = await browser.newPage();
             await page.goto(`https://m.bunjang.co.kr/search/products?q=${searchWord}`);
             const searchResult = await page.evaluate((count) => {
                 const result = [];
@@ -64,20 +83,20 @@ export class Crawler{
                 }
                 return result;
             }, count);
-            await page.close();
-            await browser.close();
+            // await page.close();
+            // await browser.close();
             return searchResult
         } catch (e) {
             console.log(e);
         }
     }
 
-    public async usedCountry(count:number, searchWord:string){
+    public async usedCountry(page:Page, count:number, searchWord:string){
         try {
-            const browser = await puppeteer.launch({  
-                headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox']});
-            const page = await browser.newPage();
+            // const browser = await puppeteer.launch({  
+            //     headless: true,
+            //     args: ['--no-sandbox', '--disable-setuid-sandbox']});
+            // const page = await browser.newPage();
             await page.goto(`https://web.joongna.com/search/${searchWord}`);
             const searchResult = await page.evaluate((count) => {
                 const result = [];
@@ -94,8 +113,8 @@ export class Crawler{
                 }
                 return result;
             }, count);
-            await page.close();
-            await browser.close();
+            // await page.close();
+            // await browser.close();
             return searchResult;
         } catch (e) {
             console.log(e);
