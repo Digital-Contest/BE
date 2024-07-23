@@ -16,10 +16,6 @@ const connectToRedis = async () => {
         await redisClient.connect();
         console.log('Connected to Redis');
     } catch (error) {
-        setTimeout(() => {
-            redisClient.quit(); // 현재 연결 종료
-            redisClient.connect(); // 다시 연결 시도
-        }, 3000);
         console.error('Error connecting to Redis:');
     }
 };

@@ -14,7 +14,7 @@
 
     "start": "tsc && pm2-runtime start ecosystem.config.cjs",
 
-    "test": "jest"
+    "test": "jest --watch"
 
   },
 
@@ -68,7 +68,7 @@
 
     "supertest": "^7.0.0",
 
-    "ts-jest": "^29.2.2",
+    "ts-jest": "^29.2.3",
 
     "ts-mocha": "^10.0.0",
 

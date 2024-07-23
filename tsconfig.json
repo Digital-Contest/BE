@@ -23,7 +23,7 @@
       "./node_modules/@types",
       "./custom_typings"
     ],
-    "types": ["node", "express"],
+    "types": ["node", "express","jest"],
     "baseUrl": "./src",
     "paths": {
       "@/*": [
