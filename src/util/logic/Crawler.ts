@@ -4,6 +4,7 @@ import { Service } from 'typedi';
 @Service()
 export class Crawler{
 
+    
     public async carrotMarketCrawler(count: number, searchWord: string) {
         try {
             console.log(0)
