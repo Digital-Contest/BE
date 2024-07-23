@@ -18,7 +18,7 @@ export class Crawler{
             console.log(3)
             const crawlingResult = await page.evaluate((count) => {
                 const result = [];
-                for (let i = 3; i <= count + 2; i++) {
+                for (let i = 3; i <= count + 3; i++) {
                     const data: any = {};
                     const imageElement = document.querySelector(`#flea-market-wrap > article:nth-child(${i}) a.flea-market-article-link img`) as HTMLImageElement;
                     const titleElement = document.querySelector(`#flea-market-wrap > article:nth-child(${i}) a.flea-market-article-link img`) as HTMLImageElement;
