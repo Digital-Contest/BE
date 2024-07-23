@@ -23,7 +23,6 @@ export class Crawler{
         return carrotCrawlingResult.concat(sunderCrawlingResult, usedCrawlingResult);
     }
 
-
     public async carrotMarketCrawler(page:Page, count:number, searchWord:string) {
         try {
             // console.log(0)
