@@ -14,6 +14,7 @@ import { ProductController } from './controller/Product.Controller';
 import { UserController } from './controller/User.Controller';
 import { SatisfactionController } from './controller/Satisfaction.Controller';
 import { QuotationController } from './controller/Quotation.Controller';
+import { connectToRedis } from './config/redis';
 
 
 
@@ -78,7 +79,7 @@ initializeDatabase()
     });
 
 
-
+connectToRedis();
 
 
 
