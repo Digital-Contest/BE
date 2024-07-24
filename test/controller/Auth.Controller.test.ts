@@ -4,6 +4,7 @@ import { SuccessResponseDto } from '../../src/response/SuccessResponseDto';
 import { LoginResponse } from '../../src/dto/response/loginResponse';
 import { Request, Response } from 'express';
 import { Token } from '../../src/dto/response/Token';
+import { redisClient } from '../../src/config/redis';
 
 
 jest.mock('../../src/service/Auth.Service');
@@ -25,6 +26,7 @@ describe('AuthController 테스트', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
 
   describe('POST /auth/login/kakao', () => {
     it('로그인 응답이 성공적으로 반환', async () => {
