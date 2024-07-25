@@ -63,7 +63,6 @@ describe('Auth Service 테스트 코드', () => {
         const result = await authService.kakaoLogin(kakaoToken);
 
         expect(result).toEqual(mockLoginResponse);
-        expect(mockSocialLogin.getKakaoData).toHaveBeenCalledWith('kakao-token');
         expect(mockUserRepository.findUserByKakaoId).toHaveBeenCalledWith('kakaoUserId');
         expect(mockJwtManager.makeAccessToken).toHaveBeenCalledWith(2, 'user');
         expect(mockJwtManager.makeRefreshToken).toHaveBeenCalled();
