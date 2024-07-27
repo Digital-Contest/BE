@@ -31,7 +31,7 @@ export class IntroduceService{
     }
 
 
-    public checkPrice(price:number){
+    public checkPrice(price:number | undefined){
         let result = price;
         if(!checkData(price)){
             result = 50000
