@@ -23,7 +23,7 @@ const mockLevelService = new LevelService(
 const levelController = new LevelController(mockLevelService)
 
 
-describe('Level Controller tset', ()=>{
+describe('Level Controller test', ()=>{
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -34,7 +34,7 @@ describe('Level Controller tset', ()=>{
 
         it('bringSecondhandTradeCount 함수', async()=>{
 
-            const req = { decoded: { user_id: 1 } } as unknown as Request;
+            const req = { decoded: { user_id: 1 } }  as Request;
             const bringSecondhandTradeCountResponse = SecondhandTradeCount.of(20);
             mockLevelService.bringSecondhandTradeCount.mockResolvedValue(bringSecondhandTradeCountResponse)
             const result = await levelController.bringSecondhandTradeCount(req);
@@ -48,7 +48,7 @@ describe('Level Controller tset', ()=>{
 
         it('bringLevelInformation 함수', async()=>{
 
-            const req = { decoded: { user_id: 1 } } as unknown as Request;
+            const req = { decoded: { user_id: 1 } }  as Request;
             const bringLevelInformationResponse = LevelInformation.of(10, 2, 3);
             mockLevelService.bringLevelInformation.mockResolvedValue(bringLevelInformationResponse);
             const result = await levelController.bringLevelInformation(req);
@@ -64,7 +64,7 @@ describe('Level Controller tset', ()=>{
 
         it('bringLevelColor 함수', async()=>{
 
-            const req = { decoded: { user_id: 1 } } as unknown as Request;
+            const req = { decoded: { user_id: 1 } } as Request;
             const bringLevelColorResponse = LevelColor.of('mock-color');
             mockLevelService.bringLevelColor.mockResolvedValue(bringLevelColorResponse);
             const result = await levelController.bringLevelColor(req);
