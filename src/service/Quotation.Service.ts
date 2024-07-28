@@ -9,8 +9,7 @@ export class QuotationService {
 
 
     public async bringPlatformQuotation(count:number, search:string){
-        const crawlerResult = await this.crawler.bringCompanyProductPrice(count, search)
-     //   const combinedResults = carrotCrawlingResult.concat(sunderCrawlingResult, usedCrawlingResult);
+        const crawlerResult = await this.crawler.bringCompanyProductPrice(count, search);
         return crawlerResult;
     }
 
