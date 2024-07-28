@@ -8,10 +8,7 @@ import { redisClient } from '../../src/config/redis';
 
 
 jest.mock('../../src/service/Auth.Service');
-jest.mock('../../src/util/JwtManager');
-jest.mock('../../src/util/TokenManager');
-jest.mock('../../src/util/SocialLogin');
-jest.mock('../../src/repository/User.Repository');
+
 
 const mockAuthService = new AuthService(
   {} as any, // Mocked UserRepository
