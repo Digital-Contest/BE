@@ -136,7 +136,7 @@ export class SatisfactionService {
      * @returns 
      */
     public extractMostPlatform(platformSatisfaction:Satisfaction[]){ 
-        const result = platformSatisfaction.reduce((acc, current) => {
+        const result: Satisfaction[] = platformSatisfaction.reduce((acc, current) => {
             const existing = acc.find(item => item.getTarget() === current.getTarget());
             if (!existing || existing.introduceTextCategoryCount < current.getIntroduceTextCategoryCount()) {
                 acc = acc.filter(item => item.getTarget() !== current.getTarget());
@@ -154,7 +154,7 @@ export class SatisfactionService {
      * @returns 
      */
     public extractMostCategory(categorySatisfaction:Satisfaction[]){ 
-        const result = categorySatisfaction.reduce((acc, current) => {
+        const result : Satisfaction[] = categorySatisfaction.reduce((acc, current) => {
             const existing = acc.find(item => item.getTarget() === current.getTarget());
             if (!existing || existing.introduceTextCategoryCount < current.getIntroduceTextCategoryCount()) {
                 acc = acc.filter(item => item.getTarget() !== current.getTarget());
