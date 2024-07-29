@@ -12,10 +12,4 @@ export class QuotationService {
         const crawlerResult = await this.crawler.bringCompanyProductPrice(count, search);
         return crawlerResult;
     }
-
-   
-
-
-
-
 }
