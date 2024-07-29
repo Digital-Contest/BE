@@ -21,14 +21,14 @@ const mockCheckData = checkData as jest.Mock;
 
 const introduceService = new IntroduceService();
 
-describe('IntroduceService tests', () => {
+describe('IntroduceService 테스트', () => {
     beforeEach(() => {
         jest.clearAllMocks(); 
     });
 
 
-    describe('checkPrice function', () => {
-        it('should return the correct price for valid input', () => {
+    describe('checkPrice 함수', () => {
+        it('checkPrice 가격 존재', () => {
             const price = 1000;
 
             mockCheckData.mockReturnValue(true);
@@ -39,7 +39,7 @@ describe('IntroduceService tests', () => {
             expect(mockCheckData).toHaveBeenCalledWith(price);
         });
 
-        it('should return the default price for invalid input', () => {
+        it('checkPrice 가격 미존재', () => {
             const price = undefined;
 
             mockCheckData.mockReturnValue(false);
@@ -51,8 +51,8 @@ describe('IntroduceService tests', () => {
         });
     });
 
-    describe('makeIntroduceText function', () => {
-        it('should generate introduction text correctly', async () => {
+    describe('makeIntroduceText 함수', () => {
+        it('makeIntroduceText 정상 응답', async () => {
             const images = ["mock-image1", "mock-image2"];
             const introduceCategory = 'mock-textCategory';
             const price = 1000;
