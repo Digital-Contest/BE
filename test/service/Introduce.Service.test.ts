@@ -51,14 +51,14 @@ describe('IntroduceService 테스트', () => {
 
     describe('makeIntroduceText 함수', () => {
 
+        const images = ["mock-image1", "mock-image2"];
+        const introduceCategory = '궁서체';
+        const price = 1000;
+        const productCategory = 'mock-productCategory';
+        const product = 'mock-product';
+
         it('makeIntroduceText 정상 응답', async () => {
 
-            const images = ["mock-image1", "mock-image2"];
-            const introduceCategory = '궁서체';
-            const price = 1000;
-            const productCategory = 'mock-productCategory';
-            const product = 'mock-product';
-        
            mockGetIntroduceTextCategoryByCondition.mockReturnValue('mock-text-content');
            mockGetProductCategoryByCondition.mockReturnValue(1);
            mockOpenAi.mockResolvedValue('mock-introduce-text');
@@ -78,11 +78,6 @@ describe('IntroduceService 테스트', () => {
         });
 
         it('makeIntroduceText IntroduceTextCategory 에러처리', async () => {
-            const images = ["mock-image1", "mock-image2"];
-            const introduceCategory = 'mock';
-            const price = 1000;
-            const productCategory = 'mock-productCategory';
-            const product = 'mock-product';
 
             mockGetIntroduceTextCategoryByCondition.mockReturnValue(null);
             mockVerifyIntroduceTextCategory.mockImplementation(() => {
@@ -102,11 +97,6 @@ describe('IntroduceService 테스트', () => {
         });
 
         it('makeIntroduceText ProductCategory 에러처리', async () => {
-            const images = ["mock-image1", "mock-image2"];
-            const introduceCategory = 'mock';
-            const price = 1000;
-            const productCategory = 'mock-productCategory';
-            const product = 'mock-product';
         
             mockGetIntroduceTextCategoryByCondition.mockReturnValue("mock-text-category");
             mockGetProductCategoryByCondition.mockReturnValue(null);

@@ -10,14 +10,18 @@ import { ErrorCode } from '../../src/exception/ErrorCode';
 import { ProductList } from '../../src/dto/response/ProductList';
 import { formatDate } from '../../src/util/date';
 import { ProductCompany } from '../../src/entity/ProductCompany';
+import {verfiyProduct} from '../../src/util/verify';
 
 jest.mock('../../src/repository/Product.Repository');
 jest.mock('../../src/repository/User.Repository');
 jest.mock('../../src/repository/ProductCompany.Repository');
 jest.mock('../../src/service/User.Service');
 jest.mock('../../src/response/ErrorResponseDto');
-jest.mock('../../src/exception/ErrorCode')
-jest.mock('../../src/util/date')
+jest.mock('../../src/exception/ErrorCode');
+jest.mock('../../src/util/date');
+jest.mock('../../src/util/verify', ()=>({
+    verfiyProduct:jest.fn()
+}));
 
 
 describe('Product Service 테스트', () => {
@@ -27,6 +31,7 @@ describe('Product Service 테스트', () => {
     let mockProductRepository: jest.Mocked<ProductRepository>;
     let mockUserRepository: jest.Mocked<UserRepository>;
     let mockUserService : jest.Mocked<UserService>;
+    let mockVerfiyProduct: jest.Mock;
     let connection : jest.Mocked<Connection>;
     const mockFormatDate = formatDate as jest.Mock;
 
@@ -36,6 +41,7 @@ describe('Product Service 테스트', () => {
         mockProductRepository = new ProductRepository() as jest.Mocked<ProductRepository>;
         mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
         mockUserService = new UserService({} as any) as jest.Mocked<UserService>;
+        mockVerfiyProduct = verfiyProduct as jest.Mock;
     
         productService = new ProductService(
             mockProductRepository,
@@ -47,30 +53,20 @@ describe('Product Service 테스트', () => {
         jest.clearAllMocks();
     });
 
+
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
+
     describe('modifyProductStatus 함수', () => {
 
-        it('modifyProductStatus - 제품이 없는 경우 예외 처리', async () => {
-            const userId = 2;
-            const productId = 4;
-            const status = false;
-
-            mockProductRepository.findProductById.mockResolvedValue(null);
-
-            await expect(productService.modifyProductStatus(userId, productId, status))
-            .rejects
-            .toEqual(ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT));
-
-            expect(mockProductRepository.findProductById).toHaveBeenCalledWith(productId);
-            expect(mockProductRepository.updateProductStatus).not.toHaveBeenCalled();
-            expect(mockUserService.modifyUserScoreAccordingToProductStatus).not.toHaveBeenCalled();
-
-        });
+        const userId = 2;
+        const productId = 4;
+        const status = false;
 
         it('modifyProductStatus 정상 처리', async () => {
 
-            const userId = 1;
-            const productId = 2;
-            const status = true;
             const mockProduct =
                 Product.createProduct(1, 'url1', 'category1', 100, 'productCategory1', 'product1', 'text1');
               
@@ -78,20 +74,42 @@ describe('Product Service 테스트', () => {
             mockProductRepository.updateProductStatus.mockResolvedValue(undefined);
             mockUserService.modifyUserScoreAccordingToProductStatus.mockResolvedValue(undefined);
 
-            await productService.modifyProductStatus(userId, productId, status);
+            await productService.modifyProductStatus(userId, productId, status)
 
             expect(mockProductRepository.findProductById).toHaveBeenCalledWith(productId);
+            expect(mockVerfiyProduct).toHaveBeenCalledWith(mockProduct);
             expect(mockProductRepository.updateProductStatus).toHaveBeenCalledWith(userId, productId, status);
             expect(mockUserService.modifyUserScoreAccordingToProductStatus).toHaveBeenCalledWith(status, mockProduct, userId);
 
         });
+        
+
+        it('modifyProductStatus - 제품이 없는 경우 예외 처리', async () => {
+
+            mockProductRepository.findProductById.mockResolvedValue(null);
+            mockVerfiyProduct.mockImplementation(() => {
+                throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT)
+            });
+
+            await expect(productService.modifyProductStatus(userId, productId, status))
+            .rejects
+            .toEqual(ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT));
+
+            expect(mockProductRepository.findProductById).toHaveBeenCalledWith(productId);
+            expect(mockVerfiyProduct).toHaveBeenCalledWith(null);
+            expect(mockProductRepository.updateProductStatus).not.toHaveBeenCalled();
+            expect(mockUserService.modifyUserScoreAccordingToProductStatus).not.toHaveBeenCalled();
+
+        });
+
+      
     });
 
 
 
     describe('bringMyProduct 함수', () => {
 
-     it('bringMyProduct 정상 처리', async () => {
+        it('bringMyProduct 정상 처리', async () => {
             const userId = 1;
             const status = 'true';
 
@@ -142,7 +160,7 @@ describe('Product Service 테스트', () => {
             expect(changeTypeSpy).toHaveBeenCalledWith(status);
             expect(mappingSpy).toHaveBeenCalledWith(products);
             expect(mockProductRepository.findProductAndProductCompanyByUserIdAndStatus).toHaveBeenCalledWith(userId, true);
-        });
+            });
 
        
     });
