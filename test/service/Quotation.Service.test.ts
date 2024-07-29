@@ -6,11 +6,6 @@ import {QuotationService} from '../../src/service/Quotation.Service';
 
 jest.mock('../../src/util/logic/Crawler');
 
-const mockCrawler = new Crawler();
-const quotationService = new QuotationService(mockCrawler);
-
-
-
 
 describe('Quotation Service 테스트', () => {
 

@@ -8,7 +8,7 @@ import { UserRepository } from '../../src/repository/User.Repository';
 import { LevelService } from '../../src/service/Level.Service';
 import {getLevelByScore, getLevelExperience, getMyLevelExperience, getLevelColor} from '../../src/util/enum/Level'
 
-// 레포지토리를 모의(Mock)합니다.
+
 jest.mock('../../src/repository/Product.Repository');
 jest.mock('../../src/repository/User.Repository');
 jest.mock('../../src/util/enum/Level')

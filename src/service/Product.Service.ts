@@ -86,7 +86,7 @@ export class ProductService {
      * product의 데이터 유무에 따라 예외처리 함수
      * @param productData product 엔티티 데이터
      */
-    private verfiyProduct(productData:Product){
+    private verfiyProduct(productData:Product | undefined | null){
         if (!checkData(productData)) {
            throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT);
         }
