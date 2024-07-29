@@ -9,6 +9,8 @@ import { AuthService } from "../../src/service/Auth.Service";
 import { LoginResponse } from "../../src/dto/response/loginResponse";
 import { Token } from "../../src/dto/response/Token";
 import { checkData } from "../../src/util/checker"; 
+import { ErrorResponseDto } from "../../src/response/ErrorResponseDto";
+import { ErrorCode } from "../../src/exception/ErrorCode";
 
 jest.mock('../../src/repository/User.Repository');
 jest.mock('../../src/util/TokenManager');
@@ -116,10 +118,6 @@ describe('Auth Service 테스트 코드', () => {
             mockJwtManager.refreshVerify.mockResolvedValue(mockRefreshnVerifyResult);
             mockJwtManager.makeAccessToken.mockReturnValue(mockNewAccessToken);
 
-            const spySignVerifyToken = jest.spyOn(authService, 'signVerifyToken' as any);
-            const spySignVerifyAccessToken = jest.spyOn(authService, 'signVerifyAccessToken' as any);
-            const spySignVerifyRefreshToken = jest.spyOn(authService, 'signVerifyRefreshToken' as any);
-
             const result = await authService.reissueToken('Bearer mock-access-token','Bearer mock-refresh-token');
 
             expect(result).toEqual(mockReissueTokenResponse);
@@ -128,9 +126,77 @@ describe('Auth Service 테스트 코드', () => {
             expect(mockJwtManager.refreshVerify).toHaveBeenCalledWith('Bearer mock-refresh-token', mockAccessDecodedData.userId);
             expect(mockJwtManager.makeAccessToken).toHaveBeenCalledWith(mockAccessDecodedData.userId, mockAccessDecodedData.role);
 
-            expect(spySignVerifyToken).toHaveBeenCalledWith(mockAccessVerifyResult.state, mockRefreshnVerifyResult.state);
-            expect(spySignVerifyAccessToken).toHaveBeenCalledWith(mockAccessVerifyResult.state);
-            expect(spySignVerifyRefreshToken).toHaveBeenCalledWith(mockRefreshnVerifyResult.state);
+
+        });
+
+
+        it('reissueToken 재로그인', async() => {
+            const mockAccessVerifyResult = {
+                state: false,
+                userId: 1,
+                role: 'user'
+            };
+            const mockAccessDecodedData = {
+                message: 'ok',
+                userId: 1,
+                role: 'user'
+            };
+            const mockRefreshnVerifyResult = {
+                state:  false,
+                token: 'Bearer mock-refreshToken'
+            };
+            const mockNewAccessToken = 'mock-new-accessToken';
+
+            mockJwtManager.verify.mockReturnValue(mockAccessVerifyResult);
+            mockJwtManager.decode.mockReturnValue(mockAccessDecodedData);
+            mockJwtManager.refreshVerify.mockResolvedValue(mockRefreshnVerifyResult);
+            mockJwtManager.makeAccessToken.mockReturnValue(mockNewAccessToken);
+
+            await expect(authService.reissueToken('Bearer mock-access-token','Bearer mock-refresh-token'))
+                .rejects
+                .toEqual(ErrorResponseDto.of(ErrorCode.LOGIN_AGAIN));
+            expect(mockJwtManager.verify).toHaveBeenCalledWith('mock-access-token');
+            expect(mockJwtManager.decode).toHaveBeenCalledWith('mock-access-token');
+            expect(mockJwtManager.refreshVerify).toHaveBeenCalledWith('Bearer mock-refresh-token', mockAccessDecodedData.userId);
+            expect(mockJwtManager.makeAccessToken).not.toHaveBeenCalledWith(mockAccessDecodedData.userId, mockAccessDecodedData.role);
+
+   
+
+        });
+
+
+
+        it('reissueToken 토큰 미만료', async() => {
+            const mockAccessVerifyResult = {
+                state: true,
+                userId: 1,
+                role: 'user'
+            };
+            const mockAccessDecodedData = {
+                message: 'ok',
+                userId: 1,
+                role: 'user'
+            };
+            const mockRefreshnVerifyResult = {
+                state: true,
+                token: 'Bearer mock-refreshToken'
+            };
+            const mockNewAccessToken = 'mock-new-accessToken';
+           
+            mockJwtManager.verify.mockReturnValue(mockAccessVerifyResult);
+            mockJwtManager.decode.mockReturnValue(mockAccessDecodedData);
+            mockJwtManager.refreshVerify.mockResolvedValue(mockRefreshnVerifyResult);
+            mockJwtManager.makeAccessToken.mockReturnValue(mockNewAccessToken);
+
+            await expect(authService.reissueToken('Bearer mock-access-token','Bearer mock-refresh-token'))
+                .rejects
+                .toEqual(ErrorResponseDto.of(ErrorCode.NOT_EXPIRED));
+
+            expect(mockJwtManager.verify).toHaveBeenCalledWith('mock-access-token');
+            expect(mockJwtManager.decode).toHaveBeenCalledWith('mock-access-token');
+            expect(mockJwtManager.refreshVerify).toHaveBeenCalledWith('Bearer mock-refresh-token', mockAccessDecodedData.userId);
+            expect(mockJwtManager.makeAccessToken).not.toHaveBeenCalledWith(mockAccessDecodedData.userId, mockAccessDecodedData.role);
+
 
         });
 

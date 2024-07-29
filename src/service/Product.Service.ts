@@ -3,16 +3,13 @@ import { InjectRepository } from 'typeorm-typedi-extensions';
 import { ProductRepository } from '../repository/Product.Repository';
 import { UserService } from './User.Service';
 import { Product } from '../entity/Product';
-import { checkData } from '../util/checker';
-import { ErrorResponseDto } from '../response/ErrorResponseDto';
-import { ErrorCode } from '../exception/ErrorCode';
 import { ProductList } from '../dto/response/ProductList';
 import { formatDate } from '../util/date';
 import { UserRepository } from '../repository/User.Repository';
 import { ProductCompanyRepository } from '../repository/ProductCompany.Repository';
 import { Transactional } from '../util/decorator/transaction';
 import { Connection } from 'typeorm';
-import { verifyIntroduceTextCategory, verifyProductCategory } from '../util/verify';
+import { verfiyProduct, verifyIntroduceTextCategory, verifyProductCategory } from '../util/verify';
 import { getIntroduceTextCategoryByCondition } from '../util/enum/IntroduceTextCategory';
 import { getProductCategoryByCondition } from '../util/enum/ProductCategory';
 
@@ -38,7 +35,7 @@ export class ProductService {
      */
     async modifyProductStatus(userId:number, productId: number, status: boolean):Promise<void> {
         const productData = await this.productRepository.findProductById(productId);
-        this.verfiyProduct(productData);
+        verfiyProduct(productData);
         await this.productRepository.updateProductStatus(userId, productId, status);
         await this.userService.modifyUserScoreAccordingToProductStatus(status, productData, userId);
      
@@ -82,15 +79,7 @@ export class ProductService {
         await this.productCompanyRepository.insertProductCompanys(company, productId);
     }
 
-    /**
-     * product의 데이터 유무에 따라 예외처리 함수
-     * @param productData product 엔티티 데이터
-     */
-    private verfiyProduct(productData:Product | undefined | null){
-        if (!checkData(productData)) {
-           throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT);
-        }
-    }
+
 
     private mappingMyProductData(products: Product[]){
         return products.map((data)=> {

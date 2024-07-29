@@ -94,7 +94,7 @@ describe('Product Service 테스트', () => {
      it('bringMyProduct 정상 처리', async () => {
             const userId = 1;
             const status = 'true';
-            const createdAt = new Date('2024-01-01T00:00:00Z');
+
             const productCompany1 = new ProductCompany('Company1', 1);
             const productCompany2 = new ProductCompany('Company2', 2);
 

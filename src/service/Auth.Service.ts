@@ -11,6 +11,7 @@ import { ErrorResponseDto } from '../response/ErrorResponseDto';
 import { ErrorCode } from '../exception/ErrorCode';
 import { AxiosResponse } from 'axios';
 import { checkData } from '../util/checker';
+import { signVerifyAccessToken, signVerifyRefreshToken } from '../util/verify';
 
 require('dotenv').config();
 
@@ -59,19 +60,10 @@ export class AuthService {
     }
     
     private signVerifyToken(accessTokenVerifyResult: boolean, refreshTokenVerifyesult: boolean){
-        this.signVerifyRefreshToken(refreshTokenVerifyesult);
-        this.signVerifyAccessToken(accessTokenVerifyResult);
+        signVerifyRefreshToken(refreshTokenVerifyesult);
+        signVerifyAccessToken(accessTokenVerifyResult);
     }
 
-    private signVerifyAccessToken(status: boolean){
-        if(status)
-            throw ErrorResponseDto.of(ErrorCode.NOT_EXPIRED);
-    }
-
-    private signVerifyRefreshToken(status: boolean){
-        if(!status)
-            throw  ErrorResponseDto.of(ErrorCode.LOGIN_AGAIN);        
-    }
 
 
 

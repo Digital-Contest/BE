@@ -14,8 +14,7 @@
 
     "start": "tsc && pm2-runtime start ecosystem.config.cjs",
 
-    "test": "jest --logHeapUsage"
-
+    "test": "jest --logHeapUsage "
 
   },
 
@@ -124,6 +123,8 @@
     "puppeteer": "^22.13.1",
 
     "redis": "^4.6.10",
+
+    "reflect-metadata": "^0.2.2",
 
     "routing-controllers": "^0.9.0",
 

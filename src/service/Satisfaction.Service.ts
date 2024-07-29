@@ -153,7 +153,7 @@ export class SatisfactionService {
      * @param categorySatisfaction 카테고리별 선호 말투 중 가장 인기 있는 말투를 선별하는 함수
      * @returns 
      */
-    public extractMostCategory(categorySatisfaction:Satisfaction[]){ 
+    private extractMostCategory(categorySatisfaction:Satisfaction[]){ 
         const result : Satisfaction[] = categorySatisfaction.reduce((acc, current) => {
             const existing = acc.find(item => item.getTarget() === current.getTarget());
             if (!existing || existing.introduceTextCategoryCount < current.getIntroduceTextCategoryCount()) {
@@ -172,7 +172,7 @@ export class SatisfactionService {
      * @param kind 종류
      * @returns 
      */
-    public async bringSatisfactionAccordingToKind(userId:number, kind:string){
+    private async bringSatisfactionAccordingToKind(userId:number, kind:string){
         switch(true){
             case kind === 'platform-whole' :
                 return this.productRepository.findWholePlatformSatisfaction();

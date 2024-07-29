@@ -14,6 +14,6 @@ export const getAllIntroduceTextCategory = () => {
 }
 
 
-export const getIntroduceTextCategoryByCondition = (key: string): string => {
+export const getIntroduceTextCategoryByCondition = (key: string): string | null | undefined => {
     return IntroduceTextCategory[key as keyof typeof IntroduceTextCategory];
 }
