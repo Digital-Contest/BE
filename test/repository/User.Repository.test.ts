@@ -50,54 +50,68 @@ beforeEach(() => {
 
 describe('UserRepository 테스트', () => {
 
-    it('findUserByKakaoId 사용자 객체 반환', async () => {
-        const kakaoId = 'mock-kakaoId';
+    describe('findUserByKakaoId 테스트', () => {
 
-        const result = await userRepository.findUserByKakaoId(kakaoId);
+        it('findUserByKakaoId case1', async () => {
+            const kakaoId = 'mock-kakaoId';
 
-        expect(result).toBe(mockUser);
-        expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
-        expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('u.numbers = :kakaoId', { kakaoId });
-        expect(mockSelectQueryBuilder.getOne).toHaveBeenCalled();
+            const result = await userRepository.findUserByKakaoId(kakaoId);
+
+            expect(result).toBe(mockUser);
+            expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
+            expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('u.numbers = :kakaoId', { kakaoId });
+            expect(mockSelectQueryBuilder.getOne).toHaveBeenCalled();
+        });
     });
 
-    it('insertUser 유저 생성', async () => {
-        mockRepository.save.mockResolvedValue(mockUser);
 
-        const result = await userRepository.insertUser('1234567890', 'user@example.com', 'Test User');
+    describe('insertUser 테스트', () => {
 
-        expect(result).toBe(mockUser);
-        expect(User.createUser).toHaveBeenCalledWith('1234567890', 'user@example.com', 'USER', 'Test User');
-        expect(mockRepository.save).toHaveBeenCalledWith(mockUser);
+        it('insertUser case1', async () => {
+            mockRepository.save.mockResolvedValue(mockUser);
+
+            const result = await userRepository.insertUser('1234567890', 'user@example.com', 'Test User');
+
+            expect(result).toBe(mockUser);
+            expect(User.createUser).toHaveBeenCalledWith('1234567890', 'user@example.com', 'USER', 'Test User');
+            expect(mockRepository.save).toHaveBeenCalledWith(mockUser);
+        });
     });
 
-    it('findUserById 사용자 객체 반환', async () => {
-        const userId = 2;
 
-        mockRepository.findOne.mockResolvedValue(mockUser);
+    describe('findUserById 테스트', () => {
 
-        const result = await userRepository.findUserById(userId);
+        it('findUserById case1', async () => {
+            const userId = 2;
 
-        expect(result).toBe(mockUser);
-        expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { id: userId } });
+            mockRepository.findOne.mockResolvedValue(mockUser);
+
+            const result = await userRepository.findUserById(userId);
+
+            expect(result).toBe(mockUser);
+            expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { id: userId } });
+        });
     });
 
-    it('updateUserScore 함수', async () => {
-        const userId = 1;
-        const addScore = 10;
+    describe('updateUserScore 테스트', () => {
 
-        // UpdateQueryBuilder를 반환하도록 createQueryBuilder mock을 업데이트합니다.
-        mockRepository.createQueryBuilder.mockReturnValueOnce(mockUpdateQueryBuilder as any);
+        it('updateUserScore case1', async () => {
+            const userId = 1;
+            const addScore = 10;
 
-        const result = await userRepository.updateUserScore(userId, addScore);
+            // UpdateQueryBuilder를 반환하도록 createQueryBuilder mock을 업데이트합니다.
+            mockRepository.createQueryBuilder.mockReturnValueOnce(mockUpdateQueryBuilder as any);
 
-        expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
-        expect(mockUpdateQueryBuilder.update).toHaveBeenCalledWith(User);
-        expect(mockUpdateQueryBuilder.set).toHaveBeenCalledWith({ score: expect.any(Function) });
-        expect(mockUpdateQueryBuilder.where).toHaveBeenCalledWith('id = :userId', { userId });
-        expect(mockUpdateQueryBuilder.setParameters).toHaveBeenCalledWith({ addScore });
-        expect(mockUpdateQueryBuilder.execute).toHaveBeenCalled();
+            const result = await userRepository.updateUserScore(userId, addScore);
 
-        expect(result).toEqual({ affected: 1 });
+            expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
+            expect(mockUpdateQueryBuilder.update).toHaveBeenCalledWith(User);
+            expect(mockUpdateQueryBuilder.set).toHaveBeenCalledWith({ score: expect.any(Function) });
+            expect(mockUpdateQueryBuilder.where).toHaveBeenCalledWith('id = :userId', { userId });
+            expect(mockUpdateQueryBuilder.setParameters).toHaveBeenCalledWith({ addScore });
+            expect(mockUpdateQueryBuilder.execute).toHaveBeenCalled();
+
+            expect(result).toEqual({ affected: 1 });
+        });
     });
 });
