@@ -1,17 +1,20 @@
 import { ProductRepository } from '../../src/repository/Product.Repository';
 import { UserRepository } from '../../src/repository/User.Repository';
-import {ProductCompanyRepository} from '../../src/repository/ProductCompany.Repository';
-import {UserService} from '../../src/service/User.Service';
-import {ProductService} from '../../src/service/Product.Service';
-import { Connection } from 'typeorm';
+import { ProductCompanyRepository } from '../../src/repository/ProductCompany.Repository';
+import { UserService } from '../../src/service/User.Service';
+import { ProductService } from '../../src/service/Product.Service';
+import { QueryRunner, Connection } from 'typeorm';
 import { Product } from '../../src/entity/Product';
 import { ErrorResponseDto } from '../../src/response/ErrorResponseDto';
 import { ErrorCode } from '../../src/exception/ErrorCode';
 import { ProductList } from '../../src/dto/response/ProductList';
 import { formatDate } from '../../src/util/date';
 import { ProductCompany } from '../../src/entity/ProductCompany';
-import {verfiyProduct} from '../../src/util/verify';
+import { verifyIntroduceTextCategory, verifyProductCategory, verfiyProduct } from '../../src/util/verify';
+import { getProductCategoryByCondition } from '../../src/util/enum/ProductCategory';
+import { getIntroduceTextCategoryByCondition } from '../../src/util/enum/IntroduceTextCategory';
 
+// 모듈 모킹
 jest.mock('../../src/repository/Product.Repository');
 jest.mock('../../src/repository/User.Repository');
 jest.mock('../../src/repository/ProductCompany.Repository');
@@ -19,10 +22,24 @@ jest.mock('../../src/service/User.Service');
 jest.mock('../../src/response/ErrorResponseDto');
 jest.mock('../../src/exception/ErrorCode');
 jest.mock('../../src/util/date');
-jest.mock('../../src/util/verify', ()=>({
-    verfiyProduct:jest.fn()
+jest.mock('../../src/util/verify', () => ({
+    verfiyProduct: jest.fn(),
+    verifyIntroduceTextCategory: jest.fn(),
+    verifyProductCategory: jest.fn()
+}));
+jest.mock('../../src/util/enum/ProductCategory', () => ({
+    getProductCategoryByCondition: jest.fn()
+}));
+jest.mock('../../src/util/enum/IntroduceTextCategory', () => ({
+    getIntroduceTextCategoryByCondition: jest.fn()
 }));
 
+jest.mock('../../src/util/decorator/transaction', () => ({
+    Transactional: () => (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+      // 실제 트랜잭션 동작을 제거하고 단순히 원래 메서드를 호출하도록 합니다.
+      return descriptor;
+    }
+  }));
 
 describe('Product Service 테스트', () => {
 
@@ -34,6 +51,10 @@ describe('Product Service 테스트', () => {
     let mockVerfiyProduct: jest.Mock;
     let connection : jest.Mocked<Connection>;
     const mockFormatDate = formatDate as jest.Mock;
+    let mockVerifyIntroduceTextCategory: jest.Mock;
+    let mockVerifyProductCategory: jest.Mock;
+    let mockGetIntroduceTextCategoryByCondition: jest.Mock;
+    let mockGetProductCategoryByCondition: jest.Mock;
 
 
     beforeEach(() => {
@@ -42,13 +63,19 @@ describe('Product Service 테스트', () => {
         mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
         mockUserService = new UserService({} as any) as jest.Mocked<UserService>;
         mockVerfiyProduct = verfiyProduct as jest.Mock;
+        mockVerifyIntroduceTextCategory =  verifyIntroduceTextCategory as jest.Mock;
+        mockVerifyProductCategory = verifyProductCategory as jest.Mock;
+        mockGetIntroduceTextCategoryByCondition = getIntroduceTextCategoryByCondition as jest.Mock;
+        mockGetProductCategoryByCondition = getProductCategoryByCondition as jest.Mock;
     
         productService = new ProductService(
             mockProductRepository,
             mockUserService, 
             mockUserRepository, 
             mockProductCompanyRepository, 
-            connection);
+            connection as unknown as Connection
+        );
+
 
         jest.clearAllMocks();
     });
@@ -160,15 +187,89 @@ describe('Product Service 테스트', () => {
             expect(changeTypeSpy).toHaveBeenCalledWith(status);
             expect(mappingSpy).toHaveBeenCalledWith(products);
             expect(mockProductRepository.findProductAndProductCompanyByUserIdAndStatus).toHaveBeenCalledWith(userId, true);
+            }); 
+    });
+
+
+    describe('pentrateProduct 함수', () => {
+        const userId = 1;
+        const imageUrl = 'mock-url';
+        const introduceCategory = 'mock-introduceCategory';
+        const price = 1000;
+        const productCategory = 'mock-productCategory';
+        const product = 'mock-product';
+        const introduceText = 'mock-introduceText';
+        const companys = ['company1', 'company2'];
+
+        const productData = {getId:jest.fn().mockReturnValue(1)} as unknown as Product;
+
+        it('pentrateProduct 정상 처리', async () => {
+
+            mockGetIntroduceTextCategoryByCondition.mockReturnValue("mock-text-category");
+            mockGetProductCategoryByCondition.mockReturnValue(1);
+            mockProductRepository.insertProduct.mockResolvedValue(productData);
+
+            await productService.pentrateProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText, companys);
+       
+            expect(mockGetIntroduceTextCategoryByCondition).toHaveBeenCalledWith(introduceCategory);
+            expect(mockVerifyIntroduceTextCategory).toHaveBeenCalledWith("mock-text-category"); 
+            expect(mockGetProductCategoryByCondition).toHaveBeenCalledWith(productCategory);
+            expect(mockVerifyProductCategory).toHaveBeenCalledWith(1); 
+            expect(mockProductRepository.insertProduct).toHaveBeenCalledWith(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText);
+            expect(mockProductCompanyRepository.insertProductCompanys).toHaveBeenCalledWith(companys, productData.getId());
+   
+        }); 
+
+
+
+        it('pentrateProduct verifyIntroduceTextCategory 에러 처리', async () => {
+            mockGetIntroduceTextCategoryByCondition.mockReturnValue(null);
+            mockVerifyIntroduceTextCategory.mockImplementation(() => {
+                throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_INTRODUCE_CATEGORY);
             });
 
-       
+            await expect(productService.pentrateProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText, companys))
+                .rejects.toEqual(ErrorResponseDto.of(ErrorCode.NOT_FOUND_INTRODUCE_CATEGORY));
+
+            expect(mockGetIntroduceTextCategoryByCondition).toHaveBeenCalledWith(introduceCategory);
+            expect(mockVerifyIntroduceTextCategory).toHaveBeenCalledWith(null);
+            expect(mockVerifyProductCategory).not.toHaveBeenCalled();
+            expect(mockGetProductCategoryByCondition).not.toHaveBeenCalled();
+            expect(mockProductRepository.insertProduct).not.toHaveBeenCalled();
+            expect(mockProductCompanyRepository.insertProductCompanys).not.toHaveBeenCalled();
+        });
+
+        it('pentrateProduct verifyProductCategory 에러 처리', async () => {
+
+            mockGetIntroduceTextCategoryByCondition.mockReturnValue("mock-text-category");
+            mockGetProductCategoryByCondition.mockReturnValue(null);
+            mockVerifyProductCategory.mockImplementation(() => {
+                throw  ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT_CATEGORY);
+            });
+
+            await expect(productService.pentrateProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText, companys))
+                .rejects.toEqual( ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT_CATEGORY));
+
+            expect(mockGetIntroduceTextCategoryByCondition).toHaveBeenCalledWith(introduceCategory);
+            expect(mockGetProductCategoryByCondition).toHaveBeenCalledWith(productCategory);
+            expect(mockVerifyProductCategory).toHaveBeenCalledWith(null); 
+            expect(mockVerifyIntroduceTextCategory).toHaveBeenCalledWith("mock-text-category"); 
+            expect(mockProductRepository.insertProduct).not.toHaveBeenCalled();
+            expect(mockProductCompanyRepository.insertProductCompanys).not.toHaveBeenCalled();
+   
+        }); 
+
+   
+    });
+
+
+
     });
 
 
     
 
 
-});
+
 
 

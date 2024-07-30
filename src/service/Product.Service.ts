@@ -67,16 +67,7 @@ export class ProductService {
         verifyIntroduceTextCategory(getIntroduceTextCategoryByCondition(introduceCategory));
         verifyProductCategory(getProductCategoryByCondition(productCategory));
         const productData = await this.productRepository.insertProduct(userId, imageUrl, introduceCategory, price, productCategory, product, introduceText);
-        await this.pentrateProductCompany(companys, productData.getId());
-    }
-
-    /**
-     * 물품 등록 회사를 삽입하는 함수
-     * @param company 등록할 회사들
-     * @param productId 물품 id
-     */
-    async pentrateProductCompany(company:string[], productId:number){
-        await this.productCompanyRepository.insertProductCompanys(company, productId);
+        await this.productCompanyRepository.insertProductCompanys(companys, productData.getId());
     }
 
 
@@ -105,8 +96,6 @@ export class ProductService {
             result = null;
         }
         return result;
-    
-
     }
 
     
