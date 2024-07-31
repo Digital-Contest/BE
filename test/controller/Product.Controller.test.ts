@@ -19,7 +19,6 @@ const mockProductService = new ProductService(
     {} as any,
     {} as any,
     {} as any,
-    {} as any,
 ) as jest.Mocked<ProductService>;
 
 const productController = new ProductController(mockProductService)

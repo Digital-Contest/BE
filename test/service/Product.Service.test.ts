@@ -1,9 +1,8 @@
 import { ProductRepository } from '../../src/repository/Product.Repository';
-import { UserRepository } from '../../src/repository/User.Repository';
 import { ProductCompanyRepository } from '../../src/repository/ProductCompany.Repository';
 import { UserService } from '../../src/service/User.Service';
 import { ProductService } from '../../src/service/Product.Service';
-import { QueryRunner, Connection } from 'typeorm';
+import { Connection } from 'typeorm';
 import { Product } from '../../src/entity/Product';
 import { ErrorResponseDto } from '../../src/response/ErrorResponseDto';
 import { ErrorCode } from '../../src/exception/ErrorCode';
@@ -36,7 +35,6 @@ jest.mock('../../src/util/enum/IntroduceTextCategory', () => ({
 
 jest.mock('../../src/util/decorator/transaction', () => ({
     Transactional: () => (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-      // 실제 트랜잭션 동작을 제거하고 단순히 원래 메서드를 호출하도록 합니다.
       return descriptor;
     }
   }));
@@ -46,7 +44,6 @@ describe('Product Service 테스트', () => {
     let productService: ProductService;
     let mockProductCompanyRepository: jest.Mocked<ProductCompanyRepository>;
     let mockProductRepository: jest.Mocked<ProductRepository>;
-    let mockUserRepository: jest.Mocked<UserRepository>;
     let mockUserService : jest.Mocked<UserService>;
     let mockVerfiyProduct: jest.Mock;
     let connection : jest.Mocked<Connection>;
@@ -60,7 +57,6 @@ describe('Product Service 테스트', () => {
     beforeEach(() => {
         mockProductCompanyRepository = new ProductCompanyRepository() as jest.Mocked<ProductCompanyRepository>;
         mockProductRepository = new ProductRepository() as jest.Mocked<ProductRepository>;
-        mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
         mockUserService = new UserService({} as any) as jest.Mocked<UserService>;
         mockVerfiyProduct = verfiyProduct as jest.Mock;
         mockVerifyIntroduceTextCategory =  verifyIntroduceTextCategory as jest.Mock;
@@ -71,7 +67,6 @@ describe('Product Service 테스트', () => {
         productService = new ProductService(
             mockProductRepository,
             mockUserService, 
-            mockUserRepository, 
             mockProductCompanyRepository, 
             connection as unknown as Connection
         );

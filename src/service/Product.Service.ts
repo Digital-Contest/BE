@@ -23,7 +23,6 @@ export class ProductService {
     constructor(
         @InjectRepository(ProductRepository) private readonly productRepository: ProductRepository,
         private readonly userService: UserService,
-        @InjectRepository(UserRepository) private readonly userRepository: UserRepository,
         @InjectRepository(ProductCompanyRepository) private readonly productCompanyRepository: ProductCompanyRepository,
         private readonly connection: Connection,
     ) {}

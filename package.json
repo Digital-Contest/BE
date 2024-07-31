@@ -14,7 +14,7 @@
 
     "start": "tsc && pm2-runtime start ecosystem.config.cjs",
 
-    "test": "jest --logHeapUsage "
+    "test": "jest --logHeapUsage --coverage"
 
   },
 

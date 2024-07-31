@@ -11,7 +11,7 @@ import { UserNickname } from "../dto/response/UserNickname";
 @Service()
 export class UserService{
     constructor(
-        @InjectRepository(UserRepository) private userRepository: UserRepository,
+        @InjectRepository(UserRepository) private readonly userRepository: UserRepository
     ) { }
 
     /**
