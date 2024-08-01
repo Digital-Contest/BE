@@ -9,7 +9,6 @@ export class QuotationService {
 
 
     public async bringPlatformQuotation(count:number, search:string){
-        const crawlerResult = await this.crawler.bringCompanyProductPrice(count, search);
-        return crawlerResult;
+        return this.crawler.bringCompanyProductPrice(count, search);
     }
 }
