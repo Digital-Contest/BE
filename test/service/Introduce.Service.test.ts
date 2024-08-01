@@ -58,18 +58,13 @@ describe('IntroduceService 테스트', () => {
         const product = 'mock-product';
 
         it('makeIntroduceText 정상 응답', async () => {
-
            mockGetIntroduceTextCategoryByCondition.mockReturnValue('mock-text-content');
            mockGetProductCategoryByCondition.mockReturnValue(1);
            mockOpenAi.mockResolvedValue('mock-introduce-text');
            introduceService.checkPrice = jest.fn().mockReturnValue(price);
-        
            const expectedResponse = IntroduceTextResponse.of('mock-introduce-text', price);
-        
            const result = await introduceService.makeIntroduceText(images, introduceCategory, price, productCategory, product);
-        
            expect(result).toEqual(expectedResponse);
-
            expect(mockOpenAi).toHaveBeenCalledWith(images[0], price + product + 'mock-text-content');
            expect(mockGetIntroduceTextCategoryByCondition).toHaveBeenCalledWith(introduceCategory);
            expect(mockGetProductCategoryByCondition).toHaveBeenCalledWith(productCategory);
@@ -78,17 +73,14 @@ describe('IntroduceService 테스트', () => {
         });
 
         it('makeIntroduceText IntroduceTextCategory 에러처리', async () => {
-
             mockGetIntroduceTextCategoryByCondition.mockReturnValue(null);
             mockVerifyIntroduceTextCategory.mockImplementation(() => {
                 throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_INTRODUCE_CATEGORY);
             });
             introduceService.checkPrice = jest.fn().mockReturnValue(price);
-
             await expect(introduceService.makeIntroduceText(images, introduceCategory, price, productCategory, product))
                 .rejects
                 .toEqual(ErrorResponseDto.of(ErrorCode.NOT_FOUND_INTRODUCE_CATEGORY));
-        
             expect(mockGetIntroduceTextCategoryByCondition).toHaveBeenCalledWith(introduceCategory);
             expect(mockVerifyIntroduceTextCategory).toHaveBeenCalledWith(null); 
             expect(mockOpenAi).not.toHaveBeenCalled();
@@ -97,18 +89,15 @@ describe('IntroduceService 테스트', () => {
         });
 
         it('makeIntroduceText ProductCategory 에러처리', async () => {
-        
             mockGetIntroduceTextCategoryByCondition.mockReturnValue("mock-text-category");
             mockGetProductCategoryByCondition.mockReturnValue(null);
             mockVerifyProductCategory.mockImplementation(() => {
                 throw ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT_CATEGORY);
             });
             introduceService.checkPrice = jest.fn().mockReturnValue(price);
-        
             await expect(introduceService.makeIntroduceText(images, introduceCategory, price, productCategory, product))
                 .rejects
                 .toEqual(ErrorResponseDto.of(ErrorCode.NOT_FOUND_PRODUCT_CATEGORY));
-            
             expect(mockGetIntroduceTextCategoryByCondition).toHaveBeenCalledWith(introduceCategory);
             expect(mockGetProductCategoryByCondition).toHaveBeenCalledWith(productCategory);
             expect(mockVerifyProductCategory).toHaveBeenCalledWith(null); 
@@ -122,21 +111,16 @@ describe('IntroduceService 테스트', () => {
 
     describe('checkPrice 함수', () => {
 
-
         it('checkPrice 가격 존재', () => {
             (checkData as jest.Mock).mockReturnValue(true);
-
             const result = introduceService.checkPrice(2000);
-
             expect(result).toEqual(2000);
             expect((checkData as jest.Mock)).toHaveBeenCalledWith(2000);
         });
 
         it('checkPrice 가격 미존재', () => {
             (checkData as jest.Mock).mockReturnValue(false);
-
             const result = introduceService.checkPrice(undefined);
-
             expect(result).toEqual(50000);
             expect((checkData as jest.Mock)).toHaveBeenCalledWith(undefined);
         });
