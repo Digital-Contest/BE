@@ -36,8 +36,13 @@ const mockUser = {
 } as unknown as User;
 
 describe('Auth Service 테스트 코드', () => {
+
     beforeEach(()=>{
         jest.clearAllMocks()
+    });
+
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
     describe('kakaoLogin 함수', () => {
@@ -51,27 +56,21 @@ describe('Auth Service 테스트 코드', () => {
                     properties: { nickname: 'Test User' }
                 }
             } as AxiosResponse<any>;
-
             mockSocialLogin.getKakaoData.mockResolvedValue(kakaoData);
             mockUserRepository.findUserByKakaoId.mockResolvedValue(mockUser);
             mockJwtManager.makeAccessToken.mockReturnValue('mock-access-token');
             mockJwtManager.makeRefreshToken.mockReturnValue('mock-refresh-token');
             mockTokenManager.setToken.mockResolvedValue(undefined);
-
             (checkData as jest.Mock).mockReturnValue(false);
             const spySignInDependingOnRegistrationStatus = jest.spyOn(authService, 'signInDependingOnRegistrationStatus' as any);
             const spyInsertUser = jest.spyOn(mockUserRepository, 'insertUser');
-
             const mockLoginResponse: LoginResponse= LoginResponse.of('mock-access-token', 'mock-refresh-token', 'user');
-
             const result = await authService.kakaoLogin(kakaoToken);
-
             expect(result).toEqual(mockLoginResponse);
             expect(mockUserRepository.findUserByKakaoId).toHaveBeenCalledWith('kakaoUserId');
             expect(mockJwtManager.makeAccessToken).toHaveBeenCalledWith(2, 'user');
             expect(mockJwtManager.makeRefreshToken).toHaveBeenCalled();
             expect(mockTokenManager.setToken).toHaveBeenCalledWith('2eco', 'mock-refresh-token');
-
             expect(spySignInDependingOnRegistrationStatus).toHaveBeenCalledWith(mockUser, kakaoData)
             expect(spyInsertUser).toHaveBeenCalledWith(kakaoData.data.id, kakaoData.data.kakao_account.email, kakaoData.data.properties.nickname);
         });
@@ -80,20 +79,14 @@ describe('Auth Service 테스트 코드', () => {
     describe('logout 함수', () => {
 
         it('logout 정상 응답', async() => {
-
             const mockUserId = 'mock-userId';
             mockTokenManager.deleteToken.mockResolvedValue(undefined);
-
-            const result = await authService.logout(mockUserId);
-
-            expect(result).toEqual(undefined);
+            await authService.logout(mockUserId);
             expect(mockTokenManager.deleteToken).toHaveBeenCalledWith(mockUserId+"eco");
-
         });
     });
 
     describe('reissueToken 함수', () => {
-
 
         it('reissueToken 토큰 재발급', async() => {
             const mockAccessVerifyResult = {
@@ -112,21 +105,16 @@ describe('Auth Service 테스트 코드', () => {
             };
             const mockNewAccessToken = 'mock-new-accessToken';
             const mockReissueTokenResponse = Token.of('mock-new-accessToken', 'Bearer mock-refreshToken');
-
             mockJwtManager.verify.mockReturnValue(mockAccessVerifyResult);
             mockJwtManager.decode.mockReturnValue(mockAccessDecodedData);
             mockJwtManager.refreshVerify.mockResolvedValue(mockRefreshnVerifyResult);
             mockJwtManager.makeAccessToken.mockReturnValue(mockNewAccessToken);
-
             const result = await authService.reissueToken('Bearer mock-access-token','Bearer mock-refresh-token');
-
             expect(result).toEqual(mockReissueTokenResponse);
             expect(mockJwtManager.verify).toHaveBeenCalledWith('mock-access-token');
             expect(mockJwtManager.decode).toHaveBeenCalledWith('mock-access-token');
             expect(mockJwtManager.refreshVerify).toHaveBeenCalledWith('Bearer mock-refresh-token', mockAccessDecodedData.userId);
             expect(mockJwtManager.makeAccessToken).toHaveBeenCalledWith(mockAccessDecodedData.userId, mockAccessDecodedData.role);
-
-
         });
 
 
@@ -146,12 +134,10 @@ describe('Auth Service 테스트 코드', () => {
                 token: 'Bearer mock-refreshToken'
             };
             const mockNewAccessToken = 'mock-new-accessToken';
-
             mockJwtManager.verify.mockReturnValue(mockAccessVerifyResult);
             mockJwtManager.decode.mockReturnValue(mockAccessDecodedData);
             mockJwtManager.refreshVerify.mockResolvedValue(mockRefreshnVerifyResult);
             mockJwtManager.makeAccessToken.mockReturnValue(mockNewAccessToken);
-
             await expect(authService.reissueToken('Bearer mock-access-token','Bearer mock-refresh-token'))
                 .rejects
                 .toEqual(ErrorResponseDto.of(ErrorCode.LOGIN_AGAIN));
@@ -159,12 +145,7 @@ describe('Auth Service 테스트 코드', () => {
             expect(mockJwtManager.decode).toHaveBeenCalledWith('mock-access-token');
             expect(mockJwtManager.refreshVerify).toHaveBeenCalledWith('Bearer mock-refresh-token', mockAccessDecodedData.userId);
             expect(mockJwtManager.makeAccessToken).not.toHaveBeenCalledWith(mockAccessDecodedData.userId, mockAccessDecodedData.role);
-
-   
-
         });
-
-
 
         it('reissueToken 토큰 미만료', async() => {
             const mockAccessVerifyResult = {
@@ -182,25 +163,17 @@ describe('Auth Service 테스트 코드', () => {
                 token: 'Bearer mock-refreshToken'
             };
             const mockNewAccessToken = 'mock-new-accessToken';
-           
             mockJwtManager.verify.mockReturnValue(mockAccessVerifyResult);
             mockJwtManager.decode.mockReturnValue(mockAccessDecodedData);
             mockJwtManager.refreshVerify.mockResolvedValue(mockRefreshnVerifyResult);
             mockJwtManager.makeAccessToken.mockReturnValue(mockNewAccessToken);
-
             await expect(authService.reissueToken('Bearer mock-access-token','Bearer mock-refresh-token'))
                 .rejects
                 .toEqual(ErrorResponseDto.of(ErrorCode.NOT_EXPIRED));
-
             expect(mockJwtManager.verify).toHaveBeenCalledWith('mock-access-token');
             expect(mockJwtManager.decode).toHaveBeenCalledWith('mock-access-token');
             expect(mockJwtManager.refreshVerify).toHaveBeenCalledWith('Bearer mock-refresh-token', mockAccessDecodedData.userId);
             expect(mockJwtManager.makeAccessToken).not.toHaveBeenCalledWith(mockAccessDecodedData.userId, mockAccessDecodedData.role);
-
-
-        });
-
-        
-    });
-        
+        });   
+    });     
 });
