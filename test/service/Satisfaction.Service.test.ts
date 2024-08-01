@@ -1,4 +1,4 @@
-import { link } from 'fs';
+
 import { Satisfaction } from '../../src/dto/response/Satisfaction';
 import {ProductRepository} from '../../src/repository/Product.Repository';
 import {SatisfactionService} from '../../src/service/Satisfaction.Service';
@@ -8,7 +8,7 @@ import {getAllProductCategory} from '../../src/util/enum/ProductCategory';
 import { ErrorCode } from '../../src/exception/ErrorCode';
 import { ErrorResponseDto } from '../../src/response/ErrorResponseDto';
 import { GroupedData } from '../../src/interface/GroupData';
-import exp from 'constants';
+
 
 jest.mock('../../src/repository/Product.Repository')
 jest.mock('../../src/util/enum/Company', ()=>({
@@ -17,6 +17,7 @@ jest.mock('../../src/util/enum/Company', ()=>({
 jest.mock('../../src/util/enum/ProductCategory', ()=>({
     getAllProductCategory: jest.fn()
 }))
+
 
 
 describe('Satisfaction Service 테스트', ()=>{
@@ -55,7 +56,7 @@ describe('Satisfaction Service 테스트', ()=>{
     describe('bringPlatfromSatisfation 함수', ()=>{
         it('bringPlatfromSatisfation 정상 처리', async()=>{
             const bringSatisfactionAccordingToKind = jest.spyOn(satisfactionService as any, "bringSatisfactionAccordingToKind").mockResolvedValue(mockSatisfactionData);
-            const extractMostPlatform = jest.spyOn(satisfactionService as any, "extractMostPlatform").mockReturnValue(bringSatisfationResponse);
+            const extractMostPlatform = jest.spyOn(satisfactionService as any, "extractMostCategory").mockReturnValue(bringSatisfationResponse);
             const result = await satisfactionService.bringPlatfromSatisfation(userId, kind);
             expect(result).toEqual(bringSatisfationResponse);
             expect(bringSatisfactionAccordingToKind).toHaveBeenCalledWith(userId, kind);
