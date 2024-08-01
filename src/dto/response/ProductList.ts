@@ -31,32 +31,31 @@ export class ProductList {
     }
 
     private setProduct(product: string) {
-        if (!product) throw new Error (`${__dirname} : product 값이 존재하지 않습니다.`);
+        if (product === null) throw new Error (`${__dirname} : product 값이 존재하지 않습니다.`);
         this.product = product;
     }
 
     private setProductCategory(productCategory: string) {
-        if (!productCategory) throw new Error (`${__dirname} : productCategory 값이 존재하지 않습니다.`);
+        if (productCategory === null) throw new Error (`${__dirname} : productCategory 값이 존재하지 않습니다.`);
         this.productCategory = productCategory;
     }
 
     private setImageUrl(imageUrl: string) {
-        if (!imageUrl) throw new Error (`${__dirname} : imageUrl 값이 존재하지 않습니다.`);
+        if (imageUrl === null) throw new Error (`${__dirname} : imageUrl 값이 존재하지 않습니다.`);
         this.imageUrl = imageUrl;
     }
 
     private setCreatedAt(createdAt: string) {
-        if (!createdAt) throw new Error (`${__dirname} : createdAt 값이 존재하지 않습니다.`);
+        if (createdAt === null) throw new Error (`${__dirname} : createdAt 값이 존재하지 않습니다.`);
         this.createdAt = createdAt;
     }
 
     private setCompany(company: string[]) {
-        if (!company || company.length === 0) throw new Error (`${__dirname} : company 값이 존재하지 않습니다.`);
         this.company = company;
     }
 
     private setPrice(price:number){
-        if(price === null)throw new Error (`${__dirname} : company 값이 존재하지 않습니다.`);
+        if(price === null)throw new Error (`${__dirname} : price 값이 존재하지 않습니다.`);
         this.price=price;
     }
 
