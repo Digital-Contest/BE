@@ -7,8 +7,6 @@ import { LoginResponse } from '../dto/response/loginResponse';
 import { SocialLogin } from '../util/SocialLogin';
 import { Token } from '../dto/response/Token';
 import { User } from '../entity/User';
-import { ErrorResponseDto } from '../response/ErrorResponseDto';
-import { ErrorCode } from '../exception/ErrorCode';
 import { AxiosResponse } from 'axios';
 import { checkData } from '../util/checker';
 import { signVerifyAccessToken, signVerifyRefreshToken } from '../util/verify';
