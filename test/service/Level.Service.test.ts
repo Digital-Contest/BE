@@ -25,18 +25,16 @@ const mockGetLevelColor = getLevelColor as jest.Mock;
 
 describe('Level Service 테스트', () => {
     let levelService: LevelService;
-    let mockProductRepository: jest.Mocked<ProductRepository>;
-    let mockUserRepository: jest.Mocked<UserRepository>;
+    const mockProductRepository = new ProductRepository() as jest.Mocked<ProductRepository>;
+    const mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
 
     beforeEach(() => {
-        mockProductRepository = new ProductRepository() as jest.Mocked<ProductRepository>;
-        mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
         levelService = new LevelService(mockProductRepository, mockUserRepository);
-
         jest.clearAllMocks();
     });
 
     describe('bringSecondhandTradeCount 함수', () => {
+
         it('bringSecondhandTradeCount 정상 응답', async () => {
             const userId = 1;
             const findSecondhandTradeCountResponse = [
@@ -44,32 +42,23 @@ describe('Level Service 테스트', () => {
                 Product.createProduct(1, 'url2', 'category2', 200, 'productCategory2', 'product2', 'text2')
             ];
             const bringSecondhandTradeCountResponse = SecondhandTradeCount.of(findSecondhandTradeCountResponse.length);
-
             mockProductRepository.findSecondhandTradeCount.mockResolvedValue(findSecondhandTradeCountResponse);
-
             const result = await levelService.bringSecondhandTradeCount(userId);
-
-  
             expect(result).toEqual(bringSecondhandTradeCountResponse);
             expect(mockProductRepository.findSecondhandTradeCount).toHaveBeenCalledWith(userId);
         });
     });
 
-
     describe('bringLevelInformation 함수', () => {
 
         it('bringLevelInformation 정상 응답', async () => {
             const userId = 1;
-    
             mockUserRepository.findUserById.mockResolvedValue(mockUser);
             mockGetLevelByScore.mockReturnValue(3);
             mockGetLevelExperience.mockReturnValue(10);
             mockGetMyLevelExperience.mockReturnValue(7);
-
             const bringLevelInformationResponse = LevelInformation.of(10, 7, 3);
-
             const result = await levelService.bringLevelInformation(userId);
-      
             expect(result).toEqual(bringLevelInformationResponse);
             expect(mockUserRepository.findUserById).toHaveBeenCalledWith(userId);
             expect(mockGetLevelByScore).toHaveBeenCalledWith(mockUser.getScore());
@@ -78,22 +67,15 @@ describe('Level Service 테스트', () => {
         });
     });
 
-
-
     describe('bringLevelColor 함수', () => {
 
         it('bringLevelColor 정상 응답', async () => {
             const userId = 1;
-    
             mockUserRepository.findUserById.mockResolvedValue(mockUser);
             mockGetLevelByScore.mockReturnValue(3);
             mockGetLevelColor.mockReturnValue('mock-color');
-
             const bringLevelColorResponse = LevelColor.of('mock-color');
-
             const result = await levelService.bringLevelColor(userId);
-
-
             expect(result).toEqual(bringLevelColorResponse);
             expect(mockUserRepository.findUserById).toHaveBeenCalledWith(userId);
             expect(mockGetLevelByScore).toHaveBeenCalledWith(mockUser.getScore());
