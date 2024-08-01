@@ -74,7 +74,7 @@ export class SatisfactionService {
      * @param criteria 기준 타켓
      * @returns 매핑된 데이터
      */
-    public mappingSatisfactionData(satisfaction:Satisfaction[], criteria:string[]){
+    private mappingSatisfactionData(satisfaction:Satisfaction[], criteria:string[]){
         const result: GroupedData = {};
         const groupedData = this.groupByTarget(satisfaction, result);
         const checkedGroupedData = this.checkExistence(criteria, getAllIntroduceTextCategory(), groupedData);
@@ -91,7 +91,7 @@ export class SatisfactionService {
      * @param groupedData 등록된 데이터
      * @returns 
      */
-    public checkExistence(targets:string[], allCategories:string[], groupedData:GroupedData){
+    private checkExistence(targets:string[], allCategories:string[], groupedData:GroupedData){
         targets.forEach(target => {
             if (!groupedData[target]) {
                 groupedData[target] = {
@@ -115,7 +115,7 @@ export class SatisfactionService {
      * @param groupedData 그룹 데이터 형식
      * @returns 그룹화된 데이터
      */
-    public groupByTarget(satisfaction:Satisfaction[],groupedData:GroupedData){
+    private groupByTarget(satisfaction:Satisfaction[],groupedData:GroupedData){
         satisfaction.forEach(data => {
             const target = data.getTarget();
             if (!groupedData[target]) {
@@ -135,7 +135,7 @@ export class SatisfactionService {
      * @param platformSatisfaction 플랫폼별 선호 말투 중 가장 인기 있는 말투를 선별하는 함수
      * @returns 
      */
-    public extractMostPlatform(platformSatisfaction:Satisfaction[]){ 
+    private extractMostPlatform(platformSatisfaction:Satisfaction[]){ 
         const result: Satisfaction[] = platformSatisfaction.reduce((acc, current) => {
             const existing = acc.find(item => item.getTarget() === current.getTarget());
             if (!existing || existing.introduceTextCategoryCount < current.getIntroduceTextCategoryCount()) {
