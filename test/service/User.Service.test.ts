@@ -10,7 +10,6 @@ import {getProductCategoryByCondition} from '../../src/util/enum/ProductCategory
 
 
 jest.mock('../../src/repository/User.Repository')
-
 jest.mock('../../src/util/enum/ProductCategory', () => ({
     getProductCategoryByCondition: jest.fn()             
 }))
@@ -29,26 +28,19 @@ describe('User Service 테스트', ()=>{
         jest.clearAllMocks();
     });
 
-
     afterEach(() => {
         jest.resetAllMocks();
     });
-
 
     describe('bringNickname 함수', ()=>{
 
         it('bringNickname 정상 처리', async () => {
             const userId = 1;
-
             mockUserRepository.findUserById.mockResolvedValue(mockUser);
-
             const bringNicknameResponse = UserNickname.of(mockUser.getNickname());
-
             const result = await userService.bringNickname(userId);
-
             expect(result).toEqual(bringNicknameResponse);
-            expect(mockUserRepository.findUserById).toHaveBeenCalledWith(userId)
-
+            expect(mockUserRepository.findUserById).toHaveBeenCalledWith(userId);
         });
     });
 
@@ -60,21 +52,15 @@ describe('User Service 테스트', ()=>{
         it('modifyUserScoreAccordingToProductStatus status true 처리', async () => {
             const status = true;
             const productCategoryScore = 100
-
             mockGetProductCategoryByCondition.mockReturnValue('mock-productCategoryByCondition');
-
             await userService.modifyUserScoreAccordingToProductStatus(status, product, userId);
-
             expect(getProductCategoryByCondition).toHaveBeenCalledWith(product.getProductCategory());
             expect(mockUserRepository.updateUserScore(userId, productCategoryScore));
         });
 
-
         it('modifyUserScoreAccordingToProductStatus status false 처리', async () => {
             const status = false;
-    
             await userService.modifyUserScoreAccordingToProductStatus(status, product, userId);
-
             expect(mockGetProductCategoryByCondition).not.toHaveBeenCalled();
             expect(mockUserRepository.updateUserScore).not.toHaveBeenCalled();
         });
