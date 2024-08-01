@@ -5,7 +5,6 @@ import { UserService } from './User.Service';
 import { Product } from '../entity/Product';
 import { ProductList } from '../dto/response/ProductList';
 import { formatDate } from '../util/date';
-import { UserRepository } from '../repository/User.Repository';
 import { ProductCompanyRepository } from '../repository/ProductCompany.Repository';
 import { Transactional } from '../util/decorator/transaction';
 import { Connection } from 'typeorm';
@@ -71,12 +70,19 @@ export class ProductService {
 
 
 
-    private mappingMyProductData(products: Product[]){
-        return products.map((data)=> {
-            return new ProductList(data.getId(), data.getProduct(), data.getProductCategory(), 
-            data.getImageUrl(), formatDate(data.getCreatedAt()), 
-            data.getProductCompanys().map((data)=> data.getCompany()), data.getPrice());
-        })
+    private mappingMyProductData(products: Product[]): ProductList[] {
+        return products.map((data) => {
+            const productCompanys = data.getProductCompanys() || []; 
+            return new ProductList(
+                data.getId(),
+                data.getProduct(),
+                data.getProductCategory(),
+                data.getImageUrl(),
+                formatDate(data.getCreatedAt()),
+                productCompanys.map((company) => company.getCompany()), // Safely map
+                data.getPrice()
+            );
+        });
     }
 
 
