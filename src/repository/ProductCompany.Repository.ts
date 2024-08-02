@@ -15,7 +15,7 @@ export class ProductCompanyRepository extends Repository<ProductCompany> {
     */
    public async insertProductCompanys(company:string[], productId: number){
       const newProductCompanys = company.map((data)=> ProductCompany.createProductCompany(data, productId));
-      return this.save(newProductCompanys);
+      await this.save(newProductCompanys);
    }
 
 
