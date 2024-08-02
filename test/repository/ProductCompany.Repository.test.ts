@@ -1,49 +1,32 @@
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ProductCompany } from '../../src/entity/ProductCompany';
-import {ProductCompanyRepository} from '../../src/repository/ProductCompany.Repository'
+import { ProductCompanyRepository } from '../../src/repository/ProductCompany.Repository';
+import { mockDeep, mockReset,} from 'jest-mock-extended';
+
+const mockProductCompanies: ProductCompany[] = [
+    { productId: 1, company: 'Company1', createdAt:undefined, id:undefined, product:undefined, updateAt:undefined } as unknown as ProductCompany,
+];
 
 
-jest.mock('../../src/entity/ProductCompany', () => ({
-    createProductCompany: jest.fn(),
-}));
 
-
-
-const mockProductCompany = {
-
-} as unknown as ProductCompany;
-  
-
-describe('ProductCompanyRepository 테스트', () => {
+describe('ProductCompanyRepository', () => {
     let productCompanyRepository: ProductCompanyRepository;
+    const mockProductCompanyRepository = mockDeep<Repository<ProductCompany>>();
 
 
     beforeEach(() => {
+        mockReset(mockProductCompanyRepository);
         productCompanyRepository = new ProductCompanyRepository();
-        jest.clearAllMocks();
-    });
-    
-    afterEach(() => {
-        jest.resetAllMocks();
+        productCompanyRepository['save'] = mockProductCompanyRepository.save;
     });
 
-    describe('insertProductCompanys 함수', () => {
-
-        const mockSave = jest.spyOn(productCompanyRepository as any, 'save').mockImplementation(jest.fn());
-
-        it('insertProductCompanys 정상 ', async () => {
-            const companies = ['company1', 'company2'];
-            const productId = 2;
-            const savedCompanies = companies.map((data) => ({
-                data,
-                productId,
-              }));
-            mockSave.mockResolvedValue(savedCompanies);
-            
-
-           
-
+    describe('insertProductCompanys', () => {
+        it('insertProductCompanys 정상 테스트', async () => {
+            const companies = ['Company1'];
+            const productId = 1;
+            await productCompanyRepository.insertProductCompanys(companies, productId);
+            expect(productCompanyRepository['save']).toHaveBeenCalledTimes(1);
+            expect(productCompanyRepository['save']).toHaveBeenCalledWith(mockProductCompanies);
         });
-
     });
 });
