@@ -80,11 +80,11 @@ export class ProductRepository extends Repository<Product> {
      * @returns 
      */
     public async insertProduct(userId:number, imageUrl:string, introduceCategory:string, price:number, productCategory:string,
-     product:string, introduceText:string){
+     product:string, introduceText:string):Promise<Product>{
         const newProduct = Product.createProduct(
            userId, 
            imageUrl, introduceCategory, price, productCategory, product, introduceText );
-        this.save(newProduct);
+       return this.save(newProduct);
 
     }
 
