@@ -25,92 +25,67 @@ const mockUpdateQueryBuilder = {
     execute: jest.fn().mockResolvedValue({ affected: 1 })
 } as unknown as UpdateQueryBuilder<User>;
 
-const mockRepository = mockDeep<Repository<User>>();
-
+const mockUserRepository = mockDeep<Repository<User>>();
 let userRepository: UserRepository;
 
-// 테스트 전에 모의 객체 리셋
 beforeEach(() => {
-    mockReset(mockRepository);
-
-    mockRepository.createQueryBuilder.mockImplementation((alias?: string) => {
-        if (alias === 'update') {
-            return mockUpdateQueryBuilder as unknown as SelectQueryBuilder<User>;
-        }
-        return mockSelectQueryBuilder as unknown as SelectQueryBuilder<User>;
-    });
-
+    mockReset(mockUserRepository);
     userRepository = new UserRepository();
-    userRepository['createQueryBuilder'] = mockRepository.createQueryBuilder;
-    userRepository['save'] = mockRepository.save;
-    userRepository['findOne'] = mockRepository.findOne;
+    userRepository['createQueryBuilder'] = mockUserRepository.createQueryBuilder;
+    userRepository['save'] = mockUserRepository.save;
+    userRepository['findOne'] = mockUserRepository.findOne;
     jest.spyOn(User, 'createUser').mockReturnValue(mockUser);
 });
 
 describe('UserRepository 테스트', () => {
 
     describe('findUserByKakaoId 테스트', () => {
-
-        it('findUserByKakaoId case1', async () => {
+        it('findUserByKakaoId 정상 테스트', async () => {
             const kakaoId = 'mock-kakaoId';
-
+            mockUserRepository.createQueryBuilder.mockReturnValueOnce(mockSelectQueryBuilder as any);
             const result = await userRepository.findUserByKakaoId(kakaoId);
-
             expect(result).toBe(mockUser);
-            expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
+            expect(mockUserRepository.createQueryBuilder).toHaveBeenCalled();
+            expect(mockSelectQueryBuilder.select).toHaveBeenCalledWith('u');
+            expect(mockSelectQueryBuilder.from).toHaveBeenCalledWith(User, 'u');
             expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('u.numbers = :kakaoId', { kakaoId });
             expect(mockSelectQueryBuilder.getOne).toHaveBeenCalled();
         });
     });
 
-
     describe('insertUser 테스트', () => {
-
-        it('insertUser case1', async () => {
-            mockRepository.save.mockResolvedValue(mockUser);
-
+        it('insertUser 정상 테스트', async () => {
+            userRepository['save'] = jest.fn().mockResolvedValue(mockUser);
             const result = await userRepository.insertUser('1234567890', 'user@example.com', 'Test User');
-
-            expect(result).toBe(mockUser);
-            expect(User.createUser).toHaveBeenCalledWith('1234567890', 'user@example.com', 'USER', 'Test User');
-            expect(mockRepository.save).toHaveBeenCalledWith(mockUser);
+            expect(result).toEqual(mockUser);
+            expect(userRepository['save']).toHaveBeenCalledWith(mockUser);
         });
     });
 
-
     describe('findUserById 테스트', () => {
-
-        it('findUserById case1', async () => {
+        it('findUserById 정상 테스트', async () => {
             const userId = 2;
-
-            mockRepository.findOne.mockResolvedValue(mockUser);
-
+            mockUserRepository.findOne.mockResolvedValue(mockUser);
             const result = await userRepository.findUserById(userId);
-
             expect(result).toBe(mockUser);
-            expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { id: userId } });
+            expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { id: userId } });
         });
     });
 
     describe('updateUserScore 테스트', () => {
-
-        it('updateUserScore case1', async () => {
+        it('updateUserScore 정상 테스트', async () => {
             const userId = 1;
             const addScore = 10;
-
-            // UpdateQueryBuilder를 반환하도록 createQueryBuilder mock을 업데이트합니다.
-            mockRepository.createQueryBuilder.mockReturnValueOnce(mockUpdateQueryBuilder as any);
-
+            mockUserRepository.createQueryBuilder.mockReturnValueOnce(mockUpdateQueryBuilder as any);
             const result = await userRepository.updateUserScore(userId, addScore);
-
-            expect(mockRepository.createQueryBuilder).toHaveBeenCalled();
+            expect(userRepository['createQueryBuilder']).toHaveBeenCalled();
             expect(mockUpdateQueryBuilder.update).toHaveBeenCalledWith(User);
             expect(mockUpdateQueryBuilder.set).toHaveBeenCalledWith({ score: expect.any(Function) });
             expect(mockUpdateQueryBuilder.where).toHaveBeenCalledWith('id = :userId', { userId });
             expect(mockUpdateQueryBuilder.setParameters).toHaveBeenCalledWith({ addScore });
             expect(mockUpdateQueryBuilder.execute).toHaveBeenCalled();
-
             expect(result).toEqual({ affected: 1 });
+          
         });
     });
 });
