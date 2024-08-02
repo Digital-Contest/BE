@@ -56,7 +56,7 @@ describe('Satisfaction Service 테스트', ()=>{
     describe('bringPlatfromSatisfation 함수', ()=>{
         it('bringPlatfromSatisfation 정상 처리', async()=>{
             const bringSatisfactionAccordingToKind = jest.spyOn(satisfactionService as any, "bringSatisfactionAccordingToKind").mockResolvedValue(mockSatisfactionData);
-            const extractMostPlatform = jest.spyOn(satisfactionService as any, "extractMostCategory").mockReturnValue(bringSatisfationResponse);
+            const extractMostPlatform = jest.spyOn(satisfactionService as any, "extractMostPlatform").mockReturnValue(bringSatisfationResponse);
             const result = await satisfactionService.bringPlatfromSatisfation(userId, kind);
             expect(result).toEqual(bringSatisfationResponse);
             expect(bringSatisfactionAccordingToKind).toHaveBeenCalledWith(userId, kind);
