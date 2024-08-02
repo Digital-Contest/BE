@@ -10,7 +10,6 @@ const mockUser = {
     nickname: 'Test user'
 } as User;
 
-// 모의 QueryBuilder 객체 생성
 const mockSelectQueryBuilder = {
     select: jest.fn().mockReturnThis(),
     from: jest.fn().mockReturnThis(),
