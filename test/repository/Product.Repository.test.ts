@@ -147,10 +147,6 @@ describe('ProductCompanyRepository', () => {
     describe('findWholePlatformSatisfaction', () => {
         it('findWholePlatformSatisfaction 정상 테스트', async () => {
             mockProductyRepository.createQueryBuilder.mockReturnValueOnce(mockSelectQueryBuilder as any);
-            mockProductyRepository.createQueryBuilder.mockReturnValueOnce({
-                ...mockSelectQueryBuilder,
-                getRawMany: jest.fn().mockResolvedValue(mockSatiafcations) 
-            } as any);
             const result = await productRepository.findWholePlatformSatisfaction();
             expect(result).toEqual(mockSatiafcations);
             expect(productRepository['createQueryBuilder']).toHaveBeenCalledWith('p');
@@ -162,6 +158,65 @@ describe('ProductCompanyRepository', () => {
             expect(mockSelectQueryBuilder.innerJoin).toHaveBeenCalledWith(ProductCompany, 'pc', 'pc.product_id = p.id');
             expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('p.status = true');
             expect(mockSelectQueryBuilder.groupBy).toHaveBeenCalledWith('pc.company, p.introduceTextCategory');
+            expect(mockSelectQueryBuilder.orderBy).toHaveBeenCalledWith('introduceTextCategoryCount', 'DESC')
+            expect(mockSelectQueryBuilder.getRawMany).toHaveBeenCalled();
+        });
+    });
+
+    describe('findMinePlatformSatisfaction', () => {
+        it('findMinePlatformSatisfaction 정상 테스트', async () => {
+            const userId = 1;
+            mockProductyRepository.createQueryBuilder.mockReturnValueOnce(mockSelectQueryBuilder as any);
+            const result = await productRepository.findMinePlatformSatisfaction(userId);
+            expect(result).toEqual(mockSatiafcations);
+            expect(productRepository['createQueryBuilder']).toHaveBeenCalledWith('p');
+            expect(mockSelectQueryBuilder.select).toHaveBeenCalledWith([
+                'pc.company AS target',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ]);
+            expect(mockSelectQueryBuilder.innerJoin).toHaveBeenCalledWith(ProductCompany, 'pc', 'pc.product_id = p.id');
+            expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('p.status = true');
+            expect(mockSelectQueryBuilder.andWhere).toHaveBeenCalledWith('p.user_id = :userId',{userId})
+            expect(mockSelectQueryBuilder.groupBy).toHaveBeenCalledWith('pc.company, p.introduceTextCategory');
+            expect(mockSelectQueryBuilder.orderBy).toHaveBeenCalledWith('introduceTextCategoryCount', 'DESC')
+            expect(mockSelectQueryBuilder.getRawMany).toHaveBeenCalled();
+        });
+    });
+
+    describe('findWholeCategorySatisfaction', () => {
+        it('findWholeCategorySatisfaction 정상 테스트', async () => {
+            mockProductyRepository.createQueryBuilder.mockReturnValueOnce(mockSelectQueryBuilder as any);
+            const result = await productRepository.findWholeCategorySatisfaction();
+            expect(result).toEqual(mockSatiafcations);
+            expect(productRepository['createQueryBuilder']).toHaveBeenCalledWith('p');
+            expect(mockSelectQueryBuilder.select).toHaveBeenCalledWith([
+                'p.product_category AS target',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ]);
+            expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('p.status = true');
+            expect(mockSelectQueryBuilder.groupBy).toHaveBeenCalledWith('p.product_category, p.introduceTextCategory');
+            expect(mockSelectQueryBuilder.orderBy).toHaveBeenCalledWith('introduceTextCategoryCount', 'DESC')
+            expect(mockSelectQueryBuilder.getRawMany).toHaveBeenCalled();
+        });
+    });
+
+    describe('findMineCategorySatisfaction', () => {
+        it('findMineCategorySatisfaction 정상 테스트', async () => {
+            const userId = 1;
+            mockProductyRepository.createQueryBuilder.mockReturnValueOnce(mockSelectQueryBuilder as any);
+            const result = await productRepository.findMineCategorySatisfaction(userId);
+            expect(result).toEqual(mockSatiafcations);
+            expect(productRepository['createQueryBuilder']).toHaveBeenCalledWith('p');
+            expect(mockSelectQueryBuilder.select).toHaveBeenCalledWith([
+                'p.product_category AS target',
+                'p.introduceTextCategory AS introduceTextCategory',
+                'COUNT(p.introduceTextCategory) AS introduceTextCategoryCount'
+            ]);
+            expect(mockSelectQueryBuilder.where).toHaveBeenCalledWith('p.status = true');
+            expect(mockSelectQueryBuilder.andWhere).toHaveBeenCalledWith('p.user_id = :userId',{userId})
+            expect(mockSelectQueryBuilder.groupBy).toHaveBeenCalledWith('p.product_category, p.introduceTextCategory');
             expect(mockSelectQueryBuilder.orderBy).toHaveBeenCalledWith('introduceTextCategoryCount', 'DESC')
             expect(mockSelectQueryBuilder.getRawMany).toHaveBeenCalled();
         });
