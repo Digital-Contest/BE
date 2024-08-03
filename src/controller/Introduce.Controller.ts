@@ -4,7 +4,7 @@ import {  IntroduceTextRequest } from "../dto/request/IntruduceTextRequest";
 import { IntroduceService } from "../service/Introduce.Service";
 import { SuccessResponseDto } from "../response/SuccessResponseDto";
 import { compareAuthToken } from "../middleware/jwtMiddleware";
-import { uploadImage } from "../middleware/before/s3Upload";
+import { uploadImage } from "../middleware/s3Upload";
 import { IntroduceTextResponse } from "../dto/response/IntroduceTextResponse";
 
 

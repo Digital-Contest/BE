@@ -10,7 +10,7 @@ import { ProductStatus } from "../dto/request/ProductStatus";
 import { ProductService } from "../service/Product.Service";
 import { ProductList } from "../dto/response/ProductList";
 import { ProductCreate } from "../dto/request/ProductCreat";
-import { uploadImage } from "../middleware/before/s3Upload";
+import { uploadImage } from "../middleware/s3Upload";
 
 
 
