@@ -7,7 +7,7 @@ import { Service } from 'typedi';
 export class SocialLogin {
 
     public async getKakaoData(token: string): Promise<AxiosResponse<any>>{
-        return await axios({
+        return axios({
             method: 'get',
             url: 'https://kapi.kakao.com/v2/user/me',
             headers: {
