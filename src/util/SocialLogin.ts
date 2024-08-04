@@ -7,13 +7,11 @@ import { Service } from 'typedi';
 export class SocialLogin {
 
     public async getKakaoData(token: string): Promise<AxiosResponse<any>>{
-        return axios({
-            method: 'get',
-            url: 'https://kapi.kakao.com/v2/user/me',
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
+        return axios.get('https://kapi.kakao.com/v2/user/me', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
     }
 
 }
