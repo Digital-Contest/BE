@@ -1,24 +1,6 @@
 
 import {LevelExperience, getLevelColor, getLevelExperience, getMyLevelExperience, getLevelByScore } from '../../../src/util/enum/Level';
 
-const levelExperienceTestCases = [
-    { key: 'LEVEL_0', expectedValue: LevelExperience.LEVEL_0 },
-    { key: 'LEVEL_1', expectedValue: LevelExperience.LEVEL_1 },
-    { key: 'LEVEL_2', expectedValue: LevelExperience.LEVEL_2 },
-    { key: 'LEVEL_3', expectedValue: LevelExperience.LEVEL_3 },
-    { key: 'LEVEL_4', expectedValue: LevelExperience.LEVEL_4 },
-    { key: 'LEVEL_5', expectedValue: LevelExperience.LEVEL_5 },
-  ];
-
-const levelColorTestCases = [
-    { key: LevelExperience.LEVEL_0, expectedValue: "pink" },
-    { key: LevelExperience.LEVEL_1, expectedValue: "pink" },
-    { key: LevelExperience.LEVEL_2, expectedValue: "brown" },
-    { key: LevelExperience.LEVEL_3, expectedValue: "blue" },
-    { key: LevelExperience.LEVEL_4, expectedValue: "purple" },
-    { key: LevelExperience.LEVEL_5, expectedValue: "yellow"}
-];
-
 describe('LevelExperience enum 테스트', () => {
 
   describe('getLevelColor 함수 테스트', () => {
