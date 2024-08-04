@@ -1,6 +1,5 @@
 import { TokenManager } from "../../src/util/TokenManager";
 import { redisClient } from "../../src/config/redis";
-import { RedisClientType } from "redis";
 
 
 jest.mock('../../src/config/redis', () => ({

@@ -1,57 +1,41 @@
-// openAI.test.ts
 import OpenAI from 'openai';
 import { openAI } from '../../src/util/openAI'; 
-import { envs } from "../../src/config/environment";
 
-jest.mock('openai');
+const mockResponse = {
+  choices:[
+      {
+        message: {
+            content: 'This is the response content'
+        }
+      }
+  ]
+};
 
-describe('openAI function', () => {
-  it('should return the expected response content', async () => {
-    // const mockCreate = jest.fn();
-    
-    // // Create a mock instance of OpenAI and set up nested mocks
-    // const mockOpenAIInstance = {
-    //   chat: {
-    //     completions: {
-    //       create: mockCreate
-    //     }
-    //   }
-    // };
+jest.mock('openai', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      chat: {
+        completions: {
+          create: jest.fn().mockImplementation(async () => {
+            return mockResponse;
+          })
+        }
+      }
+    };
+  });
+});
 
-    // (OpenAI as unknown as jest.Mock).mockImplementation(() => mockOpenAIInstance);
-    
-    // // Define the expected response
-    // const mockResponse = {
-    //   choices: [
-    //     {
-    //       message: {
-    //         content: "Expected response content"
-    //       }
-    //     }
-    //   ]
-    // };
-    // mockCreate.mockResolvedValue(mockResponse);
 
-    // // Test variables
-    // const imageUrl = 'https://example.com/image.jpg';
-    // const text = 'Sample text';
 
-    // // Call the function and check results
-    // const result = await openAI(imageUrl, text);
+describe('openAI 테스트', () => {
 
-    // // Assertions
-    // expect(result).toBe('Expected response content');
-    // expect(mockCreate).toHaveBeenCalledWith({
-    //   model: "gpt-4o",
-    //   messages: [
-    //     {
-    //       role: "user",
-    //       content: [
-    //         { type: "text", text: text },
-    //         { type: "image_url", image_url: { url: imageUrl } },
-    //       ],
-    //     },
-    //   ],
-    // });
+  describe('openAI 함수 테스트', () => {
+
+    it('openAI 함수', async () => {
+      const imageUrl = 'https://example.com/image.jpg';
+      const text = 'This is a test';
+      const result = await openAI(imageUrl, text);
+      expect(result).toBe('This is the response content');
+    });
   });
 });
