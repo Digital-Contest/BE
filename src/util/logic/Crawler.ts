@@ -22,7 +22,6 @@ export class Crawler{
     public async carrotMarketCrawler(page:Page, count:number, searchWord:string) {
         try {
             await page.goto(`https://www.daangn.com/search/${searchWord}/`,{  timeout: 0 });
-           // console.log(3)
             const crawlingResult = await page.evaluate((count) => {
                 const result = [];
                 for (let i = 3; i <= count + 3; i++) {
