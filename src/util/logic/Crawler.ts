@@ -5,18 +5,14 @@ import { Service } from 'typedi';
 export class Crawler{
 
     public async bringCompanyProductPrice(count: number, searchWord: string){
-        console.log(0)
         const browser = await puppeteer.launch({
             headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
-        console.log(1)
         const page = await browser.newPage();
-        console.log(2)
         const carrotCrawlingResult = await this.carrotMarketCrawler(page, count, searchWord);
         const sunderCrawlingResult = await this.sunderMarket(page, count, searchWord);
         const usedCrawlingResult = await this.usedCountry(page, count, searchWord);
-        console.log(3)
         await page.close();
         await browser.close();
 
@@ -25,14 +21,6 @@ export class Crawler{
 
     public async carrotMarketCrawler(page:Page, count:number, searchWord:string) {
         try {
-            // console.log(0)
-            // const browser = await puppeteer.launch({
-            //     headless: true,
-            //     args: ['--no-sandbox', '--disable-setuid-sandbox']
-            // });
-            // console.log(1)
-            // const page = await browser.newPage();
-            // console.log(2)
             await page.goto(`https://www.daangn.com/search/${searchWord}/`,{  timeout: 0 });
            // console.log(3)
             const crawlingResult = await page.evaluate((count) => {
@@ -50,9 +38,6 @@ export class Crawler{
                 }
                 return result;
             }, count);
-        //    console.log(4)
-            // await page.close();
-            // await browser.close();
             return crawlingResult;
         } catch (error) {
             console.error('Error launching browser:', error);
@@ -62,10 +47,6 @@ export class Crawler{
 
     public async sunderMarket(page:Page, count:number, searchWord:string){
         try {
-            // const browser = await puppeteer.launch({    
-            //     headless: true,
-            //     args: ['--no-sandbox', '--disable-setuid-sandbox']});
-            // const page = await browser.newPage();
             await page.goto(`https://m.bunjang.co.kr/search/products?q=${searchWord}`,{  timeout: 0 });
             const searchResult = await page.evaluate((count) => {
                 const result = [];
@@ -82,8 +63,6 @@ export class Crawler{
                 }
                 return result;
             }, count);
-            // await page.close();
-            // await browser.close();
             return searchResult
         } catch (e) {
             console.log(e);
@@ -92,10 +71,6 @@ export class Crawler{
 
     public async usedCountry(page:Page, count:number, searchWord:string){
         try {
-            // const browser = await puppeteer.launch({  
-            //     headless: true,
-            //     args: ['--no-sandbox', '--disable-setuid-sandbox']});
-            // const page = await browser.newPage();
             await page.goto(`https://web.joongna.com/search/${searchWord}`,{  timeout: 0 });
             const searchResult = await page.evaluate((count) => {
                 const result = [];
@@ -112,8 +87,6 @@ export class Crawler{
                 }
                 return result;
             }, count);
-            // await page.close();
-            // await browser.close();
             return searchResult;
         } catch (e) {
             console.log(e);
