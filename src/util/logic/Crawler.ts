@@ -6,16 +6,11 @@ import {UsedCountryCrawler} from './UsedCountryCrawler'
 
 @Service()
 export class Crawler{
-
-    private carrotMarketCrawler: CarrotMarketCrawler;
-    private sunderMarketCrawler: SunderMarketCrawler;
-    private usedCountryCrawler: UsedCountryCrawler;
-
-    constructor() {
-        this.carrotMarketCrawler = new CarrotMarketCrawler();
-        this.sunderMarketCrawler = new SunderMarketCrawler();
-        this.usedCountryCrawler = new UsedCountryCrawler();
-    }
+    constructor(
+        private readonly carrotMarketCrawler: CarrotMarketCrawler,
+        private readonly sunderMarketCrawler: SunderMarketCrawler,
+        private readonly usedCountryCrawler: UsedCountryCrawler
+    ) {}
 
     public async bringCompanyProductPrice(count: number, searchWord: string) {
         const browser = await puppeteer.launch({

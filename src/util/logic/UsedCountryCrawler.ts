@@ -1,5 +1,8 @@
 import { Page } from "puppeteer";
+import { Service } from "typedi";
 
+
+@Service()
 export class UsedCountryCrawler {
     public async crawl(page: Page, count: number, searchWord: string) {
         try {
