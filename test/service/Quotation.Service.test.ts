@@ -8,7 +8,7 @@ jest.mock('../../src/util/logic/Crawler');
 describe('Quotation Service 테스트', () => {
 
     let quotationService: QuotationService;
-    const mockCrawler = new Crawler() as jest.Mocked<Crawler>;
+    const mockCrawler = new Crawler({} as any, {} as any, {} as any) as jest.Mocked<Crawler>;
 
     beforeEach(() => {
         quotationService = new QuotationService(mockCrawler);
