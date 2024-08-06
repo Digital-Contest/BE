@@ -69,18 +69,103 @@ describe('JwtManager 테스트', () => {
         });
 
         it('decode 에러 처리', () => {
-            (mockJwt.decode as jest.Mock).mockReturnValue(decodeResponse);
-            const result =  jwtManager.decode(token);
-            expect(result).toEqual({
-                message: "Ok",
-                userId: decodeResponse.user_id,
-                role: decodeResponse.role,
+            (mockJwt.decode as jest.Mock).mockImplementation(() => {
+                throw new Error('Invalid token');
             });
+            const result = jwtManager.decode(token);
+            expect(result).toBeUndefined();
             expect(mockJwt.decode).toHaveBeenCalledWith(token);
         });
     });
 
 
+    describe('verify 함수 테스트', () => {
+        const token = 'mock-token';
+        const verifyResponse = {
+            user_id: 1,
+            role: "USER"
+        }
+        it('verify 함수 정상 처리', () => {
+            (mockJwt.verify as jest.Mock).mockReturnValue(verifyResponse);
+            const result =  jwtManager.verify(token);
+            expect(result).toEqual({
+                state:true,
+                userId:verifyResponse.user_id,
+                role:verifyResponse.role,
+            });
+            expect(mockJwt.verify).toHaveBeenCalledWith(token, 'secret');
+        });
+
+        it('verify 에러 처리', () => {
+            (mockJwt.verify as jest.Mock).mockImplementation(() => {
+                throw new Error('Invalid token');
+            });
+            const result = jwtManager.verify(token);
+            expect(result).toEqual({state:false})
+            expect(mockJwt.verify).toHaveBeenCalledWith(token, 'secret');
+        });
+    });
 
 
+    describe('refreshVerify 함수 테스트', () => {
+        const userId = 1;
+        const requestToken = 'Bearer validToken';
+        const responseToken = 'validToken';
+        const refreshVerifyResponse = {
+            state: true, token: responseToken 
+        }
+        const refreshVerifyError = {
+            state: false
+        }
+        it('refreshVerify 함수 정상 처리', async () => {
+            mockTokenManager.getToken.mockResolvedValue(responseToken);
+            const verifyToken = jest.spyOn(jwtManager as any, "verifyToken").mockReturnValue(true)
+            const result = await jwtManager.refreshVerify(requestToken, userId);
+            expect(result).toEqual(refreshVerifyResponse);
+            expect(mockTokenManager.getToken).toHaveBeenCalledWith(userId+"eco");
+            expect(verifyToken).toHaveBeenCalledWith(requestToken, responseToken)
+            expect(jwt.verify).toHaveBeenCalledWith(requestToken.split('Bearer ')[1],'secret')
+        });
+
+        it('refreshVerify 토큰 검증 에러 처리', async () => {
+            mockTokenManager.getToken.mockResolvedValue(responseToken);
+            const verifyToken = jest.spyOn(jwtManager as any, "verifyToken").mockReturnValue(false)
+            const result = await jwtManager.refreshVerify(requestToken, userId);
+            expect(result).toEqual(refreshVerifyError);
+            expect(mockTokenManager.getToken).toHaveBeenCalledWith(userId+"eco");
+            expect(verifyToken).toHaveBeenCalledWith(requestToken, responseToken)
+            expect(jwt.verify).not.toHaveBeenCalled()
+        });
+
+        it('refreshVerify 에러 처리', async () => {
+            mockTokenManager.getToken.mockResolvedValue(responseToken);
+            const verifyToken = jest.spyOn(jwtManager as any, "verifyToken").mockReturnValue(true);
+            (mockJwt.verify as jest.Mock).mockImplementation(() => {
+                throw new Error('Invalid token');
+            });
+            const result = await jwtManager.refreshVerify(requestToken, userId);
+            expect(result).toEqual(refreshVerifyError);
+            expect(mockTokenManager.getToken).toHaveBeenCalledWith(userId+"eco");
+            expect(verifyToken).toHaveBeenCalledWith(requestToken, responseToken)
+            expect(jwt.verify).toHaveBeenCalledWith(requestToken.split('Bearer ')[1],'secret')
+        });
+
+
+    });
+
+    describe('verifyToken 함수 테스트', () => {
+        it('verifyToken 함수 true 처리', () => {
+            const externalToken = 'Bearer token';
+            const internalToken = 'Bearer token';
+            const result = jwtManager['verifyToken'](externalToken, internalToken);       
+            expect(result).toEqual(true);
+        });
+
+        it('verifyToken 함수 false 처리', () => {
+            const externalToken = 'Bearer token111';
+            const internalToken = 'Bearer token222';
+            const result = jwtManager['verifyToken'](externalToken, internalToken);       
+            expect(result).toEqual(false);
+        });
+    });
 });
