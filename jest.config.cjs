@@ -7,12 +7,13 @@ module.exports = {
       '**/test/service/**/*.test.ts',
       '**/test/repository/**/*.test.ts',
       '**/test/util/**/*.test.ts',
-  //    '**/test/middleware/*.test.ts'
+      '**/test/middleware/**/*.test.ts'
     ],
     collectCoverageFrom: [
       'src/controller/**/*.ts',
       'src/service/**/*.ts',
       'src/repository/**/*.ts',
-      'src/util/**/*.ts'
+      'src/util/**/*.ts',
+      'src/middleware/**/*.ts',
     ]
   };
