@@ -1,6 +1,14 @@
-import { Request } from "express";
-import {extractAuthToken, getAuthTokenBody} from '../../src/middleware/jwtMiddleware';
+import { NextFunction, Request } from "express";
+import {compareAuthToken, extractAuthToken, getAuthTokenBody} from '../../src/middleware/jwtMiddleware';
 import jwt from 'jsonwebtoken';
+import { ITokenBody } from "../../src/middleware/jwtMiddleware";
+import { HttpError } from "routing-controllers";
+
+declare module 'express-serve-static-core' {
+    interface Request {
+        decoded?: { user_id: number };
+    }
+}
 
 //jest.mock('../../src/middleware/jwtMiddleware')
 jest.mock('jsonwebtoken')
@@ -8,9 +16,11 @@ const mockJwt = jwt as jest.Mocked<typeof jwt>;
 
 describe('jwtMiddleware 테스트', () => {
   //  let mockExtractAuthToken : jest.Mock;
+    let next: NextFunction;
 
     beforeEach(() => {
      //   mockExtractAuthToken = extractAuthToken as jest.Mock;
+        next = jest.fn();
         jest.clearAllMocks();
     });
 
@@ -71,21 +81,31 @@ describe('jwtMiddleware 테스트', () => {
         });
    });
 
-    // describe('signVerifyAccessToken 함수', () => {
+    describe('compareAuthToken 함수', () => {
+        const req = { headers: { authorization: "Bearer token" } } as unknown as Request;
+        const mockTokenBody = {  user_id: 1, role: "USER" } as ITokenBody;
 
-    //     it('signVerifyAccessToken 정상 테스트', () => {
-    //         const status = true
-    //         expect(() => signVerifyAccessToken(status)).toThrow();
+        beforeEach(() => {
+            (mockJwt.verify as jest.Mock).mockReturnValue(mockTokenBody);
+        });
 
-    //     });
+        it('compareAuthToken 정상 테스트', () => {
+            compareAuthToken(req, next);
+            expect(req.decoded).toEqual(mockTokenBody);
+            expect(next).toHaveBeenCalled();
+        });
+
+        it('compareAuthToken 에러 테스트 - getAuthTokenBody에서 에러 발생', () => {
+            (mockJwt.verify as jest.Mock).mockImplementation(() => { throw new Error('JWT verification failed'); });
+            expect(() => {
+                compareAuthToken(req, next);
+            }).toThrow(new HttpError(401, 'INVALID_TOKEN'));
+            expect(next).not.toHaveBeenCalled();
+        });
+
+
       
-    // });
+    });
 
-    // describe('signVerifyRefreshToken 함수', () => {
-    //     it('signVerifyRefreshToken 정상 테스트', () => {
-    //         const status = false
-    //         expect(() => signVerifyRefreshToken(status)).toThrow();
-    //     });
-    
-    // });
+
 });
