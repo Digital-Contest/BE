@@ -16,7 +16,7 @@ export const extractAuthToken = (req: Request) => {
     }
 };
 
-export const getAuthTokenBody = (req: Request, throwing = false) => {
+export const getAuthTokenBody = (req: Request, throwing: boolean) => {
     const token: string = extractAuthToken(req);
     try {
         const payload = jwt.verify(token,"secret") ;
@@ -26,7 +26,7 @@ export const getAuthTokenBody = (req: Request, throwing = false) => {
     }
 };
 
-export const compareAuthToken = (req:Request, res: Response, next: NextFunction): void => {
+export const compareAuthToken = (req:Request, next: NextFunction): void => {
     try {
         const tokenBody : ITokenBody= getAuthTokenBody(req, true);
         req.decoded = tokenBody;
