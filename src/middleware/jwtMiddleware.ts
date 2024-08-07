@@ -10,23 +10,20 @@ export interface ITokenBody {
 
 
 
-const extractAuthToken = (req: Request) => {
+export const extractAuthToken = (req: Request) => {
     if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         return req.headers.authorization.split(' ')[1];
     }
 };
 
 export const getAuthTokenBody = (req: Request, throwing = false) => {
-
     const token: string = extractAuthToken(req);
     try {
         const payload = jwt.verify(token,"secret") ;
         return typeof payload === 'string' ? JSON.parse(payload as string) : payload;
-
     } catch (e) {
         if (throwing) throw e;
     }
-    return null;
 };
 
 export const compareAuthToken = (req:Request, res: Response, next: NextFunction): void => {
