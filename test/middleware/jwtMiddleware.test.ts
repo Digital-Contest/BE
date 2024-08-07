@@ -10,16 +10,13 @@ declare module 'express-serve-static-core' {
     }
 }
 
-//jest.mock('../../src/middleware/jwtMiddleware')
 jest.mock('jsonwebtoken')
 const mockJwt = jwt as jest.Mocked<typeof jwt>;
 
 describe('jwtMiddleware 테스트', () => {
-  //  let mockExtractAuthToken : jest.Mock;
     let next: NextFunction;
 
     beforeEach(() => {
-     //   mockExtractAuthToken = extractAuthToken as jest.Mock;
         next = jest.fn();
         jest.clearAllMocks();
     });
