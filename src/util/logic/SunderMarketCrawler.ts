@@ -3,12 +3,12 @@ import { Service } from "typedi";
 
 
 @Service()
-export class UsedCountryCrawler {
+export class SunderMarketCrawler {
     public async crawl(page: Page, count: number, searchWord: string) {
         try {
-            await page.goto(`https://web.joongna.com/search/${searchWord}`, { timeout: 0 });
-            const searchResult = await this.evaluatePage(page, count);
-            return searchResult;
+            await page.goto(`https://m.bunjang.co.kr/search/products?q=${searchWord}`, { timeout: 0 });
+            const crawlingResult = await this.evaluatePage(page, count);
+            return crawlingResult;
         } catch (error) {
             console.error('Error launching browser:', error);
             throw error;
@@ -33,4 +33,7 @@ export class UsedCountryCrawler {
             return result;
         }, count);
     }
+
+
+
 }

@@ -1,7 +1,7 @@
 import  puppeteer, { Page }  from 'puppeteer'
 import { Service } from 'typedi';
 import {CarrotMarketCrawler} from './CarrotMarketCrawler'
-import { SunderMarketCrawler} from './SunderMarketCraler'
+import { SunderMarketCrawler} from './SunderMarketCrawler'
 import {UsedCountryCrawler} from './UsedCountryCrawler'
 
 @Service()
