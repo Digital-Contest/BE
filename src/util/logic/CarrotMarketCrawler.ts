@@ -15,9 +15,10 @@ export class CarrotMarketCrawler {
     }
 
     private async evaluatePage(page: Page, count: number) {
+        /* istanbul ignore next */
         return page.evaluate((count) => {
             const result = [];
-            for (let i = 3; i <= count + 3; i++) {
+            for (let i = 3; i < count + 3; i++) {
                 const data: any = {};
                 const imageElement = document.querySelector(`#flea-market-wrap > article:nth-child(${i}) a.flea-market-article-link img`) as HTMLImageElement;
                 const titleElement = document.querySelector(`#flea-market-wrap > article:nth-child(${i}) a.flea-market-article-link img`) as HTMLImageElement;
