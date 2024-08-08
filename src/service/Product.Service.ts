@@ -72,7 +72,7 @@ export class ProductService {
 
     private mappingMyProductData(products: Product[]): ProductList[] {
         return products.map((data) => {
-            const productCompanys = data.getProductCompanys() || []; 
+            const productCompanys = data.getProductCompanys(); 
             return new ProductList(
                 data.getId(),
                 data.getProduct(),
