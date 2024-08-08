@@ -1,12 +1,12 @@
 import {Crawler} from '../../../src/util/logic/Crawler';
 import {CarrotMarketCrawler} from '../../../src/util/logic/CarrotMarketCrawler';
-import {SunderMarketCrawler} from '../../../src/util/logic/SunderMarketCraler';
+import {SunderMarketCrawler} from '../../../src/util/logic/SunderMarketCrawler';
 import {UsedCountryCrawler} from '../../../src/util/logic/UsedCountryCrawler';
 import puppeteer from 'puppeteer';
 
 jest.mock('puppeteer');
 jest.mock('../../../src/util/logic/CarrotMarketCrawler')
-jest.mock('../../../src/util/logic/SunderMarketCraler')
+jest.mock('../../../src/util/logic/SunderMarketCrawler')
 jest.mock('../../../src/util/logic/UsedCountryCrawler')
 
 describe('Crawler 테스트', () => {
