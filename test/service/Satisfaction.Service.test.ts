@@ -148,13 +148,13 @@ describe('Satisfaction Service 테스트', ()=>{
 
     const groupData:GroupedData = {}
     const groupedData: GroupedData = {
-        target2: {
+        'category1': {
             target: 'target2',
             data: [
                 SatisfactionDetailData.of('category2', 20)
             ],
         },
-        target1: {
+        'category2': {
             target: 'target1',
             data: [
                 SatisfactionDetailData.of('category1', 15)
@@ -176,9 +176,15 @@ describe('Satisfaction Service 테스트', ()=>{
     });
 
     describe('checkExistence 함수', () => {
-        it('checkExistence 정상처리', () => {
+        const groupedNotData: GroupedData = {};
+        it('checkExistence 정상처리1 .', () => {
             const result = satisfactionService['checkExistence'](criteria, allCategories, groupedData);
             expect(result).toEqual(groupedData);
+        });
+
+        it('checkExistence 정상처리2 ', () => {
+            const result = satisfactionService['checkExistence'](criteria, allCategories, groupedNotData);
+            expect(result).toEqual(groupedNotData);
         });
     });
 
