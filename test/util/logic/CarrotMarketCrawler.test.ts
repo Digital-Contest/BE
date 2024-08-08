@@ -158,3 +158,116 @@ describe('CarrotMarketCrawler', () => {
         });
     });
 });
+
+
+
+
+// import 'reflect-metadata';
+// import puppeteer, { Page, Browser } from 'puppeteer';
+// import { Container } from 'typedi';
+// import { CarrotMarketCrawler } from '../../../src/util/logic/CarrotMarketCrawler';
+
+// describe('CarrotMarketCrawler', () => {
+//     let browser: Browser;
+//     let page: Page;
+//     let crawler: CarrotMarketCrawler;
+
+//     beforeAll(async () => {
+//         browser = await puppeteer.launch({ headless: true });
+//         page = await browser.newPage();
+//         crawler = Container.get(CarrotMarketCrawler);
+//     });
+
+//     afterAll(async () => {
+//         await browser.close();
+//     });
+
+//     it('should crawl the page and return correct data', async () => {
+//         const mockEvaluatePage = jest.spyOn<any, any>(crawler, 'evaluatePage').mockImplementation(async () => {
+//             return [
+//                 {
+//                     company: '당근마켓',
+//                     image: 'https://example.com/image.jpg',
+//                     title: 'Example Item',
+//                     price: '10000원',
+//                 },
+//             ];
+//         });
+
+//         const result = await crawler.crawl(page, 1, 'example-search-word');
+//         expect(result).toEqual([
+//             {
+//                 company: '당근마켓',
+//                 image: 'https://example.com/image.jpg',
+//                 title: 'Example Item',
+//                 price: '10000원',
+//             },
+//         ]);
+
+//         expect(mockEvaluatePage).toHaveBeenCalledTimes(1);
+//         mockEvaluatePage.mockRestore();
+//     });
+
+//     it('should throw an error if the page fails to load', async () => {
+//         jest.spyOn(page, 'goto').mockImplementationOnce(async () => {
+//             throw new Error('Failed to load page');
+//         });
+
+//         await expect(crawler.crawl(page, 1, 'example-search-word')).rejects.toThrow('Failed to load page');
+//     });
+
+//     it('should evaluate the page and return an empty array if no elements are found', async () => {
+//         const result = await crawler['evaluatePage'](page, 0);
+//         expect(result).toEqual([]);
+//     });
+
+//     it('should evaluate the page and return correct data', async () => {
+//         const mockPageEvaluate = jest.spyOn(page, 'evaluate').mockImplementationOnce(async () => {
+//             return [
+//                 {
+//                     company: '당근마켓',
+//                     image: 'https://example.com/image.jpg',
+//                     title: 'Example Item',
+//                     price: '10000원',
+//                 },
+//             ];
+//         });
+
+//         const result = await crawler['evaluatePage'](page, 1);
+//         expect(result).toEqual([
+//             {
+//                 company: '당근마켓',
+//                 image: 'https://example.com/image.jpg',
+//                 title: 'Example Item',
+//                 price: '10000원',
+//             },
+//         ]);
+
+//         expect(mockPageEvaluate).toHaveBeenCalledTimes(1);
+//         mockPageEvaluate.mockRestore();
+//     });
+
+//     it('should handle cases where elements are missing on the page', async () => {
+//         jest.spyOn(page, 'evaluate').mockImplementationOnce(async () => {
+//             return [
+//                 {
+//                     company: '당근마켓',
+//                     image: '',
+//                     title: '',
+//                     price: '',
+//                 },
+//             ];
+//         });
+
+//         const result = await crawler['evaluatePage'](page, 1);
+//         expect(result).toEqual([
+//             {
+//                 company: '당근마켓',
+//                 image: '',
+//                 title: '',
+//                 price: '',
+//             },
+//         ]);
+//     });
+// });
+
