@@ -117,6 +117,8 @@ describe('CarrotMarketCrawler', () => {
             expect(result).toEqual([]);
         });
 
+
+        
         it('should handle missing elements gracefully', async () => {
             // Mocking page.evaluate to return data with missing elements
             (page.evaluate as jest.Mock).mockImplementation(async (fn: Function, count: number) => {
