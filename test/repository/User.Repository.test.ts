@@ -76,16 +76,25 @@ describe('UserRepository 테스트', () => {
         it('updateUserScore 정상 테스트', async () => {
             const userId = 1;
             const addScore = 10;
+            const score = 1
             mockUserRepository.createQueryBuilder.mockReturnValueOnce(mockUpdateQueryBuilder as any);
             const result = await userRepository.updateUserScore(userId, addScore);
             expect(userRepository['createQueryBuilder']).toHaveBeenCalled();
             expect(mockUpdateQueryBuilder.update).toHaveBeenCalledWith(User);
-            expect(mockUpdateQueryBuilder.set).toHaveBeenCalledWith({ score: expect.any(Function) });
+            const setCallArg = (mockUpdateQueryBuilder.set as jest.Mock).mock.calls[0][0];
+           // mockUpdateQueryBuilder.set가 호출된 때의 인자를 추출
+            // [0]은 첫 번째 호출의 기록을 의미합니다.
+            // [0]에서 [0]은 첫 번째 호출 시 전달된 인자를 의미합니다.
+            // 이 인자는 객체 형태로, 여기서는 { score: () => 'score + :addScore' } 형태로 예상됩니다.
+            expect(setCallArg.score).toBeInstanceOf(Function);
+            // setCallArg.score가 함수인지 확인
+            expect(setCallArg.score()).toBe('score + :addScore');
+            // score 함수가 올바른 문자열을 반환하는지 확인
             expect(mockUpdateQueryBuilder.where).toHaveBeenCalledWith('id = :userId', { userId });
             expect(mockUpdateQueryBuilder.setParameters).toHaveBeenCalledWith({ addScore });
             expect(mockUpdateQueryBuilder.execute).toHaveBeenCalled();
-            expect(result).toEqual({ affected: 1 });
-          
+            expect(result).toEqual({ affected: 1 });  
         });
+
     });
 });
