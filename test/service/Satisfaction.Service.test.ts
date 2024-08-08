@@ -238,6 +238,21 @@ describe('Satisfaction Service 테스트', ()=>{
             const result = satisfactionService['extractMostPlatform'](mockSatisfactionData);
             expect(result).toEqual(expectedResult);
         });
+
+        it('extractMostPlatform 정상처리4', () => {
+            const mockSatisfactionData: Satisfaction[] = [
+                Satisfaction.of('target1', 'category1', 10),
+                Satisfaction.of('target2', 'category2', 11),
+                Satisfaction.of('target3', 'category3', 12)
+            ];
+            const expectedResult: Satisfaction[] = [
+                Satisfaction.of('target1', 'category1', 10),
+                Satisfaction.of('target2', 'category2', 11),
+                Satisfaction.of('target3', 'category3', 12)
+            ];
+            const result = satisfactionService['extractMostPlatform'](mockSatisfactionData);
+            expect(result).toEqual(expectedResult);
+        });
     });
 
 
@@ -273,11 +288,22 @@ describe('Satisfaction Service 테스트', ()=>{
             ];
             const result = satisfactionService['extractMostCategory'](mockSatisfactionData);
             expect(result).toEqual(expectedResult);
-        });
-       
+        });  
+        
+        it('extractMostCategory 정상처리4', () => {
+            const mockSatisfactionData: Satisfaction[] = [
+                Satisfaction.of('target1', 'category1', 10),
+                Satisfaction.of('target2', 'category2', 11),
+                Satisfaction.of('target3', 'category3', 12)
+            ];
+            const expectedResult: Satisfaction[] = [
+                Satisfaction.of('target1', 'category1', 10),
+                Satisfaction.of('target2', 'category2', 11),
+                Satisfaction.of('target3', 'category3', 12)
+            ];
+            const result = satisfactionService['extractMostCategory'](mockSatisfactionData);
+            expect(result).toEqual(expectedResult);
+        }); 
+
     });
-
-
-
-
 });
