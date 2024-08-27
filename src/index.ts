@@ -54,32 +54,37 @@ app.use(function (req: express.Request, res: express.Response, next: express.Nex
 
 useContainer(Container);
 
-initializeDatabase()
-    .then(() => {
-        console.log('Database connected.');
+app.get('/', (req: express.Request, res: express.Response) => {
+    return res.json({ message: 'Hello, world!' });
+});
 
-        const httpServer: Server = createServer(app);
-        httpServer.listen(envs.port, () => {
+
+// initializeDatabase()
+//     .then(() => {
+//         console.log('Database connected.');
+
+//         const httpServer: Server = createServer(app);
+//         httpServer.listen(envs.port, () => {
       
-            app.emit('started');
+//             app.emit('started');
           
-        });
-        process.on('SIGINT', function () {
+//         });
+//         process.on('SIGINT', function () {
 
-            isKeepAlive = false;
-            httpServer.close(function (): void {
+//             isKeepAlive = false;
+//             httpServer.close(function (): void {
     
-                process.exit(0);
-            });
-        });
-    })
-    .catch(e => {
-        console.error(`Express running failure : ${e}`);
-        console.log(e);
-    });
+//                 process.exit(0);
+//             });
+//         });
+//     })
+//     .catch(e => {
+//         console.error(`Express running failure : ${e}`);
+//         console.log(e);
+//     });
 
 
-connectToRedis();
+// connectToRedis();
 
 
 
