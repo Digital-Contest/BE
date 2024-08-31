@@ -59,47 +59,33 @@ app.get('/', (req: express.Request, res: express.Response) => {
 });
 
 
-// initializeDatabase()
-//     .then(() => {
-//         console.log('Database connected.');
+initializeDatabase()
+    .then(() => {
+        console.log('Database connected.');
 
-//         const httpServer: Server = createServer(app);
-//         httpServer.listen(envs.port, () => {
+        const httpServer: Server = createServer(app);
+        httpServer.listen(envs.port, () => {
       
-//             app.emit('started');
+            app.emit('started');
           
-//         });
-//         process.on('SIGINT', function () {
+        });
+        process.on('SIGINT', function () {
 
-//             isKeepAlive = false;
-//             httpServer.close(function (): void {
+            isKeepAlive = false;
+            httpServer.close(function (): void {
     
-//                 process.exit(0);
-//             });
-//         });
-//     })
-//     .catch(e => {
-//         console.error(`Express running failure : ${e}`);
-//         console.log(e);
-//     });
-
-
-// connectToRedis();
-
-const httpServer: Server = createServer(app);
-httpServer.listen(envs.port, () => {
-
-    app.emit('started');
-  
-});
-process.on('SIGINT', function () {
-
-    isKeepAlive = false;
-    httpServer.close(function (): void {
-
-        process.exit(0);
+                process.exit(0);
+            });
+        });
+    })
+    .catch(e => {
+        console.error(`Express running failure : ${e}`);
+        console.log(e);
     });
-});
+
+
+connectToRedis();
+
 
 
 
